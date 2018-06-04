@@ -1,5 +1,3 @@
-# Eureka
-
 # 1. 개요
 
 ### Eureka란?
