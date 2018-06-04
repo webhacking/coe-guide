@@ -1,6 +1,10 @@
 # Spring Cloud Sleuth
+
 Spring Cloud Sleuth는 Dapper, Zipkin, HTrace의 영향을 받아 만들어진 Spring Cloud를 위한 분산 추적 솔루션이다.
 모든 interaction에 자동으로 적용된다.
+
+![](../images/monitoring-log-global-transaction-id.png)
+- Sleuth를 통해 Global Transaction id, Span id 부여
 
 #### Span
 >작업의 기본 단위이다. 예를 들어 RPC(Remote Procedure Call)을 전송하면 새로운 Span이 하나 생성된다.
