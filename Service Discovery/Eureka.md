@@ -1,6 +1,6 @@
 # 1. 개요
 
-### Eureka
+### Eureka란?
 
 ```text
 Eureka is the Netflix Service Discovery Server and Client.
