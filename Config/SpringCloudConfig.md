@@ -108,7 +108,7 @@ application.yml(또는 properties)등 client의 환경설정은 Remote Property 
 Remote Property Source 생성
 > {serviceId}-{profile}.yml 형식으로 환경설정 파일 추가
 
-![Externalized ConfigurationsRemote Property Source](./images/remote-property-source.png)
+![Externalized ConfigurationsRemote Property Source](../images/remote-property-source.png)
 
 Client에 bootstrap.yml 추가
 ```yaml
@@ -162,4 +162,4 @@ management:
 4. Remote Property Source의 환경설정 변경 후 http://{serviceUrl}/actuator/refresh POST 호출 함  
   (Actuator in Spring Boot 2.0 이전 버전인 경우 http://{serviceUrl}/refresh)
 > 정상 처리 결과 Body에 아래와 같이 표시되고, 변경 내용이 없다면 아무 내용도 표시되지 않음   
-> <img src='./images/refreshResult.png'>
+> <img src='../images/refreshResult.png'>
