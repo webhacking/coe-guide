@@ -21,10 +21,10 @@ with each server replicating state about the registered services to the others.
 
 ### Eureka 기능
 
-![](./document/images/service-registry.png)
+![](../images/service-registry.png)
 
 
-![](./document/images/service-discovery.png)
+![](../images/service-discovery.png)
 
 
 ## 2. 구성방법
@@ -88,7 +88,7 @@ public class CoeEurekaApplication {
 ```
 
 ### Eureka Dashboard
-![](./document/images/eureka-dashboard.png)
+![](../images/eureka-dashboard.png)
 - 웹브라우저에서 Eureka Server로 설정한 URL에 접속시 Eureka 콘솔 화면을 볼 수 있음
 
 ## Eureka Client 설치방법
@@ -197,7 +197,7 @@ public class CoeEurekaApplication {
   - 여러개의 Eureka에 등록할 경우 defaultZone에 ,(comma)로 구분하여 입력한다.
 
 ### Sleuth 설정
-![](./document/images/monitoring-log-global-transaction-id.png)
+![](../images/monitoring-log-global-transaction-id.png)
 - Sleuth를 통해 Global Transaction id, Span id 부여
 
 - Eureka Client 의 pom.xml에 Sleuth dependency 추가
