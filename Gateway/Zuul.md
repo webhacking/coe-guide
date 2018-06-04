@@ -23,9 +23,6 @@ to multiple Amazon Auto Scaling Groups as appropriate.
 - Static Response handling
 - Active/Active traffic management
 
-### Netflix Zuul Architecture
-![](../images/zuul-netflix-cloud-architecture.png)
-
 ### Zuul 을 사용하는 이유?
 ```text
 API Gateway는 Microservice Architecture(이하 MSA)에서 언급되는 컴포넌트 중 하나이며,
@@ -36,107 +33,132 @@ Monolithic Architecture와 달리 MSA는 도메인별 데이터를 저장하고 
 end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul 을 사용하여 관리한다.
 ```
 
-### Http Request & Response with Zuul
-![](../images/zuul-route-setting.png)
+### Netflix Zuul Architecture
+![](../images/zuul-netflix-cloud-architecture.png)
 
-## 2. 구성방법
+### Zuul 동작
+![](../images/zuul-how-it-works.png)
 
-### 구성요소
-| Type      	| Tool         	| Version      	|
-|-----------	|--------------	|--------------	|
-| Compiler  	| Java         	| 1.8 이상     	|
-| Builder   	| maven        	| 3.2 이상     	|
-| Framework 	| Spring Boot  	| 2.0          	|
-|           	| Spring Cloud 	| Finchley.RC1 	|
+# 2. 구성방법
+1. Spring boot project 생성
+1. pom.xml에 zuul, eureka-client dependency 추가
+    ```xml
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+    ```
+1. configuration - application.yml 수정
+    ```yaml
+    spring:
+      application:
+        name: zuul-service
 
-참고 : [Spring Cloud Dependency](http://projects.spring.io/spring-cloud/)
+    zuul:
+      ignoredServices: '*'
+      routes:
+        customer:
+          path: /api/v1/customers/**  
+          serviceId: CUSTOMER-SERVICE
+          strip-prefix: false
+        order:
+          path: /api/v1/orders/**
+          serviceId: ORDER-SERVIC
+          strip-prefix: false        #true인 경우 path를 제거 후 각 서비스에 포워딩
 
-### 설치
-1. Spring boot project
-2. pom.xml에 zuul, eureka-client dependency 추가
-```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-</dependency>
-```
-3. configuration - application.yml 수정
-  ```yaml
-  spring:
-    application:
-      name: zuul-service
+    eureka:
+      client:
+        serviceUrl:
+          defaultZone: http://192.168.1.19:8761/eureka/
+        enabled: true
+    ```
+    - 서비스명 zuul-sevice로 설정
+    - Gateway의 라우팅 정보 설정
+    - Eureka client 등록
+1. @EnableZuulProxy annotation 추가를 통해 Zuul Proxy 선언
+    ```java
+    @EnableZuulProxy
+    @EnableDiscoveryClient
+    @SpringBootApplication
+    public class CoeZuulApplication {
 
-  zuul:
-    ignoredServices: '*'
-    routes:
-      customer:
-        path: /api/v1/customers/**
-        serviceId: CUSTOMER-SERVICE
-        strip-prefix: false
-      order:
-        path: /api/v1/orders/**
-        serviceId: ORDER-SERVIC
-        strip-prefix: false        #true인 경우 path를 제거 후 각 서비스에 포워딩
+      public static void main(String[] args) {
+        SpringApplication.run(CoeZuulApplication.class, args);
+      }
+    }
+    ```
+    - Gateway 도 Eureka Client로 등록
+    - Fallback 처리를 위한 Provider 등록
+    - Filter 등록
 
-  eureka:
-    client:
-      serviceUrl:
-        defaultZone: http://192.168.1.19:8761/eureka/ #,(comma)로 추가가능
-      enabled: true
+# 3. Router setting
 
-  hystrix:
-    threadpool:
-      default:
-        coreSize: 100  # Hystrix Thread Pool default size
-        maximumSize: 500  # Hystrix Thread Pool default size
-        keepAliveTimeMinutes: 1
-        allowMaximumSizeToDivergeFromCoreSize: true
-    command:
-      default:
-        execution:
-          isolation:
-            thread:
-              timeoutInMilliseconds: 1800000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
-        circuitBreaker:
-          requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
-          errorThresholdPercentage: 50
-          enabled: true
-  ```
-  - 서비스명 zuul-sevice로 설정
-  - Gateway의 라우팅 정보 설정
-  - Eureka client 등록
-  - Circuit Breaking을 위한 hystrix 설정
+...
 
-4. @EnableZuulProxy annotation 추가를 통해 Zuul Proxy 선언
+# 4. Filter
 
-```java
-@EnableZuulProxy
-@EnableDiscoveryClient
-@SpringBootApplication
-public class CoeZuulApplication {
+1. Filter 등록
+    ```java
+    @EnableZuulProxy
+    @EnableDiscoveryClient
+    @SpringBootApplication
+    public class CoeZuulApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(CoeZuulApplication.class, args);
-	}
+      public static void main(String[] args) {
+        SpringApplication.run(CoeZuulApplication.class, args);
+      }
 
-	@Bean
-	public FallbackProvider nexshopZuulFallbackProvider() {
-		return new ZuulFallbackProvider();
-	}
+      @Bean
+      public SimpleFilter simpleFilter() {
+        return new SimpleFilter();
+      }
+    }
+    ```
 
-	@Bean
-	public SimpleFilter simpleFilter() {
-		return new SimpleFilter();
-	}
-}
-```
-- Gateway 도 Eureka Client로 등록
-- Fallback 처리를 위한 Provider 등록
-- Filter 등록
-
-
+# 5. Hystrix
 ![](../images/circuit-breaking.png)
+
+1. configuration - application.yml 수정
+    ```yaml
+    ...
+
+    hystrix:
+      threadpool:
+        default:
+          coreSize: 100  # Hystrix Thread Pool default size
+          maximumSize: 500  # Hystrix Thread Pool default size
+          keepAliveTimeMinutes: 1
+          allowMaximumSizeToDivergeFromCoreSize: true
+      command:
+        default:
+          execution:
+            isolation:
+              thread:
+                timeoutInMilliseconds: 1800000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
+          circuitBreaker:
+            requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
+            errorThresholdPercentage: 50
+            enabled: true
+    ```
+    - Circuit Breaking을 위한 hystrix 설정
+1. Fallback 처리를 위한 Provider 등록
+    ```java
+    @EnableZuulProxy
+    @EnableDiscoveryClient
+    @SpringBootApplication
+    public class CoeZuulApplication {
+
+      public static void main(String[] args) {
+        SpringApplication.run(CoeZuulApplication.class, args);
+      }
+
+      @Bean
+      public FallbackProvider nexshopZuulFallbackProvider() {
+        return new ZuulFallbackProvider();
+      }
+    }
+    ```
