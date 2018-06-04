@@ -4,7 +4,7 @@ Spring Cloud Config는 분산 시스템에서 환경설정을 외부로 분리�
 
 Config Server를 사용하여 모든 환경(개발, 테스트, 프로덕션 등)에 대한 어플리케이션들의 속성을 한 곳에서 관리할 수 있다.
 
-![Externalized Configurations](./images/externalized-configurations.png)
+![Externalized Configurations](../images/externalized-configurations.png)
 
 ### 장점
 - 설정 관리의 용이성
