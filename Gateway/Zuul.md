@@ -1,6 +1,4 @@
-# Gateway
-
-## 1. 개요
+# 1. 개요
 
 ### Zuul이란?
 
@@ -26,7 +24,7 @@ to multiple Amazon Auto Scaling Groups as appropriate.
 - Active/Active traffic management
 
 ### Netflix Zuul Architecture
-![](./document/images/zuul-netflix-cloud-architecture.png)
+![](../images/zuul-netflix-cloud-architecture.png)
 
 ### Zuul 을 사용하는 이유?
 ```text
@@ -39,7 +37,7 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
 ```
 
 ### Http Request & Response with Zuul
-![](./document/images/zuul-route-setting.png)
+![](../images/zuul-route-setting.png)
 
 ## 2. 구성방법
 
@@ -141,4 +139,4 @@ public class CoeZuulApplication {
 - Filter 등록
 
 
-![](./document/images/circuit-breaking.png)
+![](../images/circuit-breaking.png)
