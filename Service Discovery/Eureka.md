@@ -1,3 +1,4 @@
+
 # 1. 개요
 
 ### Eureka
@@ -79,8 +80,8 @@ Microservices는 가상 환경 혹은 컨테이너 기반 환경에서 서비스
     ```
 
 5. Eureka server 구동 후 Eureka Dashboard 확인
-![](../images/eureka-dashboard.png) 
-  - 웹브라우저에서 Eureka Server로 설정한 URL에 접속시 Eureka 콘솔 화면을 볼 수 있음  
+  ![](../images/eureka-dashboard.png) 
+    - 웹브라우저에서 Eureka Server로 설정한 URL에 접속시 Eureka 콘솔 화면을 볼 수 있음  
 
 ### Eureka Client 설치방법
 
