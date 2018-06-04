@@ -86,5 +86,5 @@ public class Application {
 
 
 > zipkin vs. jaeger 참고
-<img src='./images/zipkinVsJaeger.png'>
+<img src='../images/zipkinVsJaeger.png'>
 [출처](https://sematext.com/blog/jaeger-vs-zipkin-opentracing-distributed-tracers/)
