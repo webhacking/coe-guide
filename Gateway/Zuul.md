@@ -59,7 +59,8 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
         name: zuul-service
 
     zuul:
-      ignoredServices: '*'
+      ignoredServices: '*'  # routes에 정의되지 않은 모든 요청은 무시 함
+      sensitive-headers:    # header의 모든 정보를 bypass 함
       routes:
         customer:
           path: /api/v1/customers/**  
@@ -101,7 +102,31 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
 
 # 4. Filter
 
-1. Filter 등록
+1. Filter 생성 및 등록
+    ```java
+    public class SimpleFilter extends ZuulFilter {
+        private static Logger logger = LoggerFactory.getLogger(SimpleFilter.class);
+
+        @Override
+        public String filterType() {  return "pre";      } // "post", "routing", "error"
+
+        @Override
+        public int filterOrder() {  return 0;  }
+
+        @Override
+        public boolean shouldFilter() { return true; }
+
+        @Override
+        public Object run() throws ZuulException {
+            RequestContext ctx = RequestContext.getCurrentContext();
+            HttpServletRequest request = ctx.getRequest();
+
+            logger.info(String.format("%s request to %s", request.getMethod(), request.getRequestURL().toString()));
+
+            return null;
+        }
+    }
+    ```
     ```java
     @EnableZuulProxy
     @EnableDiscoveryClient
@@ -118,3 +143,45 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
       }
     }
     ```
+
+
+# 4. RouteLocator
+RouteLocator를 통해 Zuul 설정에 등록된 route 정보를 확인할 수 있다.
+
+1. RouteLocator 생성 및 등록
+```java
+public class RouteLocater extends SimpleRouteLocator {
+    private Logger logger = LoggerFactory.getLogger(RouteLocater.class);
+
+    public RouteLocater(String servletPath, ZuulProperties properties) {
+        super(servletPath, properties);
+    }
+
+    @Override
+    protected ZuulProperties.ZuulRoute getZuulRoute(String adjustedPath) {
+        ZuulProperties.ZuulRoute zuulRoute = super.getZuulRoute(adjustedPath);  
+        logger.info(">>>>>>>" + zuulRoute.toString());
+
+        return zuulRoute;
+    }
+}
+```
+```java
+public class CoeZuulApplication {
+
+	@Autowired
+	private ServerProperties serverProperties;
+	@Autowired
+	private ZuulProperties zuulProperties;
+
+	@Bean
+	public RouteLocater routeLocater() {
+		return new RouteLocater(serverProperties.getServlet().getServletPrefix(), zuulProperties); //zuul의 route 설정 사용한다.
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(ZuulApplication.class, args);
+	}
+
+}
+```
