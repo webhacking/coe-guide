@@ -41,3 +41,53 @@
       }
     }
     ```
+    
+2. HystrixCommand, fallbackMethod 등록
+```java
+@Service
+public class OrderService {
+
+    private CustomerClient customerClient;
+
+    public OrderService(CustomerClient customerClient) {
+        this.customerClient = customerClient;
+    }
+
+    @HystrixCommand(fallbackMethod = "getDefaultAllCustomer")
+    public List<Customer> getAllCustomer() {
+        return customerClient.findAll();
+    }
+
+    public List<Customer> getDefaultAllCustomer() {
+        Customer customer = new Customer();
+        customer.setCustomerId(Integer.MAX_VALUE);
+        customer.setName("fallback");
+        customer.setEmail("fallback@gmail.com");
+
+        return Arrays.asList(customer);
+    }
+}
+```
+
+3. FeignClient Hystrix 사용
+```java
+@RefreshScope
+@FeignClient(
+        name ="${coe.application.customer-service}",
+        decode404 = true,
+        fallback = CustomerFallback.class
+)
+public interface CustomerClient {
+    @RequestMapping(method = RequestMethod.GET, value = API_V1_BASE_PATH + "/customers")
+    List<Customer> findAll();
+}
+```
+```java
+public class CustomerFallback implements CustomerClient {
+    @Override
+    public List<Customer> findAll() {
+
+        return Arrays.asList(new Customer(1,"coe", "coe@mail.com"));
+    }
+}
+```
