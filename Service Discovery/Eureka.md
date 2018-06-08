@@ -112,7 +112,7 @@ Microservices는 가상 환경 혹은 컨테이너 기반 환경에서 서비스
 4. @EnableDiscoveryClient Annotation 추가하여 Eureka Client 선언
 
     ```java
-    @EnableDiscoveryClient
+    @EnableDiscoveryClient  //eureka, consul, zookeeper의 implements를 모두 포함. @EnableEurekaClient는 only works for eureka.
     @SpringBootApplication
     public class CustomerApplication {
 
