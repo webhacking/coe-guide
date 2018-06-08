@@ -59,7 +59,8 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
         name: zuul-service
 
     zuul:
-      ignoredServices: '*'
+      ignoredServices: '*'  # routes에 정의되지 않은 모든 요청은 무시 함
+      sensitive-headers:    # header의 모든 정보를 bypass 함
       routes:
         customer:
           path: /api/v1/customers/**  
