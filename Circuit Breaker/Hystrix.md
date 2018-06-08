@@ -68,6 +68,24 @@ public class OrderService {
     }
 }
 ```
+```java
+@EnableCircuitBreaker // cicuitBreaker를 사용하지 않아도 fallback 처리에서 필요 함.(starter-Hystrix의 경우.)
+@EnableFeignClients
+@EnableDiscoveryClient
+@SpringBootApplication
+@RestController
+public class Service01Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Service01Application.class, args);
+    }
+
+    @RequestMapping("/test")
+    public String getTest(){
+        return "test";
+    }
+}
+```
 
 3. FeignClient Hystrix 사용
 ```java
