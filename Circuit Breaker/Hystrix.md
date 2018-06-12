@@ -190,13 +190,7 @@ public class CustomerFallback implements CustomerClient {
 
 # 2. Hystrix Dashboard
 Hystrix stream을 시각화하는 서비스
-> Hystrix dashboard 기본 endpoint -> http://localhost:port/hystrix  
 
-![](../images/hystrix-dashboard-main.png)
-
-main에 hystrix stream URL 입력 후 Monitor Stream 클릭 하면 아래화면 처럼 모니터링 가능
-
-![](../images/hystrix-dashboard.png)
 ### Hystrix Dashboard dependency 추가
 ```xml
 <dependency>
@@ -222,7 +216,13 @@ management:
       exposure:
         include: 'hystrix.stream'
 ```
+> Hystrix dashboard 기본 endpoint -> http://localhost:port/hystrix  
 
+![](../images/hystrix-dashboard-main.png)
+
+main에 hystrix stream URL 입력 후 Monitor Stream 클릭 하면 아래화면 처럼 모니터링 가능
+
+![](../images/hystrix-dashboard.png)
 # 3. Hystrix Turbine
 각 서비스별 Hystrix Stream 을 통합해주는 서비스
 > turbine 기본 endpoint -> http://localhost:port/turbine.stream
