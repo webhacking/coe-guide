@@ -188,4 +188,21 @@ Microservices는 가상 환경 혹은 컨테이너 기반 환경에서 서비스
     - heart-beat는 defaultZone의 very first 항목인 eureka1에 만 전송
   - 여러개의 Eureka에 등록할 경우 defaultZone에 ,(comma)로 구분하여 입력한다.
 
-
+## 4. Eureka registry caching
+- Eureka Server Response Cache 설정  
+Eureka server에서 eureka client에게 자신의 registry 정보를 제공 시 사용하는 cache.  
+client에게 더 빠른 registry 정보 제공을 위해 실제 registry 값이 아닌 cache의 값을 제공 함.  
+```yml
+eureka.server.response-cache-update-interval-ms: 3000 # 기본 30초
+```
+- Eureka Client Cache 설정  
+Eureka client에 존재하는 cache로 eureka server에 서비스 정보 요청 시 이 cache의 값을 이용 한다.
+cache refresh interval은 아래와 같이 정의 할 수 있다. (기본 30초)
+```yml
+eureka.client.registryFetchIntervalSeconds: 3 # 기본 30초
+```
+> Ribbon cache 설정(cache를 정리하며 ribbon cache 도 포함하여 정리 함)  
+> Zuul, Feign 에서 다른 서비스 호출 시 사용 되는 cache
+> ```yml
+> ribbon.ServerListRefreshInterval: 3000
+> ```
