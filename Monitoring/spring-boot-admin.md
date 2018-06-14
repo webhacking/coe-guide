@@ -97,6 +97,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface 를 제�
 ```
 
 2. application.yml
+
 ```yaml
 spring:
   application:
@@ -125,7 +126,6 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     enabled: true
     ...
-
 ```
 
 3. add @EnableAdminServer Annotation
@@ -144,6 +144,7 @@ s	public static void main(String[] args) {
 ```
 
 4. customize security configuration
+
 ```java
 	@Configuration
 	public static class SecurityPermitAllConfig extends WebSecurityConfigurerAdapter {
@@ -162,6 +163,7 @@ s	public static void main(String[] args) {
 > Eureka 는 필수가 아니며, Spring Boot Admin Client 를 통해 구성 가능하다.
 
 1. pom.xml
+
 ```xml
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -178,6 +180,7 @@ s	public static void main(String[] args) {
 ```
 
 2. application.yml
+
 ```yaml
 server:
   port: 17003
@@ -211,6 +214,7 @@ management:
 ```
 
 3. customize security configuraion
+
 ```java
 @Configuration
 @EnableWebSecurity
