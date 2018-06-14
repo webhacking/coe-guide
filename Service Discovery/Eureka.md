@@ -105,6 +105,7 @@ Microservices는 가상 환경 혹은 컨테이너 기반 환경에서 서비스
         serviceUrl:
           defaultZone: http://192.168.1.19:8761/eureka/
         enabled: true
+      preferIpAddress: true # 서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
     ```
     - Eureka Server 연결 설정
     - Service 명 customer-service로 설정 (eureka server에 등록되는 서비스 명)
