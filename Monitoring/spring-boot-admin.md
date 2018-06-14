@@ -7,8 +7,6 @@
 
 Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface 를 제공하는 UI 프레임워크이다.
 
-Spring Cloud Registry (Eureka) 로 부터 서비스 인스턴스 정보를 받아 한 화면에서 
-
 ### 제공하는 기능
 - Health Status
 - Application 상세 정보
@@ -157,9 +155,11 @@ s	public static void main(String[] args) {
 	}
 ```
 
-##### Service-side 구성 (with Eureka Client)
+##### Client-side 구성 (with Eureka Client)
 
-> Eureka 는 필수가 아니며, Spring Boot Admin Client 를 통해 구성 가능
+각 마이크로서비스가 Eureka Client로 구성되어 있는 경우, Actuator 정보만 추가하여 Admin Server에 자동 등록하고 사용할 수 있다.
+
+> Eureka 는 필수가 아니며, Spring Boot Admin Client 를 통해 구성 가능하다.
 
 1. pom.xml
 ```xml
@@ -232,8 +232,7 @@ public class SecurityPermitAllConfig extends WebSecurityConfigurerAdapter {
 
 > 참고 : https://codecentric.github.io/spring-boot-admin/current/
 
-
-### 서비스측 구성 (with Eureka)
+###### 서비스측 구성 (with Eureka)
 
 # 참고
 SpringBoot Admin Sever의 버전과 마이크로 서비스의 SpringBoot(Actuator) 버전에 따라 이슈가 있음
