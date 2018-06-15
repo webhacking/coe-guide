@@ -185,3 +185,20 @@ public class CoeZuulApplication {
 
 }
 ```
+# 5. 파일 전송 크기 제한 설정
+아래 속성을 추가하고, 파일전송의 시간을 감안하여 ribbon, hystrix등의 timeout 설정을 변경해 준다.
+```yml
+# 2.0 이전의 경우
+spring:
+  http:
+    multipart:
+      max-file-size: 100MB	# 한개 파일의 전송 크기
+      max-request-size: 100MB	# 하나의 요청에 포함되는 전체 파일 크기
+      
+# 2.0 이후의 경우
+spring:
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size=128MB
+```
