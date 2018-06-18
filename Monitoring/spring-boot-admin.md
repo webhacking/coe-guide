@@ -2,7 +2,7 @@
 
 Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제공하는 UI 프레임워크이다.
 각 서비스의 Spring Actuator Endpoints의 정보를 읽어와 Dashboard를 제공한다.  
-![](../images/sba-ui-applications.png)
+![](../images/sba-ui-application-list.png)
 
 ### 제공하는 기능
 - Health Status
