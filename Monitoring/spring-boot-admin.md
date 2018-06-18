@@ -19,15 +19,20 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface 를 제�
 
 # 2. 구성방법
 
-### version : 1.5x
+## Server-side 구성
 
-> 참고 : http://codecentric.github.io/spring-boot-admin/1.5.7/
+1. Spring boot project 생성
+2. pom.xml dependency 추가
 
-##### Server-side 구성
-
-1. pom.xml
+   Spring Admin 2.x 버전은 주석으로 표시한 버전 정보 참고 
 
 ```xml
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.13.RELEASE</version> <!--2.0.1.RELEASE-->
+		<relativePath/> 
+	</parent>
 	<dependencyManagement>
 		<dependencies>
             <dependency>
@@ -46,15 +51,13 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface 를 제�
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<spring-boot-admin.version>1.5.7</spring-boot-admin.version>
-		<spring-cloud.version>Edgware.RC1</spring-cloud.version>
+		<spring-boot-admin.version>1.5.7</spring-boot-admin.version> <!--2.0.1-SNAPSHOT-->
+		<spring-cloud.version>Edgware.RC1</spring-cloud.version> <!--Finchley.RC2-->
 	</properties>
-
     <dependencies>
 		<!-- for Spring Boot Admin -->
 		<dependency>
@@ -66,11 +69,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface 를 제�
 			<artifactId>spring-boot-admin-server-ui</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>de.codecentric</groupId>
-			<artifactId>spring-boot-admin-server-ui-hystrix</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jolokia</groupId>
+			<groupId>org.jolokia</groupId> <!--JMX-bean management-->
 			<artifactId>jolokia-core</artifactId>
 		</dependency>
 
@@ -96,12 +95,35 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface 를 제�
 	</dependencies>
 ```
 
-2. application.yml
-
+2. configuration - application.yml 수정
+1.5.x 버전
 ```yaml
 spring:
   application:
     name: coe-admin-server
+
+server:
+  port: 8080
+
+management:
+  security:
+    enabled: false
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+    enabled: true
+```
+
+2.x 버전
+```yaml
+spring:
+  application:
+    name: coe-admin-server
+
+server:
+  port: 8080
 
 management:
   endpoints:
@@ -111,25 +133,16 @@ management:
   endpoint:
     health:
       show-details: ALWAYS
-  security:
-    enabled: false
-
-server:
-  port: 8080
 
 eureka:
-  instance:
-    leaseRenewalIntervalInSeconds: 10
   client:
-    registryFetchIntervalSeconds: 5
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
     enabled: true
-    ...
 ```
+- Spring boot 2.x 버전의 경우 default actuator endpoint는 health, info뿐이므로 명시적으로 열어줘야 함("*")
 
 3. add @EnableAdminServer Annotation
-
 ```java
 @SpringBootApplication
 @EnableDiscoveryClient
@@ -143,8 +156,7 @@ s	public static void main(String[] args) {
 }
 ```
 
-4. customize security configuration
-
+4. customize SPA Web security configuration
 ```java
 	@Configuration
 	public static class SecurityPermitAllConfig extends WebSecurityConfigurerAdapter {
@@ -232,9 +244,7 @@ public class SecurityPermitAllConfig extends WebSecurityConfigurerAdapter {
 }
 ```
 
-#### version : 2.0x
 
-> 참고 : https://codecentric.github.io/spring-boot-admin/current/
 
 ###### 서비스측 구성 (with Eureka)
 
@@ -262,3 +272,7 @@ SpringBoot Admin Sever의 버전과 마이크로 서비스의 SpringBoot(Actuato
 
 > SpringBoot Admin Server와 각 마이크로 서비스의 버전을 맞춰서 사용하는 것을 권장.
 > SpringBoot Admin 2.x를 사용하는 경우 turbine은 별도의 서비스로 제공 해야 함
+
+### reference guide 
+1.5.x : http://codecentric.github.io/spring-boot-admin/1.5.7/ 
+2.x : https://codecentric.github.io/spring-boot-admin/current/
