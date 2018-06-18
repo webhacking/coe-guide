@@ -19,7 +19,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
 # 2. 구성방법
 ## SBA 1.5.x 구성
 
-#### a. Server-side 구성 (1.5.x)
+### a. Server-side 구성 (1.5.x)
 1. Spring boot project 생성
 2. pom.xml dependency 추가
   ```xml
@@ -85,7 +85,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
     }
     ```
 
-#### b. Client-side 구성 with Eureka Client (1.5.x)
+### b. Client-side 구성 with Eureka Client (1.5.x)
 각 마이크로서비스가 Eureka Client로 구성되어 있는 경우, Actuator 정보만 추가하여 Admin Server에 자동 등록하고 사용할 수 있다.
 
 > Eureka 는 필수가 아니며, Spring Boot Admin Client 를 통해 구성 가능하다.
@@ -120,54 +120,54 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
 
 ## SBA 2.0.x 구성
 
-#### a. Server-side 구성 (2.0.x)
+### a. Server-side 구성 (2.0.x)
   1. Spring boot project 생성
   2. pom.xml dependency 추가
-    ```xml
-      <dependencyManagement>
-        <dependencies>
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-dependencies</artifactId>
-            <version>${spring-cloud.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
-          <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-dependencies</artifactId>
-            <version>${spring-boot-admin.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-          </dependency>
-        </dependencies>
-      </dependencyManagement>
-      <properties>
-        <spring-boot-admin.version>2.0.1-SNAPSHOT</spring-boot-admin.version>
-    		<spring-cloud.version>Finchley.RC2</spring-cloud.version>
-        ...
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>de.codecentric</groupId>
-          <artifactId>spring-boot-admin-starter-server</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.springframework.cloud</groupId>
-          <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        ...
-      </dependencies>
-    ```
+     ```xml
+	      <dependencyManagement>
+		<dependencies>
+		  <dependency>
+		    <groupId>org.springframework.cloud</groupId>
+		    <artifactId>spring-cloud-dependencies</artifactId>
+		    <version>${spring-cloud.version}</version>
+		    <type>pom</type>
+		    <scope>import</scope>
+		  </dependency>
+		  <dependency>
+		    <groupId>de.codecentric</groupId>
+		    <artifactId>spring-boot-admin-dependencies</artifactId>
+		    <version>${spring-boot-admin.version}</version>
+		    <type>pom</type>
+		    <scope>import</scope>
+		  </dependency>
+		</dependencies>
+	      </dependencyManagement>
+	      <properties>
+		<spring-boot-admin.version>2.0.1-SNAPSHOT</spring-boot-admin.version>
+			<spring-cloud.version>Finchley.RC2</spring-cloud.version>
+		...
+	      </properties>
+	      <dependencies>
+		<dependency>
+		  <groupId>de.codecentric</groupId>
+		  <artifactId>spring-boot-admin-starter-server</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>org.springframework.cloud</groupId>
+		  <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		...
+	      </dependencies>
+     ```
   3. application.yml - eureka 설정 추가
-    ```yaml
-    server:
-      port: 8080
-    eureka:
-      client:
-        serviceUrl:
-          defaultZone: ${EUREKA_SERVER_URL:http://localhost}:${EUREKA_SERVER_PORT:8761}/eureka/
-    ```
+     ```yaml
+	    server:
+	      port: 8080
+	    eureka:
+	      client:
+		serviceUrl:
+		  defaultZone: ${EUREKA_SERVER_URL:http://localhost}:${EUREKA_SERVER_PORT:8761}/eureka/
+     ```
   4. @EnableAdminServer Annotation 추가  
       ```java
       @SpringBootApplication
@@ -182,47 +182,48 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
       }
       ```
 
-#### b. Client-side 구성 with Eureka Client (2.0.x)
+### b. Client-side 구성 with Eureka Client (2.0.x)
   각 마이크로서비스가 Eureka Client로 구성되어 있는 경우, Actuator 정보만 추가하여 Admin Server에 자동 등록하고 사용할 수 있다.
 
   > Eureka 는 필수가 아니며, Spring Boot Admin Client 를 통해 구성 가능하다.
 
   1. Spring boot project 생성
   2. pom.xml dependency 추가
-    ```xml
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jolokia</groupId> <!--JMX-bean management-->
-      <artifactId>jolokia-core</artifactId>
-    </dependency>
-    ```
+     ```xml
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-actuator</artifactId>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.springframework.boot</groupId>
+	      <artifactId>spring-boot-starter-security</artifactId>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.springframework.cloud</groupId>
+	      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.jolokia</groupId> <!--JMX-bean management-->
+	      <artifactId>jolokia-core</artifactId>
+	    </dependency>
+     ```
   3. application.yml - eureka, actuator 설정 추가
-    ```yaml
-    management:
-      endpoints:
-        web:
-          exposure:
-            include: "*"
-      endpoint:
-        health:
-          show-details: ALWAYS
-    eureka:
-      client:
-        serviceUrl:
-          defaultZone: ${EUREKA_SERVER_URL:http://localhost}:${EUREKA_SERVER_PORT:8761}/eureka/
-    ```
+     ```yaml
+	    management:
+	      endpoints:
+		web:
+		  exposure:
+		    include: "*"
+	      endpoint:
+		health:
+		  show-details: ALWAYS
+	    eureka:
+	      client:
+		serviceUrl:
+		  defaultZone: ${EUREKA_SERVER_URL:http://localhost}:${EUREKA_SERVER_PORT:8761}/eureka/
+     ```
     - Spring boot 2.x 버전의 경우 default actuator endpoint는 health, info뿐이므로 명시적으로 열어줘야 함("*")
+    
   4. Eureka Discovery Annotation 추가, actuator access security 설정 추가
   ```java
   @SpringBootApplication
@@ -245,8 +246,6 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
       }
   }
   ```
-
-
 
 # 3. Login Page 설정
 ## 1.5.x Server 설정 추가
