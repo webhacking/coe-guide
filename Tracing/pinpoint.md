@@ -40,3 +40,6 @@ Agent(서비스단에 추가되는 bytecode), Collector, HBase, UI Web 로 구�
 
 # 3. Applicatinos 간 관계 설정
 TBD
+
+# 참고
+작동원리 : https://d2.naver.com/helloworld/1194202
