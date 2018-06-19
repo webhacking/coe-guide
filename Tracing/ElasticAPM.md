@@ -17,6 +17,7 @@ APM Server는 agent에서 받은 데이터로 도큐먼트를 만들어 Elastics
 APM Server는 Go로 개발되었고, APM Agent는 Node.js, Python를 제공한다. (Ruby, Javascript 제공 예정)
 
 
+
 # 참고
 ### Elastic APM vs Pinpoint 
 
