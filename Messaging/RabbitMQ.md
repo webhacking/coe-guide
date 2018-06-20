@@ -48,8 +48,8 @@ localhost:15672/15673/15674에 접속하여 guest/guest로 확인
 시작전 반드시 구성할 노드 실행을 중지한다.(중지는 실행의 역순)
 
 ~~~bash
-$ ./rabbitmq3/sbin/rabbitmqctl -n rabbit3 start_app
-$ ./rabbitmq2/sbin/rabbitmqctl -n rabbit2 start_app
+$ ./rabbitmq3/sbin/rabbitmqctl -n rabbit3 stop_app
+$ ./rabbitmq2/sbin/rabbitmqctl -n rabbit2 stop_app
 
 $ ./rabbitmq2/sbin/rabbitmqctl -n rabbit2 join_cluster rabbit1@호스트네임
 $ ./rabbitmq3/sbin/rabbitmqctl -n rabbit3 join_cluster rabbit1@호스트네임
