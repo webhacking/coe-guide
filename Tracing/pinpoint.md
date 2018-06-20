@@ -27,7 +27,7 @@ Agent(서비스단에 추가되는 bytecode), Collector, HBase, UI Web 로 구�
 # 2. Quick Start
 소스코드 다운로드 [Naver Pinpoint]('https://github.com/naver/pinpoint.git')  
 서비스 시작  
-1. quickstart/bin/start-hbase.sh  
+1. quickstart/bin/start-hbase.sh  quickstart/bin/init-hbase.sh (db 초기화)
 2. quickstart/bin/start-collector.sh  
 3. quickstart/bin/start-web.sh  
 4. 사용자 서비스 시작 시 아래 parma 추가
@@ -38,5 +38,9 @@ Agent(서비스단에 추가되는 bytecode), Collector, HBase, UI Web 로 구�
 ```
 5. http://localhost:28080로 접속하여 서비스 이용 가능
 
-# 3. Applicatinos 간 관계 설정
+# 3. 설치
+#### 다운로드  
+https://github.com/naver/pinpoint/releases/tag/1.7.3
+
+
 TBD
