@@ -76,6 +76,11 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
         serviceUrl:
           defaultZone: http://192.168.1.19:8761/eureka/
         enabled: true
+    ribbon:
+      ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
+      ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time
+    #  SocketTimeout: 500     # Response 데이터의 packet 들을 받을 때 서로 다른 패킷을 받기 까지의 delay time (참고: http://tomining.tistory.com/164)
+      
     ```
     - 서비스명 zuul-sevice로 설정
     - Gateway의 라우팅 정보 설정
