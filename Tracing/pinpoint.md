@@ -38,9 +38,8 @@ Agent(서비스단에 추가되는 bytecode), Collector, HBase, UI Web 로 구�
 ```
 5. http://localhost:28080로 접속하여 서비스 이용 가능
 
-# 3. 설치
-#### 다운로드  
-https://github.com/naver/pinpoint/releases/tag/1.7.3
-
-
+# 3. Applicatinos 간 관계 설정
 TBD
+
+# 참고
+작동원리 : https://d2.naver.com/helloworld/1194202

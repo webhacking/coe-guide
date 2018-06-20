@@ -76,6 +76,11 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
         serviceUrl:
           defaultZone: http://192.168.1.19:8761/eureka/
         enabled: true
+    ribbon:
+      ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
+      ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time
+    #  SocketTimeout: 500     # Response 데이터의 packet 들을 받을 때 서로 다른 패킷을 받기 까지의 delay time (참고: http://tomining.tistory.com/164)
+      
     ```
     - 서비스명 zuul-sevice로 설정
     - Gateway의 라우팅 정보 설정
@@ -184,4 +189,21 @@ public class CoeZuulApplication {
 	}
 
 }
+```
+# 5. 파일 전송 크기 제한 설정
+아래 속성을 추가하고, 파일전송의 시간을 감안하여 ribbon, hystrix등의 timeout 설정을 변경해 준다.
+```yml
+# 2.0 이전의 경우
+spring:
+  http:
+    multipart:
+      max-file-size: 100MB	# 한개 파일의 전송 크기
+      max-request-size: 100MB	# 하나의 요청에 포함되는 전체 파일 크기
+      
+# 2.0 이후의 경우
+spring:
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size=128MB
 ```
