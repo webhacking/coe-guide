@@ -18,14 +18,14 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-__#Spring Boot 1.5.15를 사용함__
+#Spring Boot 1.5.15를 사용함
 <parent>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-parent</artifactId>
   <version>1.5.15.BUILD-SNAPSHOT</version>  #
   <relativePath/> <!-- lookup parent from repository -->
 </parent>
-__#Spring Cloud Edgware 사용함__
+#Spring Cloud Edgware 사용함
 <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -33,7 +33,7 @@ __#Spring Cloud Edgware 사용함__
   <spring-cloud.version>Edgware.BUILD-SNAPSHOT</spring-cloud.version>
 </properties>
 ... ...
-__#eureka dependency 추가__
+#eureka dependency 추가
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
@@ -90,12 +90,12 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-__#web dependency 추가__
+#web dependency 추가
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
-__#eureka client dependency 추가__
+#eureka client dependency 추가
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -139,7 +139,7 @@ application을 실행 합니다.
 localhost:8761 로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다. 이때 instance명은 모두 대문자로 표시됩니다.  
 localhost:8771/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
 
-# 2. Zuul
+# 3. Zuul
 Gateway 역할을 수행하는 zuul 서비스를 설정하도록 하겠습니다.  
 
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
@@ -153,7 +153,7 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-__#zuul dependency 추가__
+#zuul dependency 추가
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
@@ -175,8 +175,8 @@ zuul:
   sensitive-headers:    # header의 모든 정보를 bypass 함
   routes:
     customer:
-      path: /api/v1/customer/**
-      serviceId: CUSTOMER-SERVICE
+      path: /api/v1/customer/** # 사용자가 입력할 url
+      serviceId: CUSTOMER-SERVICE # routing을 처리할 endpoint service
       strip-prefix: true  # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함
 
 eureka:
@@ -223,7 +223,7 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-__#feign dependency 추가__
+#feign dependency 추가
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -266,7 +266,7 @@ public interface CustomerClient {
 }
 ```
 > Feign  
-> REST 기반 client의 서비스 호출을 지원
+> REST 기반 client 서비스의 API 호출을 지원
 
 - CustomerService 파일 내용
 ```Java
