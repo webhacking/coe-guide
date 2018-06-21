@@ -156,6 +156,8 @@ brew install haproxy
     server rabbit2 127.0.0.1:5673 check inter 5000 rise 2 fall 3
     server rabbit3 127.0.0.1:5674 check inter 5000 rise 2 fall 3
 ~~~
+> check inter 5000 rise 2 fall 3 -> server 상태를 5초 간격으로 check 한다.   
+> Health check에 3번 실패하면 해당 서버는 서비스에서 제외하고, 2번 정상 check되면 서버를 서비스에 추가한다.
 
 ## 5. 클라이언트에서 접근
 본 예제는 Spring boot 기준으로 작성 되어 있다.
