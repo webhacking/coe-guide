@@ -1,19 +1,54 @@
 # 1. 개요
 
-### Zuul 목적 - Unified Front Door
+## Tables of Contents
+- Zuul 개요
+  - 역할
+  - 목적
+  - Netflix 활용 예시
+  
+- Zuul Core Features
+  - Routing Rules
+  - Filters
+  - Load Balancing
 
-![](../images/api-gateway-microservices-architecture.png)
 
 
 
-```text
-API Gateway는 Microservice Architecture(이하 MSA)에서 언급되는 컴포넌트 중 하나이며,
-모든 클라이언트 요청에 대한 end point를 통합하는 서버이다. 마치 프록시 서버처럼 동작한다.
-그리고 인증 및 권한, 모니터링, logging 등 추가적인 기능이 있다. 모든 비지니스 로직이 하나의 서버에 존재하는
-Monolithic Architecture와 달리 MSA는 도메인별 데이터를 저장하고 도메인별로 하나 이상의 서버가 따로 존재한다.
+## Zuul 개요
+#### 마이크로서비스 아키텍처에서 정의
+- API Gateway 또는 Edge service application
+  
+### Netflix 설계 목적
+- JVM-based router and server-side load balancer
+- 마이크로 서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 컴포넌트
+![](../images/api-gateway-1.png)
+
+### 필요한 배경, 사용하면 좋을 곳
+
+
+### Zuul 목적
+- 1
+  - 모든 비지니스 로직이 하나의 서버에 존재하는 Monolithic Architecture와 달리 MSA는 도메인별 데이터를 저장하고 도메인별로 하나 이상의 서버가 따로 존재한다.
 한 서비스에 한개 이상의 서버가 존재하기 때문에 이 서비스를 사용하는 클라이언트 입장에서는 다수의 end point가 생기게 되며,
 end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul 을 사용하여 관리한다.
-```
+- 2
+  - avoid the need to manage CORS and authentication concerns independently for all the backends
+- 다야항 Front-end
+  - HTML5/JavaScript-based UI for desktop and mobile browesrs
+  - Android, iPhone clients
+  - 3rd party applications
+- UI가 필요한 데이터가 여러 서비스에 걸쳐있다. 따라서 모든 서비스로부터 데이터를 fetch 해야한다
+
+- 마이크로 서비스 세계에서는 데이터가 나눠져 있기 때문에 client가 원하는 데이터 모양이 다를 수 있다. 커스터마이징이 필요하다.
+- client 특성에 따라 데이터 형태가 달라져야 한다 (desktop browser, mobile version)
+- 클라우드 환경에서는 서비스 인스턴스의 위치가 동적으로 변한다
+- 시간이 지남에 다라 서비스가 나눠지고 쪼개지고합쳐질 수 있다
+- 서비스는 웹 친화적이지 않은 하나 이상의 프로토콜을 사용할 수 있다
+
+### Netflix Zuul 활용 예시
+- Rather than provide a one-size-fits-all style API, the API gateway can expose a different API for each client. For example, the Netflix API gateway runs client-specific adapter code that provides each client with an API that’s best suited to its requirements.
+- The API gateway might also implement security, e.g. verify that the client is authorized to perform the request
+
 
 
 >https://www.nginx.com/blog/introduction-to-microservices/
