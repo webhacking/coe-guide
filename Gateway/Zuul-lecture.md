@@ -13,14 +13,17 @@
 
 ## Netflix Zuul 개요
 ### 마이크로서비스 아키텍처에서 의미
-- API Gateway 또는 API Service, Edge Service
+- 정의
+  - API Gateway 또는 API Service, Edge Service
+- 역할
   - 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
   - web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
-
 <p align="center><img height="" src"../images/x.png"></p>
 						    
 ### Netflix Zuul 설계 목적
-- JVM-based router and Server-side load balancer
+- 정의
+  - JVM-based router and Server-side load balancer
+- 목적
   - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원 (*Filters*를 통한 구현)
   - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
 
@@ -31,23 +34,23 @@
 <p align="center"><img height="550" src="../images/zuul-how-it-works.png"></p>
 
 ### Netflix Zuul (API Service) 필요 배경
-- Monolithic Architecture vs. Microservice Architecture 환경의 변화
-<p align="center"><img width="650" src="../images/monolithic-architecture-vs-microservices-architecture.png"></p>
+- Monolithic 에서 Microservice Architecture 분산 서비스 환경으로의 변화
+  - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 커뮤니케이션하고 협업하는 소프트웨어 아키텍처 패턴이다.
+  <p align="center"><img width="650" src="../images/monolithic-architecture-vs-microservices-architecture.png"></p>
 
-- 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 커뮤니케이션하고 협업하는 소프트웨어 아키텍처 패턴이다.
-- 이에 따라 클라이언트는 사용자에게 원하는 화면과 정보를 제공하기 위해 하나 이상의 서비스와 직접 통신할 필요가 생겼다.
-- 발생할 수 있는 문제 -> 해결하기 위해서는 중복된 로직을 하나의 포인트로 모아서 관리한다. 더 효율적
-  - (서비스 인스턴스 위치 추가/변경/삭제에 따른 관리의 어려움)
-    - 클라우드 환경에서는 서비스 인스턴스의 위치가 동적으로 변한다
-      - 클라우드에서 운영하는 경우 load에 따라 autoscailing을 위해 유동 ip를 사용한다
-      - 시간이 지남에 다라 서비스가 나눠지고 쪼개지고합쳐질 수 있다
-    - avoid the need to manage CORS and authentication concerns independently for all the backends
-    - 웹 친화적이지 않은 다양한 통신 프로토콜 사용
-      - 마이크로서비스별로 통신에 필요한 프로토콜을 자유롭게 선택할 수 있기 때문에 다양한 프로토콜을 클라이언트가 처리하기에 부담이 따른다.
-    - 다양한 클라이언트 타입 및 데이터 포맷 지원
-      - 마이크로 서비스 세계에서는 데이터가 나눠져 있기 때문에 client가 원하는 데이터 모양이 다를 수 있다. 커스터마이징이 필요하다. 라우팅 전에 필요한 정보 추가가 필요할 수도 있고 응답하기 전에도 그렇다.
-        - client 특성에 따라 데이터 형태가 달라져야 한다 (desktop browser, mobile version)
-
+- 특징
+  - 클라이언트와 백엔드 서비스간 커뮤니케이션 방법의 변화
+    - Monolithic: 어플리케이션 내부에서 객체 주입, 메서드 호출 등을 통해 서로 다른 도메인 서비스와 협업하여 데이터 생성
+    - Microservices: 클라이언트가 하나 이상의 서비스와 직접 통신해서 데이터 생성
+  
+  - 기능적 측면에서 변화
+    - 백엔스 서비스를 대상으로 인증, 권한, CORS 관리 등과 같은 공통 관심사 로직을 클라이언트에서 분리
+    - 백엔드 서비스들의 다양한 통신 프로토콜(HTTP, AMQP 등) 사용에 대한 지원
+    - 다양한 클라이언트(web/mobile browser, native mobile app 등) 특성에 맞는 다양한 데이터 포맷 지원
+    <p align="center"><img width="650" src="../images/api-gateway-purpose.png"></p> 
+  - 인프라 측면
+    - 클라우드 환경에서 Auto Scaling과 같은 기능을 이용해 서비스 인스턴스를 트래픽에 따라 동적으로 생성/운영하거나 컨테이너로 배포하면서 인스턴스의 위치(host,port)가 동적으로 변한다.
+    - 시간이 지남에 따라 서비스가 합쳐지거나 쪼개질 수 있다
  
 ### Netflix Zuul 활용 예시
 - Rather than provide a one-size-fits-all style API, the API gateway can expose a different API for each client. For example, the Netflix API gateway runs client-specific adapter code that provides each client with an API that’s best suited to its requirements.
@@ -56,16 +59,7 @@
 
 
 >https://www.nginx.com/blog/introduction-to-microservices/
-### Zuul 역할
 
-Zuul is a JVM-based router and server-side load balancer from Netflix.
-
-```text
-Zuul is the front door for all requests from devices and web sites to the backend of
-the Netflix streaming application. As an edge service application, Zuul is built to enable
-dynamic routing, monitoring, resiliency and security. It also has the ability to route requests
-to multiple Amazon Auto Scaling Groups as appropriate.
-```
 
 +front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
 +그림
