@@ -1,14 +1,14 @@
 ## Tables of Contents
-- Zuul 개요
+- **Zuul 개요**
   - 마이크로서비스 아키텍처에서 정의
   - Netflix 설계 목적
   - Netflix 활용 예시
   
-- Zuul Core Features
-  - **Routing Rules**
-  - **Filters**
-  - **Service Discovery**
-  - **Load Balancing**
+- **Zuul Core Features**
+  - Routing Rules
+  - Filters**
+  - Service Discovery
+  - Load Balancing
 
 
 ## Zuul 개요
