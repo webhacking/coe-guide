@@ -2,16 +2,15 @@
 
 ## Tables of Contents
 - Zuul 개요
-  - 역할
-  - 목적
+  - 마이크로서비스 아키텍처에서 정의
+  - Netflix 설계 목적
   - Netflix 활용 예시
   
 - Zuul Core Features
-  - Routing Rules
-  - Filters
-  - Load Balancing
-
-
+  - **Routing Rules**
+  - **Filters**
+  - **Service Discovery**
+  - **Load Balancing**
 
 
 ## Zuul 개요
@@ -23,7 +22,11 @@
 - 마이크로 서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 컴포넌트
 ![](../images/api-gateway-1.png)
 
-### 필요한 배경, 사용하면 좋을 곳
+### API Gateway 필요 배경
+- Monolithic Architecture vs. Microservice Architecture
+  - 하나의 서버에서 동작하는 모놀리틱 어플리케이션과 달리 마이크로서비스 어플리케이션은 마이크로는 일반적으로 fine-grained API들을 통해 의미있는 데이터 조각을 제공하기 때문에 client가 필요한 데이터를 사용자에게 보여주기 위해서는 하나 이상의 마이크로서비스와 통신하여 데이터를 조회해야 한다. 즉 
+- 
+
 
 
 ### Zuul 목적
@@ -86,7 +89,17 @@ to multiple Amazon Auto Scaling Groups as appropriate.
 - Static Response handling
 - Active/Active traffic management
 
-
+---
+  - Connection Pooling
+  - Status Categories
+  - Retries
+  - Request Passport
+  - Request Attempts
+  - Origin Concurrency Protection
+  - HTTP/2
+  - Mutual TLS
+  - Proxy Protocol
+  - GZip
 
 
 
