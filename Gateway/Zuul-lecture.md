@@ -1,5 +1,3 @@
-# 1. 개요
-
 ## Tables of Contents
 - Zuul 개요
   - 마이크로서비스 아키텍처에서 정의
