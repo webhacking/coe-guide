@@ -13,16 +13,14 @@
 
 ## Netflix Zuul 개요
 ### 마이크로서비스 아키텍처에서 의미
-- 정의
-  - API Gateway 또는 API Service, Edge Service
-- 역할
+- API Gateway 또는 API Service, Edge Service
   - 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
-- 그림추가: web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
-  
+  - web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
+
+<p align="center><img height="" src"../images/x.png"></p>
+						    
 ### Netflix Zuul 설계 목적
-- 정의
-  - JVM-based router and Server-side load balancer
-- 목적
+- JVM-based router and Server-side load balancer
   - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원 (*Filters*를 통한 구현)
   - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
 
