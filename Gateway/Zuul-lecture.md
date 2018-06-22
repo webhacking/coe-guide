@@ -12,17 +12,25 @@
 
 
 ## Zuul 개요
-#### 마이크로서비스 아키텍처에서 정의
+### 마이크로서비스 아키텍처에서 정의
 - API Gateway 또는 Edge service application
+- *그림삽입: 전체 마이크로서비스 어플리케이션 한장 그림에서 API Gateway 표시한 그림
   
-### Netflix 설계 목적
-- JVM-based router and server-side load balancer
-- 마이크로 서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 컴포넌트
+### Netflix Zuul 설계 목적
+- JVM-based router and Server-side load balancer로 활용
+- 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 컴포넌트
 ![](../images/api-gateway-1.png)
+- *추가정보삽입: jvm-based router 의미, server-side load balancer란
+
+### Netflix Zuul 활용 예시
+- Rather than provide a one-size-fits-all style API, the API gateway can expose a different API for each client. For example, the Netflix API gateway runs client-specific adapter code that provides each client with an API that’s best suited to its requirements.
+- The API gateway might also implement security, e.g. verify that the client is authorized to perform the request
 
 ### API Gateway 필요 배경
 - Monolithic Architecture vs. Microservice Architecture
-  - 하나의 서버에서 동작하는 모놀리틱 어플리케이션과 달리 마이크로서비스 어플리케이션은 마이크로는 일반적으로 fine-grained API들을 통해 의미있는 데이터 조각을 제공하기 때문에 client가 필요한 데이터를 사용자에게 보여주기 위해서는 하나 이상의 마이크로서비스와 통신하여 데이터를 조회해야 한다. 즉 
+  - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 협력하고 통신하는 소프트웨어 아키텍처 패턴이다.
+  - 그림삽입: monolithic vs. microservice
+  - 마이크로는 일반적으로 fine-grained API들을 통해 의미있는 데이터 조각을 제공하기 때문에 client가 필요한 데이터를 사용자에게 보여주기 위해서는 하나 이상의 마이크로서비스와 통신하여 데이터를 조회해야 한다. 즉 
 - 
 
 
@@ -46,9 +54,7 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
 - 시간이 지남에 다라 서비스가 나눠지고 쪼개지고합쳐질 수 있다
 - 서비스는 웹 친화적이지 않은 하나 이상의 프로토콜을 사용할 수 있다
 
-### Netflix Zuul 활용 예시
-- Rather than provide a one-size-fits-all style API, the API gateway can expose a different API for each client. For example, the Netflix API gateway runs client-specific adapter code that provides each client with an API that’s best suited to its requirements.
-- The API gateway might also implement security, e.g. verify that the client is authorized to perform the request
+
 
 
 
