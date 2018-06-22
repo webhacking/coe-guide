@@ -1,10 +1,10 @@
 ## Tables of Contents
-- **Zuul 개요**
+- **Netflix Zuul 개요**
   - 마이크로서비스 아키텍처에서 정의
   - Netflix 설계 목적
   - Netflix 활용 예시
   
-- **Zuul Core Features**
+- **Netflix Zuul Core Features**
   - Routing Rules
   - Filters
   - Service Discovery
@@ -12,26 +12,33 @@
 
 
 ## Netflix Zuul 개요
-### 마이크로서비스 아키텍처에서 정의
+### 마이크로서비스 아키텍처에서 의미
 - 정의: API Gateway 또는 Edge service application
-- 역할: 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 컴포넌트
+- 역할: 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
 <p align="center">
-  <img width="600" height="400" src="../images/ecommerce-microservice-architecture.png">
+  <img src="../images/ecommerce-microservice-architecture.png">
 </p>
-![]()
   
 ### Netflix Zuul 설계 목적
-- JVM-based router and Server-side load balancer로 활용
-- 
+- 정의
+  - JVM-based router and Server-side load balancer
+- 목적
+  - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원
+  - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅할 수 있다
+
+
 ![](../images/api-gateway-1.png)
 - *추가정보삽입: jvm-based router 의미, server-side load balancer란
-- 인증 및 권한, 모니터링, logging 등 추가적인 기능이 있다, Zuul is built to enable
-dynamic routing, monitoring, resiliency and security. (하나에서 공통 처리하는 느낌)
+- 인증 및 권한, 모니터링, logging 등 추가적인 기능이 있다
 
 ### Netflix Zuul 필요 배경
 - Monolithic Architecture vs. Microservice Architecture 환경의 변화
-   - 그림삽입: monolithic vs. microservice
- - 
+<p align="center">
+  <img src="../images/monolithic-architecture-vs-microservices-architecture.png">
+</p>
+ 
+ 
+ 
   - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 협력하고 통신하는 소프트웨어 아키텍처 패턴이다.
   - 따라서 클라이언트는 사용자에게 원하는 화면과 정보를 제공하기 위해 하나 이상의 서비스와 직접 통신할 필요가 생겼다.
   - 발생할 수 있는 문제 -> 해결하기 위해서는 중복된 로직을 하나의 포인트로 모아서 관리한다. 더 효율적
