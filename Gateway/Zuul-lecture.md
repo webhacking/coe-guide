@@ -13,19 +13,19 @@
 
 ## Netflix Zuul 개요
 ### 마이크로서비스 아키텍처에서 의미
-- 정의: API Gateway 또는 Edge service application
+- 정의: API Gateway 또는 API Service, Edge Service
 - 역할: 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
-<p align="center">
-  <img src="../images/ecommerce-microservice-architecture.png">
-</p>
+- 그림추가: web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
   
 ### Netflix Zuul 설계 목적
 - 정의
   - JVM-based router and Server-side load balancer
 - 목적
-  - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원
-  - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅할 수 있다
-
+  - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원 (*Filters*를 통한 구현)
+  - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
+  
+### Zuul 2.0 Architecture
+<p align="center"> <img height="600" src="../images/zuul-how-it-works.png"> </p>
 
 ![](../images/api-gateway-1.png)
 - *추가정보삽입: jvm-based router 의미, server-side load balancer란
@@ -35,14 +35,12 @@
 - Monolithic Architecture vs. Microservice Architecture 환경의 변화
 <p align="center">
   <img src="../images/monolithic-architecture-vs-microservices-architecture.png">
-</p>
- 
- 
- 
-  - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 협력하고 통신하는 소프트웨어 아키텍처 패턴이다.
-  - 따라서 클라이언트는 사용자에게 원하는 화면과 정보를 제공하기 위해 하나 이상의 서비스와 직접 통신할 필요가 생겼다.
-  - 발생할 수 있는 문제 -> 해결하기 위해서는 중복된 로직을 하나의 포인트로 모아서 관리한다. 더 효율적
-  (서비스 인스턴스 위치 추가/변경/삭제에 따른 관리의 어려움)
+
+
+- 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 커뮤니케이션하고 협업하는 소프트웨어 아키텍처 패턴이다.
+- 이에 따라 클라이언트는 사용자에게 원하는 화면과 정보를 제공하기 위해 하나 이상의 서비스와 직접 통신할 필요가 생겼다.
+- 발생할 수 있는 문제 -> 해결하기 위해서는 중복된 로직을 하나의 포인트로 모아서 관리한다. 더 효율적
+  - (서비스 인스턴스 위치 추가/변경/삭제에 따른 관리의 어려움)
     - 클라우드 환경에서는 서비스 인스턴스의 위치가 동적으로 변한다
       - 클라우드에서 운영하는 경우 load에 따라 autoscailing을 위해 유동 ip를 사용한다
       - 시간이 지남에 다라 서비스가 나눠지고 쪼개지고합쳐질 수 있다
@@ -79,8 +77,7 @@ to multiple Amazon Auto Scaling Groups as appropriate.
 ### Netflix Zuul Architecture
 ![](../images/zuul-netflix-cloud-architecture.png)
 
-### Zuul 2.0 동작방식
-![](../images/zuul-how-it-works.png)
+
 
 # 2. Features
 ### Zuul 의 기능
