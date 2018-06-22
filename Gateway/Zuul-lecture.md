@@ -40,8 +40,7 @@
 ## Netflix Zuul 2.0 Architecture
 <p align="center"><img height="500" src="../images/zuul-how-it-works.png"></p>
 
-## Netflix Zuul (API Service) 필요 배경
-- (추가보완 TBD) 
+## Netflix Zuul (API Service) 필요 배경 (추가정리 TBD) 
 - Monolithic 에서 Microservice Architecture 분산 서비스 환경으로의 변화
   - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 커뮤니케이션하고 협업하는 소프트웨어 아키텍처 패턴이다.
   <p align="center"><img width="650" src="../images/monolithic-architecture-vs-microservices-architecture.png"></p>
