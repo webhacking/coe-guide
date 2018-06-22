@@ -1,10 +1,13 @@
 ## Tables of Contents
 - **Netflix Zuul 개요**
   - 마이크로서비스 아키텍처에서 정의
-  - Netflix 설계 목적
-  - Netflix 활용 예시
+  - Netflix Zuul 설계 목적
+    - Zuul in Netflix’s Cloud Architecture
+    - Netflix Zuul 2.0 Architecture
+  - Netflix Zuul 필요 배경
   
 - **Netflix Zuul Core Features**
+  - Netflix Zuul 동작방식
   - Routing Rules
   - Filters
   - Service Discovery
@@ -12,7 +15,7 @@
 
 
 ## Netflix Zuul 개요
-### 마이크로서비스 아키텍처에서 의미
+### Definitions in Microservice Architecture
 - 정의
   - API Gateway 또는 API Service, Edge Service
 - 역할
@@ -52,24 +55,16 @@
     - 클라우드 환경에서 Auto Scaling과 같은 기능을 이용해 서비스 인스턴스를 트래픽에 따라 동적으로 생성/운영하거나 컨테이너로 배포하면서 인스턴스의 위치(host,port)가 동적으로 변한다.
     - 시간이 지남에 따라 서비스가 합쳐지거나 쪼개질 수 있다
  
-### Netflix Zuul 활용 예시
-- Rather than provide a one-size-fits-all style API, the API gateway can expose a different API for each client. For example, the Netflix API gateway runs client-specific adapter code that provides each client with an API that’s best suited to its requirements.
-- The API gateway might also implement security, e.g. verify that the client is authorized to perform the request
+## Netflix Zuul Core Features
+### Netflix Zuul 동작방식
+- 그림추가) front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
 
-
-
->https://www.nginx.com/blog/introduction-to-microservices/
-
-
-+front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
-+그림
-
-
-
-
-# 2. Features
-### Zuul 의 기능
-- **Dynamic Routing**
+### Routing Rules
+### Filters
+### Service Discovery
+### Load Balancing
+### Other features
+- Dynamic Routing
 - Load Balancing
 - Authentication
 - Insights
@@ -79,8 +74,7 @@
 - Security
 - Static Response handling
 - Active/Active traffic management
-
----
+--- 2.0
   - Connection Pooling
   - Status Categories
   - Retries
