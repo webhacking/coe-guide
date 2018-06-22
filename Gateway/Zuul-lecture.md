@@ -15,7 +15,10 @@
 ### 마이크로서비스 아키텍처에서 정의
 - 정의: API Gateway 또는 Edge service application
 - 역할: 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 컴포넌트
-![](../images/ecommerce-microservice-architecture.png)
+<p align="center">
+  <img width="600" height="400" src="../images/ecommerce-microservice-architecture.png">
+</p>
+![]()
   
 ### Netflix Zuul 설계 목적
 - JVM-based router and Server-side load balancer로 활용
