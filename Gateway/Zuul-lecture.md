@@ -1,7 +1,10 @@
 # 1. 개요
 
 ### Zuul 목적 - Unified Front Door
+
 ![](../images/api-gateway-microservices-architecture.png)
+
+
 
 ```text
 API Gateway는 Microservice Architecture(이하 MSA)에서 언급되는 컴포넌트 중 하나이며,
@@ -13,7 +16,7 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
 ```
 
 
-
+>https://www.nginx.com/blog/introduction-to-microservices/
 ### Zuul 역할
 
 Zuul is a JVM-based router and server-side load balancer from Netflix.
