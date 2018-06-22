@@ -24,7 +24,7 @@
   - API Gateway 또는 API Service, Edge Service
 - 역할
   - 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
-  - web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
+  - (그림 TBD) web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
 <p align="center><img height="" src"../images/x.png"></p>
 						    
 ## Netflix Zuul 설계 목적
@@ -35,12 +35,13 @@
   - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
 
 ## Zuul in Netflix’s Cloud Architecture
-<p align="center"><img height="550" src="../images/zuul-netflix-cloud-architecture.png"></p>
+<p align="center"><img height="500" src="../images/zuul-netflix-cloud-architecture.png"></p>
 
 ## Netflix Zuul 2.0 Architecture
-<p align="center"><img height="550" src="../images/zuul-how-it-works.png"></p>
+<p align="center"><img height="500" src="../images/zuul-how-it-works.png"></p>
 
 ## Netflix Zuul (API Service) 필요 배경
+- (추가보완 TBD) 
 - Monolithic 에서 Microservice Architecture 분산 서비스 환경으로의 변화
   - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 커뮤니케이션하고 협업하는 소프트웨어 아키텍처 패턴이다.
   <p align="center"><img width="650" src="../images/monolithic-architecture-vs-microservices-architecture.png"></p>
@@ -61,7 +62,7 @@
  
 # Netflix Zuul Core Features
 ## Netflix Zuul 동작방식
-- 그림추가) front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
+- (그림 TBD) front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
 
 ## Routing Rules
 - front-end로부터 들어온 HTTP request를 prefix or path에 따라 특정 service로 라우팅하기 위한 규칙을 정의
