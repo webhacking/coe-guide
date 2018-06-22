@@ -1,6 +1,6 @@
 # Tables of Contents
 - **Netflix Zuul 개요**
-  - 마이크로서비스 아키텍처에서 정의
+  - 마이크로서비스 아키텍처에서 의미
   - Netflix Zuul 설계 목적
     - Zuul in Netflix’s Cloud Architecture
     - Netflix Zuul 2.0 Architecture
@@ -19,7 +19,7 @@
   - RouteLocator
 
 # Netflix Zuul 개요
-## Definitions in Microservice Architecture
+## 마이크로서비스 아키텍처에서 의미
 - 정의
   - API Gateway 또는 API Service, Edge Service
 - 역할
