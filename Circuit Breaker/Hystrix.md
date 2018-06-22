@@ -1,4 +1,10 @@
 # 1. Hystrix
+
+## 목적
+https://medium.com/@goinhacker/hystrix-500452f4fae2
+https://engineering.linecorp.com/ko/blog/detail/76
+https://martinfowler.com/bliki/CircuitBreaker.html
+
 ![](../images/circuit-breaking.png)
 
 ## configuration - application.yml 수정  
@@ -110,7 +116,7 @@ public class ZuulFallbackProvider implements FallbackProvider {
 
 }
 ```
-    
+
 ## 2. HystrixCommand, fallbackMethod 등록(Service, Component만 사용 가능)
 ### Hystrix dependency 추가
 ```xml
@@ -143,7 +149,7 @@ public class OrderService {
 ```
 ### Application annotation 추가
 ```java
-@EnableHystrix 
+@EnableHystrix
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
