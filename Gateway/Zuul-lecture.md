@@ -29,7 +29,11 @@
 ### API Gateway 필요 배경
 - Monolithic Architecture vs. Microservice Architecture
   - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 협력하고 통신하는 소프트웨어 아키텍처 패턴이다.
-  - 그림삽입: monolithic vs. microservice
+  - 따라서 클라이언트는 사용자에게 필요한 화면을 구성하기 위해서 하나 이상의 서비스와 통신할 필요가 있게 되었다.
+- 클라우드 환경에서 서비스 인스턴스의 위치(host
+  
+   - 그림삽입: monolithic vs. microservice
+
   - 마이크로는 일반적으로 fine-grained API들을 통해 의미있는 데이터 조각을 제공하기 때문에 client가 필요한 데이터를 사용자에게 보여주기 위해서는 하나 이상의 마이크로서비스와 통신하여 데이터를 조회해야 한다. 즉 
 - 
 
