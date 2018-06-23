@@ -24,8 +24,7 @@
   - API Gateway 또는 API Service, Edge Service
 - 역할
   - 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
-  - (그림 TBD) web app, mobile app, 3rd party app --> api gateway --> account, inventory, shipping service
-<p align="center><img height="" src"../images/x.png"></p>
+  <p align="center"><img height="" src="../images/api-gateway-in-msa.png"></p>
 						    
 ## Netflix Zuul 설계 목적
 - 정의
