@@ -37,7 +37,6 @@
 <p align="center"><img height="500" src="../images/zuul-netflix-cloud-architecture_new.png"></p>
 
 ## Netflix Zuul 2.0 Architecture
-<p align="center"><img height="500" src="../images/zuul-how-it-works.png"></p>
 
 ## Netflix Zuul (API Service) 필요 배경 (추가정리 TBD) 
 - Monolithic 에서 Microservice Architecture 분산 서비스 환경으로의 변화
