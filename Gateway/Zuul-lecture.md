@@ -34,7 +34,7 @@
   - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
 
 ## Zuul in Netflix’s Cloud Architecture
-<p align="center"><img height="500" src="../images/zuul-netflix-cloud-architecture.png"></p>
+<p align="center"><img height="500" src="../images/zuul-netflix-cloud-architecture_new.png"></p>
 
 ## Netflix Zuul 2.0 Architecture
 <p align="center"><img height="500" src="../images/zuul-how-it-works.png"></p> 
