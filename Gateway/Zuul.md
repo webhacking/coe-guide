@@ -1,47 +1,170 @@
-# 1. 개요
+# Tables of Contents
+- **Netflix Zuul 개요**
+  - 마이크로서비스 아키텍처에서 의미
+  - Netflix Zuul 설계 목적
+    - Zuul in Netflix’s Cloud Architecture
+    - Netflix Zuul 2.0 Architecture
+  - Netflix Zuul 필요 배경
+  
+- **Netflix Zuul Core Features**
+  - Netflix Zuul 동작방식
+  - Routing Rules
+  - Filters
+  - Service Discovery
+  - Load Balancing
+  
+- **Getting Started**
+  - Spring boot project 생성
+  - Filter
+  - RouteLocator
 
-### Zuul이란?
+# Netflix Zuul 개요
+## 마이크로서비스 아키텍처에서 의미
+- 정의
+  - API Gateway 또는 API Service, Edge Service
+- 역할
+  - 마이크로서비스 아키텍처에서 여러 클라이언트 요청을 적절한 서비스로 프록시하거나 라우팅하기 위한 서비스
+  <p align="center"><img height="" src="../images/api-gateway-in-msa.png"></p>
+						    
+## Netflix Zuul 설계 목적
+- 정의
+  - JVM-based router and Server-side load balancer
+- 목적
+  - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원 (*Filters*를 통한 구현)
+  - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
 
-Zuul is a JVM-based router and server-side load balancer from Netflix.
+## Zuul in Netflix’s Cloud Architecture
+<p align="center"><img height="500" src="../images/zuul-netflix-cloud-architecture.png"></p>
 
-```text
-Zuul is the front door for all requests from devices and web sites to the backend of
-the Netflix streaming application. As an edge service application, Zuul is built to enable
-dynamic routing, monitoring, resiliency and security. It also has the ability to route requests
-to multiple Amazon Auto Scaling Groups as appropriate.
+## Netflix Zuul 2.0 Architecture
+<p align="center"><img height="500" src="../images/zuul-how-it-works.png"></p> 
+
+## Netflix Zuul (API Service) 필요 배경 (추가정리 TBD) 
+- Monolithic 에서 Microservice Architecture 분산 서비스 환경으로의 변화
+  - 하나의 서버에서 하나의 어플리케이션으로 동작하는 모놀리틱 아키텍처와 달리 마이크로서비스 아키텍처는 클라이언트 요청을 처리하기 위해 작게 나뉘어진 여러 개의 서비스가 서로 커뮤니케이션하고 협업하는 소프트웨어 아키텍처 패턴이다.
+  <p align="center"><img width="650" src="../images/monolithic-architecture-vs-microservices-architecture.png"></p>
+
+- 특징
+  - 클라이언트와 백엔드 서비스간 커뮤니케이션 방법의 변화
+    - Monolithic: 어플리케이션 내부에서 객체 주입, 메서드 호출 등을 통해 서로 다른 도메인 서비스와 협업하여 데이터 생성
+    - Microservices: 클라이언트가 하나 이상의 서비스와 직접 통신해서 데이터 생성
+  
+  - 기능적 측면에서 변화
+    - 백엔스 서비스를 대상으로 인증, 권한, CORS 관리 등과 같은 공통 관심사 로직을 클라이언트에서 분리
+    - 백엔드 서비스들의 다양한 통신 프로토콜(HTTP, AMQP 등) 사용에 대한 지원
+    - 다양한 클라이언트(web/mobile browser, native mobile app 등) 특성에 맞는 다양한 데이터 포맷 지원
+    <p align="center"><img width="650" src="../images/api-gateway-purpose.png"></p> 
+  - 인프라 측면
+    - 클라우드 환경에서 Auto Scaling과 같은 기능을 이용해 서비스 인스턴스를 트래픽에 따라 동적으로 생성/운영하거나 컨테이너로 배포하면서 인스턴스의 위치(host,port)가 동적으로 변한다.
+    - 시간이 지남에 따라 서비스가 합쳐지거나 쪼개질 수 있다
+ 
+# Netflix Zuul Core Features
+## Netflix Zuul 동작방식
+- (그림 TBD) front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
+
+## Routing Rules
+- front-end로부터 들어온 HTTP request를 prefix or path에 따라 특정 service로 라우팅하기 위한 규칙을 정의
+```yml
+zuul:
+  routes:
+    users:
+      path: /myusers/**
+      url: http://example.com/users_service
 ```
 
-### Zuul 의 기능
-- **Dynamic Routing**
-- Load Balancing
-- Authentication
-- Insights
-- Stress Testing
-- Canary Testing
-- Service Migration
-- Security
-- Static Response handling
-- Active/Active traffic management
+## Filters
+- 클라이언트가 보낸 요청을 라우팅 하기 전, 라우팅할 때, 라우팅한 후 응답을 돌려 받았을 때 필요한 작업을 수행
 
-### Zuul 을 사용하는 이유?
-```text
-API Gateway는 Microservice Architecture(이하 MSA)에서 언급되는 컴포넌트 중 하나이며,
-모든 클라이언트 요청에 대한 end point를 통합하는 서버이다. 마치 프록시 서버처럼 동작한다.
-그리고 인증 및 권한, 모니터링, logging 등 추가적인 기능이 있다. 모든 비지니스 로직이 하나의 서버에 존재하는
-Monolithic Architecture와 달리 MSA는 도메인별 데이터를 저장하고 도메인별로 하나 이상의 서버가 따로 존재한다.
-한 서비스에 한개 이상의 서버가 존재하기 때문에 이 서비스를 사용하는 클라이언트 입장에서는 다수의 end point가 생기게 되며,
-end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul 을 사용하여 관리한다.
+|  Filter 구성 요소 |                 설명                        | 
+|:---------------:|:-------------------------------------------|
+|     Type        |   pre, route, post (ZuulFilter를 상속받아 구현)    |
+|     Order       |   filter 실행 순서를 결정 (filterOrder())    |
+|     Criteria    |   filter 실행 여부 결정 (shouldFilter())    |
+|     Action      |   filter criteria 만족 시 실행할 비즈니스 로직 (run())    |
+
+- Pre filter 예시
+```java
+public class QueryParamPreFilter extends ZuulFilter {
+	@Override
+	public int filterOrder() {
+		return PRE_DECORATION_FILTER_ORDER - 1; // run before PreDecoration
+	}
+
+	@Override
+	public String filterType() {
+		return PRE_TYPE;
+	}
+
+	@Override
+	public boolean shouldFilter() {
+		RequestContext ctx = RequestContext.getCurrentContext();
+		return !ctx.containsKey(FORWARD_TO_KEY) // a filter has already forwarded
+				&& !ctx.containsKey(SERVICE_ID_KEY); // a filter has already determined serviceId
+	}
+	
+   	@Override
+    	public Object run() {
+        	RequestContext ctx = RequestContext.getCurrentContext();
+		HttpServletRequest request = ctx.getRequest();
+		if (request.getParameter("sample") != null) {
+		    // put the serviceId in `RequestContext`
+    		ctx.put(SERVICE_ID_KEY, request.getParameter("foo"));
+    	}
+        return null;
+    }
+}
 ```
 
-### Netflix Zuul Architecture
-![](../images/zuul-netflix-cloud-architecture.png)
+## Service Discovery
+- path를 매핑할 실제 서비스 인스턴스 위치를 찾는 방법
+  - Eureka (dynamic)
+  ```yml
+  zuul:
+    routes:
+      users:
+        path: /myusers/**
+        serviceId: users
+	
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
+  ```
+  - static list of servers
+  ```yml
+  zuul:
+    routes:
+      users:
+        path: /myusers/**
+        serviceId: users
 
-### Zuul 동작
-![](../images/zuul-how-it-works.png)
+  ribbon:
+    eureka:
+      enabled: false
 
-# 2. 구성방법
-1. Spring boot project 생성
-1. pom.xml에 zuul, eureka-client dependency 추가
+  users:
+    ribbon:
+      listOfServers: example1.com,example2.com
+  ```
+
+## Load Balancing
+- round-robin, weighted response time, availability이 있음
+
+## Other 2.0 features
+- Connection Pooling
+- Status Categories
+- Retries
+- Request Passport
+- Request Attempts
+- Origin Concurrency Protection
+- HTTP/2
+- Mutual TLS
+- Proxy Protocol
+- GZip
+
+# Getting Started 
+## Spring boot project 생성
+- pom.xml에 zuul, eureka-client dependency 추가
     ```xml
     <dependency>
         <groupId>org.springframework.cloud</groupId>
@@ -52,7 +175,7 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     </dependency>
     ```
-1. configuration - application.yml 수정
+- configuration - application.yml 수정
     ```yaml
     spring:
       application:
@@ -85,7 +208,7 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
     - 서비스명 zuul-sevice로 설정
     - Gateway의 라우팅 정보 설정
     - Eureka client 등록
-1. @EnableZuulProxy annotation 추가를 통해 Zuul Proxy 선언
+- @EnableZuulProxy annotation 추가를 통해 Zuul Proxy 선언
     ```java
     @EnableZuulProxy
     @EnableDiscoveryClient
@@ -101,13 +224,8 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
     - Fallback 처리를 위한 Provider 등록
     - Filter 등록
 
-# 3. Router setting
-
-...
-
-# 4. Filter
-
-1. Filter 생성 및 등록
+## Filter
+### Filter 생성 및 등록
     ```java
     public class SimpleFilter extends ZuulFilter {
         private static Logger logger = LoggerFactory.getLogger(SimpleFilter.class);
@@ -150,10 +268,10 @@ end point를 변경이 일어났을때, 관리하기가 힘들기 때문에 Zuul
     ```
 
 
-# 4. RouteLocator
-RouteLocator를 통해 Zuul 설정에 등록된 route 정보를 확인할 수 있다.
+## RouteLocator
+- RouteLocator를 통해 Zuul 설정에 등록된 route 정보를 확인할 수 있다.
 
-1. RouteLocator 생성 및 등록
+### RouteLocator 생성 및 등록
 ```java
 public class RouteLocater extends SimpleRouteLocator {
     private Logger logger = LoggerFactory.getLogger(RouteLocater.class);
@@ -190,7 +308,7 @@ public class CoeZuulApplication {
 
 }
 ```
-# 5. 파일 전송 크기 제한 설정
+## 파일 전송 크기 제한 설정
 아래 속성을 추가하고, 파일전송의 시간을 감안하여 ribbon, hystrix등의 timeout 설정을 변경해 준다.
 ```yml
 # 2.0 이전의 경우
