@@ -2,6 +2,7 @@
 - **1. Netflix Zuul 개요**
   - 마이크로서비스 아키텍처에서 의미
   - Netflix Zuul 설계 목적
+  - Netflix Zuul Architecture
     - Zuul in Netflix’s Cloud Architecture
     - Netflix Zuul 2.0 Architecture
   - Netflix Zuul 필요 배경
@@ -33,10 +34,11 @@
   - 동적 라우팅, 모니터링, 회복 탄력성, 보안 기능을 지원 (*Filters*를 통한 구현)
   - 필요에 따라 여러 개의 Amazon Auto Scaling Groups로 요청을 라우팅 (*Ribbon*을 통한 구현)
 
-## Zuul in Netflix’s Cloud Architecture
+## Netflix Zuul Architecture
+### Zuul in Netflix’s Cloud Architecture
 <p align="center"><img height="500" src="../images/zuul-netflix-cloud-architecture.png"></p>
 
-## Netflix Zuul 2.0 Architecture
+### Netflix Zuul 2.0 Architecture
 <p align="center"><img height="500" src="../images/zuul-how-it-works.png"></p> 
 
 ## Netflix Zuul (API Service) 필요 배경 (추가정리 TBD, 그림변경 필요) 
