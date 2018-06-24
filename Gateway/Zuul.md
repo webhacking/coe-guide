@@ -1,24 +1,24 @@
-# Tables of Contents
-- **Netflix Zuul 개요**
+# Table of Contents
+- **1. Netflix Zuul 개요**
   - 마이크로서비스 아키텍처에서 의미
   - Netflix Zuul 설계 목적
     - Zuul in Netflix’s Cloud Architecture
     - Netflix Zuul 2.0 Architecture
   - Netflix Zuul 필요 배경
   
-- **Netflix Zuul Core Features**
+- **2. Netflix Zuul Core Features**
   - Netflix Zuul 동작방식
   - Routing Rules
   - Filters
   - Service Discovery
   - Load Balancing
   
-- **Getting Started**
+- **3. Getting Started**
   - Spring boot project 생성
   - Filter
   - RouteLocator
 
-# Netflix Zuul 개요
+# 1. Netflix Zuul 개요
 ## 마이크로서비스 아키텍처에서 의미
 - 정의
   - API Gateway 또는 API Service, Edge Service
@@ -58,7 +58,7 @@
     - 클라우드 환경에서 Auto Scaling과 같은 기능을 이용해 서비스 인스턴스를 트래픽에 따라 동적으로 생성/운영하거나 컨테이너로 배포하면서 인스턴스의 위치(host,port)가 동적으로 변한다.
     - 시간이 지남에 따라 서비스가 합쳐지거나 쪼개질 수 있다
  
-# Netflix Zuul Core Features
+# 2. Netflix Zuul Features
 ## Netflix Zuul 동작방식
 - (그림 TBD) front-end -----routing rules:shard traffic with path------ zuul -----service discovery:instance lookup---- back-end REST API
 
@@ -162,7 +162,7 @@ public class QueryParamPreFilter extends ZuulFilter {
 - Proxy Protocol
 - GZip
 
-# Getting Started 
+# 3. Getting Started 
 ## Spring boot project 생성
 - pom.xml에 zuul, eureka-client dependency 추가
     ```xml
