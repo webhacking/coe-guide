@@ -6,7 +6,7 @@
     - Netflix Zuul 2.0 Architecture
   - Netflix Zuul 필요 배경
   
-- **2. Netflix Zuul Core Features**
+- **2. Netflix Zuul Features**
   - Netflix Zuul 동작방식
   - Routing Rules
   - Filters
