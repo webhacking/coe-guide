@@ -1,23 +1,42 @@
-# 1. 개요
+# Table of Contents
+- **1. Netflix Eureka 개요**
+  - 마이크로서비스 아키텍처에서 의미
+  - Netflix Eureka 설계 목적
+  - Netflix Eureka Architecture
+  
+- **2. Netflix Eureka Features**
+  - Netflix Zuul 동작방식
+  - Routing Rules
+  - Filters
+  - Service Discovery
+  - Load Balancing
+  
+- **3. Getting Started**
+  - Spring boot project 생성
+  - Filter
+  - RouteLocator
+  
+# 1. Netflix Eureka 개요
+## 마이크로서비스 아키텍처에서 의미
+- 정의
+  - Client-side Service Discovery
+- 역할
+  - 가용한 서비스 인스턴스 목록과 그 위치(host, port)가 동적으로 변하는 가상화 혹은 컨테이너화된 환경에서 클라이언트가 서비스 인스턴스를 호출할 수 있도록 Service registry를 제공/관리하는 서비스
+  <p align="center"><img height="" src="../images/eureka-in-msa.png"></p>
+    
+## Netflix Eureka 설계 목적
+- 정의
+  - Middle-tier load balancer
+- 목적
+  - 전통적인 로드 밸런서는 서버의 고정적인 IP 주소와 Host name을 기준으로 동작하는 반면, AWS와 같은 클라우드 환경에서는 서버 위치가 동적으로 변할 수 있기 때문에 로드 밸런서에 그 위치를 등록하고 제거하는 과정이 훨씬 더 까다롭다.
+  - 그리고 로드밸런싱과 장애복구(failover)가 가능한 Middle-tier 서비스 환경을 구성 했을 때 클라이언트(API Gateway 또는 다른 서비스)에게 가용한 서비스 인스턴스들의 위치 정보를 제공할 수 있다.
+  - AWS는 middle-tier load balancer를 제공하지 않는다.
+ 
+## Netflix Zuul Architecture
+### Eureka High level Architecture
+<p align="center"><img height="500" src="../images/eureka-high-level-architecture.png"></p>
 
-### Eureka란?
 
-```text
-Eureka is the Netflix Service Discovery Server and Client.
-The server can be configured and deployed to be highly available,
-with each server replicating state about the registered services to the others.
-```
-
-### Eureka를 사용하는 이유?
-MicroService Architecture에서 다른서비스 호출하기
-```text
-기존 Monolithic Service에서는 다른 서비스를 호출할 때, Instance가 많지 않아 고정 된 IP 기반의 HTTP/REST 또는 RPC 를 이용하면 충분하였으나,
-Microservices는 가상 환경 혹은 컨테이너 기반 환경에서 서비스가 구동되는 경우가 일반적이기 때문에 IP로 관리하기가 매우 힘들다.
-그래서 서비스의 이름으로 타서비스를 호출 하는것이 효율적이며, 
-이를 위해서 서비스를 등록(Service Registry)하고 찾아주는(Discovery) 기능이 필요하다. 
-```
-
-  ![](../images/server-side-discovery.jpg)
 
 
 ### Eureka 기능
