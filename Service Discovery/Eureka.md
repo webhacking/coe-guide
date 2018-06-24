@@ -25,8 +25,9 @@
   - Client-side Service Discovery
 - 역할
   - 가용한 서비스 인스턴스 목록과 그 위치(host, port)가 동적으로 변하는 가상화 혹은 컨테이너화된 환경에서 클라이언트가 서비스 인스턴스를 호출할 수 있도록 Service registry를 제공/관리하는 서비스
+  - **그림TBD**
   <p align="center"><img height="" src="../images/eureka-in-msa.png"></p>
-    
+
 ## Netflix Eureka 설계 목적
 - 정의
   - Middle-tier load balancer
