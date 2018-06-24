@@ -113,9 +113,10 @@ eureka:
 ```
 
 # 3. Getting Started
+
 ## Eureka Server 설치방법
-### 1. Spring Boot project 생성
-### 2. pom.xml에 Eureka Server dependency 추가
+1. Spring Boot project 생성
+1. pom.xml에 Eureka Server dependency 추가
 
     ```xml
     <dependency>
@@ -124,7 +125,7 @@ eureka:
     </dependency>
     ```
 
-### 3. configuration - application.yml 수정
+3. configuration - application.yml 수정
 
     ```yaml
     server:
@@ -149,7 +150,7 @@ eureka:
       - eureka.client.registerWithEureka: 본인 서비스를 eureka 서버에 등록 할지 여부.(eureka는 서버이면서 client가 될 수도 있음)
       - eureka.client.fetchRegistry: client 서비스가 eureka 서버로 부터 서비스 리스트 정보를 local에 caching 할지 여부
 
-### 4. @EnableEurekaServer Annotation 추가하여 Eureka Server Application으로 선언
+4. @EnableEurekaServer Annotation 추가하여 Eureka Server Application으로 선언
 
     ```java
     @EnableEurekaServer
@@ -162,14 +163,14 @@ eureka:
     }
     ```
 
-### 5. Eureka server 구동 후 Eureka Dashboard 확인
+5. Eureka server 구동 후 Eureka Dashboard 확인
   ![](../images/eureka-dashboard.png) 
     - 웹브라우저에서 Eureka Server로 설정한 URL에 접속시 Eureka 콘솔 화면을 볼 수 있음  
 
 ## Eureka Client 설치방법
 
-### 1. Spring Boot project 생성
-### 2. pom.xml에 Eureka Client dependency 추가
+1. Spring Boot project 생성
+2. pom.xml에 Eureka Client dependency 추가
     ```xml
     <dependency>
         <groupId>org.springframework.cloud</groupId>
@@ -177,7 +178,7 @@ eureka:
         <version>1.4.4.RELEASE</version>
     </dependency>
     ```
-### 3. property 추가
+3. property 추가
     ```yaml
     spring:
       application:
@@ -194,7 +195,7 @@ eureka:
     - Eureka Server 연결 설정
     - Service 명 customer-service로 설정 (eureka server에 등록되는 서비스 명)
 
-### 4. @EnableDiscoveryClient Annotation 추가하여 Eureka Client 선언
+4. @EnableDiscoveryClient Annotation 추가하여 Eureka Client 선언
 
     ```java
     @EnableDiscoveryClient  //eureka, consul, zookeeper의 implements를 모두 포함. @EnableEurekaClient는 only works for eureka.
@@ -213,7 +214,7 @@ eureka:
     }
     ```
 
-## 3. Eureka Clustering
+## Eureka Clustering
 - application.yml (Server)
 
   ```yaml
@@ -273,7 +274,7 @@ eureka:
     - heart-beat는 defaultZone의 very first 항목인 eureka1에 만 전송
   - 여러개의 Eureka에 등록할 경우 defaultZone에 ,(comma)로 구분하여 입력한다.
 
-## 4. Eureka registry caching [참조](https://blog.asarkar.org/technical/netflix-eureka/)  
+## Eureka registry caching [참조](https://blog.asarkar.org/technical/netflix-eureka/)  
 - Eureka Server Response Cache 설정  
 Eureka server에서 eureka client에게 자신의 registry 정보를 제공 시 사용하는 cache.  
 client에게 더 빠른 registry 정보 제공을 위해 실제 registry 값이 아닌 cache의 값을 제공 함.  
