@@ -165,8 +165,9 @@ public class QueryParamPreFilter extends ZuulFilter {
 - GZip
 
 # 3. Getting Started 
-## Spring boot project 생성
-- pom.xml에 zuul, eureka-client dependency 추가
+## Zuul 
+1. Spring boot project 생성
+2. pom.xml에 zuul, eureka-client dependency 추가
     ```xml
     <dependency>
         <groupId>org.springframework.cloud</groupId>
@@ -177,7 +178,7 @@ public class QueryParamPreFilter extends ZuulFilter {
         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     </dependency>
     ```
-- configuration - application.yml 수정
+3. configuration - application.yml 수정
     ```yaml
     spring:
       application:
@@ -210,7 +211,7 @@ public class QueryParamPreFilter extends ZuulFilter {
     - 서비스명 zuul-sevice로 설정
     - Gateway의 라우팅 정보 설정
     - Eureka client 등록
-- @EnableZuulProxy annotation 추가를 통해 Zuul Proxy 선언
+4. @EnableZuulProxy annotation 추가를 통해 Zuul Proxy 선언
     ```java
     @EnableZuulProxy
     @EnableDiscoveryClient
@@ -227,7 +228,7 @@ public class QueryParamPreFilter extends ZuulFilter {
     - Filter 등록
 
 ## Filter
-### Filter 생성 및 등록
+1. Filter 생성 및 등록
     ```java
     public class SimpleFilter extends ZuulFilter {
         private static Logger logger = LoggerFactory.getLogger(SimpleFilter.class);
@@ -273,7 +274,7 @@ public class QueryParamPreFilter extends ZuulFilter {
 ## RouteLocator
 - RouteLocator를 통해 Zuul 설정에 등록된 route 정보를 확인할 수 있다.
 
-### RouteLocator 생성 및 등록
+1. RouteLocator 생성 및 등록
 ```java
 public class RouteLocater extends SimpleRouteLocator {
     private Logger logger = LoggerFactory.getLogger(RouteLocater.class);
