@@ -1,9 +1,38 @@
-# 1. Hystrix
+# 1. 개요
 
-## 목적
+### 목적
 https://medium.com/@goinhacker/hystrix-500452f4fae2
 https://engineering.linecorp.com/ko/blog/detail/76
 https://martinfowler.com/bliki/CircuitBreaker.html
+
+##### Circuit Breaker란?
+
+
+![](../images/circuitbreaker-state-diagram.png)
+
+Closed
+- 초기 상태로 모든 접속은 평소와 같이 실행된다.
+
+Open(Failure state)
+- 에러율이 임계치를 넘어서면 OPEN 상태가 되고, 모든 접속은 차단(fail fast)된다.
+
+Half-open
+- OPEN 후 일정 시간이 지나면 HALF_OPEN 상태가 되고, 접속을 시도하여 성공하면 CLOSED, 실패하면 OPEN으로 되돌아간다.
+
+### Hystrix란?
+서비스들이 많은 의존성을 가진 분산환경에서는 의존성으로 인한 장애나 지연은 피할 수 없습니다.
+예를들어, 어떤 어플리케이션이 30개의 서비스들간 의존관계를 가지고 각 서비스들은 99.99% uptime을 가진다면,
+> 99.99^30 = 99.7% uptime
+0.3% of 1 billion requests = 3,000,000 failures
+2+ hours downtime/month even if all dependencies have excellent uptime.  
+
+모든 서비스들이 개별적으로 잘 동작하더라도 0.01%의 downtime은 잠재적으로 전체 시스템에 몇 시간의 downtime을 줄 수 있습니다.
+Hystrix는 이런 문제를 해결하기 위해 서비스간 의존성이 발생하는 접근 포인트를 분리시켜 장애 전파를 막고, fallback을 제공하여 시스템 장애로부터의 복구를 유연하게 합니다.
+
+- Latency and fault tolerance
+- 장애 전파 방지
+- 빠른 실패(Fail fast)와 빠른 복구(Rapid Recovery)
+- 실시간 모니터링, 알람 및 설정 변경(Operational Control) 지원
 
 ![](../images/circuit-breaking.png)
 

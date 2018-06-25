@@ -1,5 +1,7 @@
 # 1. MSA에서의 로그 관리
 
+### 목적
+
 ### 로그 관리의 어려움
 
 ![](../images/log-overview-current-issue.png)
