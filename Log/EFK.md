@@ -145,7 +145,7 @@
 
 도커를 이용하여 전체 EFK 스택을 구성해 봅니다.
 
-#### 컴포넌트 구성
+### 컴포넌트 구성
 ![](../images/log-overview-EFK-sample.png)
 1. order-service
 2. fluentd for each service
@@ -153,7 +153,7 @@
 4. elasticsearch
 5. kibana
 
-##### 1. Spring Boot 어플리케이션에 logback-spring.xml 추가 (/src/main/resources/)
+### 1. Spring Boot 어플리케이션에 logback-spring.xml 추가 (/src/main/resources/)
 ```xml
 ...
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
@@ -183,7 +183,7 @@
 ...
 ```
 
-#### 2. fluent(client, aggregator), elasticsearch, kibana는 도커를 이용해 구성한다
+### 2. fluent(client, aggregator), elasticsearch, kibana는 도커를 이용해 구성한다
   docker-compose를 이용하여 4개의 컨테이너를 실행시킨다.
   - fluent-client : 서비스의 로그파일을 읽어 중앙에 있는 fluentd-aggregator에게 전송한다.
   - fluent-aggregator : 각 fluent-client로부터 전달 된 로그들을 elasticsearch로 포워딩한다.
@@ -343,14 +343,14 @@ services:
     - source : fluentd-client에서 포워딩한 데이터
     - match : source에서 읽어온 데이터를 elasticsearch로 전송한다(@type elasticsearch).
 
-#### 3. Docker 컨테이너 실행
+### 3. Docker 컨테이너 실행
   ```bash
   > docker-compose up
   ```
   정상 작동 시 아래와 같이 4개의 컨테이너가 구동된다.  
   ![](../images/efk-stack-docker.png)
 
-#### 4. Kibana 확인
+### 4. Kibana 확인
 localhost:5601로 접속하여 kibana 작동 확인
 
 a. Index Pattern 설정
