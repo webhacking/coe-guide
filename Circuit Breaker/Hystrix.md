@@ -20,7 +20,7 @@ Circuit Breaker 패턴으로 개발된 Hystrix는 이런 문제를 해결하기 
 
 #### Circuit Breaker란?
 서비스 간 수많은 의존관계가 있는 MSA환경에서 특정 서비스 하나가 갑자기 응답하지 않게 되면 해당 서비스와 의존관계에 있는 모든 서비스들이 연쇄적으로 문제를 일으키게 되고 원인이 되는 서비스를 찾아 내기까지 시간도 오래 걸립니다.   
-![](../images/log-hystrix-fail-propagation.png)
+![](../images/circuitbreaker-hystrix-fail-propagation.png)
 
 이러한 연쇄적인 장애 발생을 막기 위해선 장애가 전파되지 않도록 문제가 발생한 서비스에 대한 접속 차단이 필요하고 Circuit Breaker 패턴을 적용하여 해결할 수 있습니다.   
 Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재합니다.
@@ -30,7 +30,7 @@ Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재합니�
 - Open(Failure state) : 에러율이 임계치를 넘어서면 OPEN 상태가 되고, 모든 접속은 차단(fail fast)된다.
 - Half-open : OPEN 후 일정 시간이 지나면 HALF_OPEN 상태가 되고, 접속을 시도하여 성공하면 CLOSED, 실패하면 OPEN으로 되돌아간다.
 
-![](../images/log-hystrix-circuitbreaker.png)
+![](../images/circuitbreaker-hystrix-circuitbreaker.png)
 - 초기 Service3 호출 정상 동작 상태시에는 Closed
 - Service3 호출 시 이상 발생 한 경우 Open 상태로 변경되고 접속 차단(fail fast)
 - 주기적으로 서비스 상태 확인하여 정상 확인될 경우 Close 상태로 변경
