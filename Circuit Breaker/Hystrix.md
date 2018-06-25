@@ -1,6 +1,6 @@
 # 1. 개요
 
-### Hystrix란?
+## Hystrix란?
 서비스들이 많은 의존성을 가진 분산환경에서는 의존성으로 인한 장애나 지연은 피할 수 없습니다.  
 예를들어, 어떤 어플리케이션이 30개의 서비스들간 의존관계를 가지고 각 서비스들은 99.99% uptime을 가진다면,
 > 99.99^30 = 99.7% uptime  
@@ -35,6 +35,17 @@ Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재합니�
 - Service3 호출 시 이상 발생 한 경우 Open 상태로 변경되고 접속 차단(fail fast)
 - 주기적으로 서비스 상태 확인하여 정상 확인될 경우 Close 상태로 변경
 
+## Hystrix 모니터링
+#### Hystrix Dashboard
+Hystrix를 적용한 어플리케이션은 측정 지표 수집에 사용될 /hystrix.stream 종단점을 노출한다.  
+각 어플리케이션의 Circuit 정보를 Hystrix Dashboard를 통해서 모니터링 할 수 있다. (적용 : 3. Hystrix Dashboard 참고)
+![](../images/hystrix-dashboard.png)
+
+#### Turbine을 통한 히스트릭스 스트림 통합
+Hystrix Dashboard는 한 번에 하나의 마이크로서비스만 모니터링할 수 있다.  
+Turbine은 다수의 /hystrix.stream 인스턴스에서 가져온 데이터를 집계해 하나의 대시보드 화면으로 통합해준다.   
+즉, 여러 인스턴스에서 /hystrix.stream을 수집해 하나의 /turbine.stream 인스턴스로 통합하는 서버이다. (적용 : 4. Hystrix Turbine 참고)
+![](../images/circuitbreaker-hystrix-turbine.png)
 
 # 2. 구성방법
 
