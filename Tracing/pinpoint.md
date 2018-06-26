@@ -39,7 +39,7 @@ Agent(서비스단에 추가되는 bytecode), Collector, HBase, UI Web 로 구�
 -Dpinpoint.agentId=service01  
 -Dpinpoint.applicationName=service01  
 ```
-5. http://localhost:28080로 접속하여 서비스 이용 가능
+5. http://localhost:28080로 접속하여 서비스 이용 가능(agent 정보가 표시되는데 5분 정도 )
 
 ####. UI에서 Applicatinos 간 관계 설정
 Application 서비스 간의 관계를 별도로 설정하지 않는다.
