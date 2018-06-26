@@ -182,7 +182,11 @@
     </appender>
 ...
 ```
-
+로그 파일 경로 지정을 위해 application.yml에 경로 추가
+```xml
+logging:
+  path: /Users/boston/Developer/log
+```
 ### 2. fluent(client, aggregator), elasticsearch, kibana는 도커를 이용해 구성한다
   docker-compose를 이용하여 4개의 컨테이너를 실행시킨다.
   - fluent-client : 서비스의 로그파일을 읽어 중앙에 있는 fluentd-aggregator에게 전송한다.
