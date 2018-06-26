@@ -183,7 +183,7 @@
 ...
 ```
 로그 파일 경로 지정을 위해 application.yml에 경로 추가
-```xml
+```yaml
 logging:
   path: /Users/boston/Developer/log
 ```
