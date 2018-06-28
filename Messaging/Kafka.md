@@ -111,9 +111,39 @@ only that leader can receive and serve data for partition
   - (bottom line) at least once : 메세지를 받고 프로세스 처리 된 후에 커밋. data duplication. idempotent(다시 받아도 시스템에 영향 주지 않는 시스템)
   - exactly once : very difficult to achieve 
   
+### Topic Configuration
+```bash
+kafka-topics --create --topic test_cleanup --zookeeper localhost:2181 --config cleanup.policy=compact --partitions 3 --replication-factor 1
 
+kafka-topics --topic test_cleanup --describe --zookeeper localhost:2181
 
+kafka-topics --alter --topic test_cleanup --zookeeper localhost:2181 --config cleanup.policy=delete
+```
 
+##### Partitions Count, Replication Factor
+- impact performance and durability of system overall
+- 처음 토픽 생성할 때 최적으로 만들어야함
+	- 파티션 수 증가하면 key ordering 보장안됨
+	- RF 증가하면, 클러스터에 부하를 줌. Performance decrease. 디스크 차지 증가
+
+Partitions Count 
+- each partition 약 10MB/s 처리
+- more partition = better parallelism, betther throughput
+                   but, files opened 많아짐
+		   but, 하나의 브로커가 비정상적으로 내려가면 leader election
+		   but, latency to replicate
+- Guideline : # of partition per brokers 2000~4000
+              # of partitions in the cluster < 20000
+	      ***Partitions per topic = (1 to 2) x (# of brokers), max 10 partitions***
+	      ex) 3brokers. 3 or 6 partitions is good
+	      
+Replication Factor
+- at least 2, maximum of 3
+- higher RF = better resilience (N-1 can fail)
+              but, longer replication (higher latency is acks=all)
+	      but, more disk space
+- Guideline : 3 (at least 3 brokers for that)
+	      
 
 ### Kafka 구동 방법
 
