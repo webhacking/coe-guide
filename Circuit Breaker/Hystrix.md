@@ -50,13 +50,20 @@ Turbine은 다수의 어플리케이션으로 부터 /hystrix.stream 의 데이�
 # 2. 구성방법
 
 Hystrix를 적용하는 세 가지 샘플 코드를 제공한다.
-- Zuul FallbackProvider 등록
-- HystrixCommand, fallbackMethod 등록
-- FeignClient Hystrix의 fallback class사용
+- HystrixCommand: 단일 API에 대하여 Hystrix를 적용한다.(fallbackMethod 등록)
+- FeignClient: Feign Interface 에 포함된 API에 Hystrix를 적용한다.(fallback class사용)
+- Zuul: routing시 Hystrix를 적용한다. (FallbackProvider 등록)
 
-### - Zuul FallbackProvider 등록
-Zuul Gateway에 Fallback Provider를 등록한다.
-1. configuration - application.yml 수정  
+## - HystrixCommand, fallbackMethod 등록(Service, Component만 사용 가능)
+1. Hystrix dependency 추가
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix</artifactId>
+    <version>1.4.4.RELEASE</version>
+</dependency>
+```        
+2. configuration - application.yml 에 추가  
 ```yml
 hystrix:
     threadpool:
@@ -75,6 +82,121 @@ hystrix:
         requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
         errorThresholdPercentage: 50
         enabled: true
+```
+3. HystrixCommand 정의
+```java
+@Service
+public class OrderService {
+    private CustomerClient customerClient;
+    public OrderService(CustomerClient customerClient) {this.customerClient = customerClient; }
+
+    @HystrixCommand(fallbackMethod = "getDefaultAllCustomer")   
+    public List<Customer> getAllCustomer() { return customerClient.findAll();
+    }
+
+    public List<Customer> getDefaultAllCustomer() {
+        Customer customer = new Customer();
+        customer.setCustomerId(Integer.MAX_VALUE);
+        customer.setName("fallback");
+        customer.setEmail("fallback@gmail.com");
+
+        return Arrays.asList(customer);
+    }
+}
+```
+4. Application annotation 추가
+```java
+@EnableHystrix
+@EnableFeignClients
+@EnableDiscoveryClient
+@SpringBootApplication
+@RestController
+public class Service01Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Service01Application.class, args);
+    }
+
+    @RequestMapping("/test")
+    public String getTest(){
+        return "test";
+    }
+}
+```
+
+## - FeignClient Hystrix의 fallback class사용
+Feign dependency 에 hystrix가 기본 포함 되어 별도 dependency추가 불필요
+1. configuration - application.yml 에 추가   
+feign에서 hystrix 사용 여부를 선택 할 수 있음(hystrix 관련 config 는 모두 동일) 
+```yml
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100  # Hystrix Thread Pool default size
+      maximumSize: 500  # Hystrix Thread Pool default size
+      keepAliveTimeMinutes: 1
+      allowMaximumSizeToDivergeFromCoreSize: true
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
+      circuitBreaker:
+        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
+        errorThresholdPercentage: 50
+        enabled: true    
+```
+2. Feign Hystrix 정의
+```java
+@RefreshScope
+@FeignClient(
+        name ="${coe.application.customer-service}",
+        decode404 = true,
+        fallback = CustomerFallback.class   //fallback 클래스 정의
+)
+public interface CustomerClient {
+    @RequestMapping(method = RequestMethod.GET, value = API_V1_BASE_PATH + "/customers")
+    List<Customer> findAll();
+}
+```
+3. Fallback class 정의
+```java
+@Component
+public class CustomerFallback implements CustomerClient {
+    @Override
+    public List<Customer> findAll() {
+
+        return Arrays.asList(new Customer(1,"coe", "coe@mail.com"));
+    }
+}
+```
+
+### - Zuul FallbackProvider 등록
+Zuul Gateway에 Fallback Provider를 등록한다.  
+Zuul dependency 에 hystrix가 기본 포함 되어 별도 dependency추가 불필요  
+1. configuration - application.yml 에 추가(hystrix 관련 config 는 모두 동일)   
+```yml
+hystrix:
+  threadpool:
+    default:
+      coreSize: 100  # Hystrix Thread Pool default size
+      maximumSize: 500  # Hystrix Thread Pool default size
+      keepAliveTimeMinutes: 1
+      allowMaximumSizeToDivergeFromCoreSize: true
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
+      circuitBreaker:
+        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
+        errorThresholdPercentage: 50
+        enabled: true    
 ```
 2. routeFallbackProvider 예시  
 ```java
@@ -159,84 +281,6 @@ public class CoeZuulApplication {
     @Bean
     public FallbackProvider zuulFallbackProvider() {
     return new ZuulFallbackProvider();
-    }
-}
-```
-
-
-## - HystrixCommand, fallbackMethod 등록(Service, Component만 사용 가능)
-1. Hystrix dependency 추가
-```xml
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-hystrix</artifactId>
-    <version>1.4.4.RELEASE</version>
-</dependency>
-```        
-2. HystrixCommand 정의
-```java
-@Service
-public class OrderService {
-    private CustomerClient customerClient;
-    public OrderService(CustomerClient customerClient) {this.customerClient = customerClient; }
-
-    @HystrixCommand(fallbackMethod = "getDefaultAllCustomer")   
-    public List<Customer> getAllCustomer() { return customerClient.findAll();
-    }
-
-    public List<Customer> getDefaultAllCustomer() {
-        Customer customer = new Customer();
-        customer.setCustomerId(Integer.MAX_VALUE);
-        customer.setName("fallback");
-        customer.setEmail("fallback@gmail.com");
-
-        return Arrays.asList(customer);
-    }
-}
-```
-3. Application annotation 추가
-```java
-@EnableHystrix
-@EnableFeignClients
-@EnableDiscoveryClient
-@SpringBootApplication
-@RestController
-public class Service01Application {
-
-    public static void main(String[] args) {
-        SpringApplication.run(Service01Application.class, args);
-    }
-
-    @RequestMapping("/test")
-    public String getTest(){
-        return "test";
-    }
-}
-```
-
-## - FeignClient Hystrix의 fallback class사용
-Feign dependency 에 hystrix가 기본 포함 되어 별도 dependency추가 불필요
-1. Feign Hystrix 정의
-```java
-@RefreshScope
-@FeignClient(
-        name ="${coe.application.customer-service}",
-        decode404 = true,
-        fallback = CustomerFallback.class   //fallback 클래스 정의
-)
-public interface CustomerClient {
-    @RequestMapping(method = RequestMethod.GET, value = API_V1_BASE_PATH + "/customers")
-    List<Customer> findAll();
-}
-```
-2. Fallback class 정의
-```java
-@Component
-public class CustomerFallback implements CustomerClient {
-    @Override
-    public List<Customer> findAll() {
-
-        return Arrays.asList(new Customer(1,"coe", "coe@mail.com"));
     }
 }
 ```
