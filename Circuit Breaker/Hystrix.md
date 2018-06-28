@@ -29,22 +29,22 @@ Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재합니�
 - Closed : 초기 상태로 모든 접속은 평소와 같이 실행된다.
 - Open(Failure state) : 에러율이 임계치를 넘어서면 OPEN 상태가 되고, 모든 접속은 차단(fail fast)된다.
 - Half-open : OPEN 후 일정 시간이 지나면 HALF_OPEN 상태가 되고, 접속을 시도하여 성공하면 CLOSED, 실패하면 OPEN으로 되돌아간다.
-
+#### Circuit open 상태 설명
 ![](../images/circuitbreaker-hystrix-circuitbreaker.png)
 - 초기 Service3 호출 정상 동작 상태시에는 Closed
 - Service3 호출 시 이상 발생 한 경우 Open 상태로 변경되고 접속 차단(fail fast)
+  - Service3 호출 결과는 fallback으로 정의된 내용이 return 됨
 - 주기적으로 서비스 상태 확인하여 정상 확인될 경우 Close 상태로 변경
 
 ## Hystrix 모니터링
 #### Hystrix Dashboard
 Hystrix를 적용한 어플리케이션은 측정 지표 수집에 사용될 /hystrix.stream 종단점을 노출한다.  
-각 어플리케이션의 Circuit 정보를 Hystrix Dashboard를 통해서 모니터링 할 수 있다. (적용 : 3. Hystrix Dashboard 참고)
+각 어플리케이션의 API상태 및 Circuit 정보를 Hystrix Dashboard를 통해서 모니터링 할 수 있다. (적용 : 3. Hystrix Dashboard 참고)
 ![](../images/hystrix-dashboard.png)
 
 #### Turbine을 통한 히스트릭스 스트림 통합
-Hystrix Dashboard는 한 번에 하나의 마이크로서비스만 모니터링할 수 있다.  
-Turbine은 다수의 /hystrix.stream 인스턴스에서 가져온 데이터를 집계해 하나의 대시보드 화면으로 통합해준다.   
-즉, 여러 인스턴스에서 /hystrix.stream을 수집해 하나의 /turbine.stream 인스턴스로 통합하는 서버이다. (적용 : 4. Hystrix Turbine 참고)
+Turbine은 다수의 어플리케이션으로 부터 /hystrix.stream 의 데이터를 집계해 하나의 stream으로 통합해준다.  
+이를 한개의 대시보드 화면에서 조회 할 수 있다. (적용 : 4. Hystrix Turbine 참고)
 ![](../images/circuitbreaker-hystrix-turbine.png)
 
 # 2. 구성방법
