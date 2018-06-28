@@ -144,6 +144,9 @@ Replication Factor
 	      but, more disk space
 - Guideline : 3 (at least 3 brokers for that)
 	      
+#### Partitions and Segments
+- partitions are made of segments(files)
+ 
 
 ### Kafka 구동 방법
 
