@@ -1,14 +1,15 @@
 # 1. 개요
 
 ### 목적
-MSA 구조에서 클라이언트의 호출이 내부적으로 여러개의 서비스를 거쳐서 일어나게 되는데 트랜잭션의 전 구간을 추적하려면 하나의 연관 ID가 있어야 한다.  
+MSA 구조에서 클라이언트의 호출이 내부적으로 여러개의 서비스를 거쳐서 일어나서 전체 트랜잭션에 대한 로그 트레이싱이 어렵다.  
+이를 쉽게 하기 위해 트랜잭션의 전 구간을 추적하기 위한 하나의 연관 ID가 필요하다.  
 
-![](../images/log-overview-tracing.png)
+![](../images/log-overview-tracing2.png)
 
-하나의 클라이언트 호출에 대해 Trace Id가 생성되고, 각 서비스간 호출 시 새로운 Span Id가 생성된다.  
+Spring Cloud Sleuth를 사용하면 하나의 클라이언트 호출에 대해 Trace Id가 생성되고, 각 서비스간 호출 시 새로운 Span Id가 생성된다.  
 이를 통해 전체 트랜잭션 Flow를 확인하거나 트랜잭션(TraceId) 또는 구간별(SpanId) 시간을 추적 할 수 있다.  
-트위터의 집킨(Zipkin), 클라우데라의 HTrace 및 구글의 대퍼(Dapper)가 분산 추적에 사용되는 대표적인 시스템이며,  
-Spring Cloud는 Spring Cloud Sleuth 라이브러리를 통해 분산 추적이 가능하다.
+트위터의 집킨(Zipkin), 클라우데라의 HTrace 및 구글의 대퍼(Dapper)등의 UI툴을 이용하면 분산 환경의 로그 트레이싱을 쉽게 할 수 있다.  
+
 
 ### Sleuth 란?
 
