@@ -19,6 +19,7 @@ Donw상태 서비스 instance는 호출 대상에서 제외되게 됩니다.
 - Multiple protocol support  
 HTTP, TCP, UDP 를 모두 지원합니다.
 
+ribbon은 주로 zuul, feign 서비스를 사용할때 내부에서 같이 작동하게 됩니다.
 
 
 # 2. 구성방법
@@ -27,7 +28,7 @@ netflix의 ribbon dependency를 추가하여 사용 할수 있지만, starter zu
 
 2. config 추가
 ```yml
-# Timeout 설정값은 Hystrix의 값과 비교하여 작은 값이 우선 적요 됩니다.
+# Timeout 설정값은 Hystrix의 값과 비교하여 작은 값이 우선 적용 됩니다.
 ribbon:
   ConnectTimeout: 1000  
   ReadTimeout: 10000
