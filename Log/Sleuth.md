@@ -1,14 +1,25 @@
 # 1. 개요
-### Sleuth 란?
+## Sleuth 란?
 
 MSA 구조에서 클라이언트의 호출이 내부적으로 여러개의 서비스를 거쳐서 일어나서 전체 트랜잭션에 대한 로그 트레이싱이 어렵다.  
 이를 쉽게 하기 위해 트랜잭션의 전 구간을 추적하기 위한 하나의 연관 ID가 필요하다.  
 
 ![](../images/log-overview-tracing2.png)
 
-Spring Cloud Sleuth의 id 체계
+### Spring Cloud Sleuth의 id 체계
 - TraceID: 최초 인입 된 하나의 클라이언트 호출에 대한 ID
 - SpanID: 최초 호출된 서비스와 그 이후 서비스에서 각각 생성되는 ID    
+#### Span ID
+- 작업의 기본 단위이다. 각 서비스 호출시에 새로운 Span이 하나 생성된다.  
+- 유일한 64-bit ID로 구분된다.  
+- Description, key-value annotation, process ID 등의 추가 정보를 가진다.
+- Trace에서 제일 처음 만들어지는 Span을 root span이라 부른다.(trace id와 동일)
+
+#### Trace ID
+- 최초 호출시 인입 서비스에서 생성된다. 
+- Tree 형태로 만들어지는 Span의 모음이다.  
+- 유일한 64-bit ID로 구분된다.
+- 예를 들어 분산 데이터 서비스를 운영할때, 하나의 Put 리퀘스트에 의해 하나의 Trace가 생성된다.
 
 이를 통해 전체 트랜잭션 Flow를 확인하거나 트랜잭션(TraceId) 또는 구간별(SpanId) 로그를 추적 할 수 있다.  
 트위터의 집킨(Zipkin), 클라우데라의 HTrace 및 구글의 대퍼(Dapper)등의 UI툴을 이용하면 분산 환경의 로그 트레이싱을 쉽게 할 수 있다.  
@@ -18,29 +29,16 @@ Global Transaction ID를 이용한 분산 트랜잭션 로그 모니터링
 - 서비스 호출 시 API Gateway에서 gTxId(Global Transaction ID) 생성
 - 각 서비스는 로깅 시 gTxID를 함께 logging하며, 다른 서비스 호출 시 header에 gTxID를 포함
 
-### 용어
-##### Span
-- 작업의 기본 단위이다. 예를 들어 RPC(Remote Procedure Call)을 전송하면 새로운 Span이 하나 생성된다.  
-- 유일한 64-bit ID로 구분된다.(Span 여러 개를 포함하는 Trace도 64-bit ID를 갖음)  
-- Description, key-value annotation, process ID 등의 추가 정보를 가진다.
-- Trace에서 제일 처음 만들어지는 Span을 root span이라 부른다.(trace id와 동일)
-
-###### Trace
-- Tree 형태로 만들어지는 Span의 모음이다.  
-  예를 들어 분산 데이터 스토어를 운영할때, 하나의 Put 리퀘스트에 의해 하나의 Trace가 생성된다.
-
-###### Annotation
-- 이벤트 시간을 기록하는데 사용된다.
-- 액션의 종류
-  - cs(Client Sent) : Span의 시작 시점
-  - sr(Server Received) : 서버가 요청을 받고 프로세스를 실행하는 시점. [sr - cs = network latency]
-  - ss(Server Send) : 요청 프로세스 완료 시점(클라이언트에 response 전달) [ss - sr = 서버가 요청 처리하는데 걸린 시간]
-  - cr(Client Received) : Span의 종료 시점 [cr - cs = 클라이언트가 서버로부터 응답받는데 걸리는 전체 시간]
+### 기록되는 이벤트 시간의 종류
+- cs(Client Sent) : Span의 시작 시점
+- sr(Server Received) : 서버가 요청을 받고 프로세스를 실행하는 시점. [sr - cs = network latency]
+- ss(Server Send) : 요청 프로세스 완료 시점(클라이언트에 response 전달) [ss - sr = 서버가 요청 처리하는데 걸린 시간]
+- cr(Client Received) : Span의 종료 시점 [cr - cs = 클라이언트가 서버로부터 응답받는데 걸리는 전체 시간]
 
 ![](../images/log-sleuth-annotation.png)
 
 
-### Spring Cloud Sleuth의 기능
+## Spring Cloud Sleuth의 기능
 
 - Slf4J MDC(Mapped Diagnostic Context)을 통해 Trace와 Span Ids를 추가할 수 있다. 이를 통해 로그로 부터 Trace와 Span 정보들을 로그 수집기에 추출할 수 있다.
 - Sleuth는 분산 추적 데이터 모델(Trace, Spans, Annotations, k-v Annotation)을 제공한다.
