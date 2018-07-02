@@ -16,12 +16,12 @@
 > 특정 서비스 혹은 서비스의 REST API 호출 결과가 비정상인 경우, 전체 서비스로의 전이를 방지하기 위해 API Gateway 혹은 각 서비스의 Hystrix에서 해당 호출을 자동으로 차단합니다.
 
 
-#### Hystrix 기능
+## Hystrix 기능
 - 장애 전파 방지
 - 빠른 실패(Fail fast)와 빠른 복구(Rapid Recovery)
 - 실시간 모니터링, 알람 및 설정 변경(Operational Control) 지원
 
-#### Circuit Breaker란?
+### 장애전파 방지 및 빠른 실패/복구(Circuit Breaker 패턴)
 서비스 간 수많은 의존관계가 있는 MSA환경에서 특정 서비스 하나가 갑자기 응답하지 않게 되면 해당 서비스와 의존관계에 있는 모든 서비스들이 연쇄적으로 문제를 일으키게 되고 원인이 되는 서비스를 찾아 내기까지 시간도 오래 걸린다.   
 ![](../images/circuitbreaker-hystrix-fail-propagation.png)
 
@@ -39,7 +39,7 @@ Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재한다.
   - Service3 호출 결과는 fallback으로 정의된 내용이 return 됨
 - 주기적으로 서비스 상태 확인하여 정상 확인될 경우 Close 상태로 변경
 
-## Hystrix 모니터링
+### Hystrix 모니터링
 #### Hystrix Dashboard
 Hystrix를 적용한 어플리케이션은 측정 지표 수집에 사용될 /hystrix.stream 종단점을 노출한다.  
 각 어플리케이션의 API상태 및 Circuit 정보를 Hystrix Dashboard를 통해서 모니터링 할 수 있다. (적용 : 3. Hystrix Dashboard 참고)
