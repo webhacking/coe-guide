@@ -17,7 +17,6 @@
 
 
 #### Hystrix 기능
-- Latency and fault tolerance
 - 장애 전파 방지
 - 빠른 실패(Fail fast)와 빠른 복구(Rapid Recovery)
 - 실시간 모니터링, 알람 및 설정 변경(Operational Control) 지원
@@ -27,7 +26,7 @@
 ![](../images/circuitbreaker-hystrix-fail-propagation.png)
 
 이러한 연쇄적인 장애 발생을 막기 위해선 장애가 전파되지 않도록 문제가 발생한 서비스에 대한 접속 차단이 필요하고 Circuit Breaker 패턴을 적용하여 해결할 수 있다.   
-Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재합니다.
+Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재한다.
 
 ![](../images/circuitbreaker-state-diagram.png)
 - Closed : 초기 상태로 모든 접속은 평소와 같이 실행된다.
