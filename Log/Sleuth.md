@@ -1,19 +1,17 @@
 # 1. 개요
+### Sleuth 란?
 
-### 목적
 MSA 구조에서 클라이언트의 호출이 내부적으로 여러개의 서비스를 거쳐서 일어나서 전체 트랜잭션에 대한 로그 트레이싱이 어렵다.  
 이를 쉽게 하기 위해 트랜잭션의 전 구간을 추적하기 위한 하나의 연관 ID가 필요하다.  
 
 ![](../images/log-overview-tracing2.png)
 
-Spring Cloud Sleuth를 사용하면 하나의 클라이언트 호출에 대해 Trace Id가 생성되고, 각 서비스간 호출 시 새로운 Span Id가 생성된다.  
-이를 통해 전체 트랜잭션 Flow를 확인하거나 트랜잭션(TraceId) 또는 구간별(SpanId) 시간을 추적 할 수 있다.  
+Spring Cloud Sleuth의 id 체계
+- TraceID: 최초 인입 된 하나의 클라이언트 호출에 대한 ID
+- SpanID: 최초 호출된 서비스와 그 이후 서비스에서 각각 생성되는 ID    
+
+이를 통해 전체 트랜잭션 Flow를 확인하거나 트랜잭션(TraceId) 또는 구간별(SpanId) 로그를 추적 할 수 있다.  
 트위터의 집킨(Zipkin), 클라우데라의 HTrace 및 구글의 대퍼(Dapper)등의 UI툴을 이용하면 분산 환경의 로그 트레이싱을 쉽게 할 수 있다.  
-
-
-### Sleuth 란?
-
-Spring Cloud Sleuth는 Dapper, Zipkin, HTrace의 영향을 받아 만들어진 Spring Cloud를 위한 분산 추적 솔루션이다.
 
 Global Transaction ID를 이용한 분산 트랜잭션 로그 모니터링
 ![](../images/log-sleuth-EFK.png)
