@@ -3,6 +3,7 @@
 
 MSA 구조에서 클라이언트의 호출이 내부적으로 여러개의 서비스를 거쳐서 일어나서 전체 트랜잭션에 대한 로그 트레이싱이 어렵다.  
 이를 쉽게 하기 위해 트랜잭션의 전 구간을 추적하기 위한 하나의 연관 ID가 필요하다.  
+Sleuth를 사용하면 이 연관 ID(traceID, spanID)를 자동으로 생성해 준다.  
 
 ![](../images/log-overview-tracing2.png)
 
@@ -38,11 +39,10 @@ Global Transaction ID를 이용한 분산 트랜잭션 로그 모니터링 예�
 
 ## Spring Cloud Sleuth의 기능
 
-- Slf4J MDC(Mapped Diagnostic Context)을 통해 Trace와 Span Ids를 추가할 수 있다. 이를 통해 로그로 부터 Trace와 Span 정보들을 로그 수집기에 추출할 수 있다.
+- Slf4J MDC(Mapped Diagnostic Context)을 통해 Trace와 Span Ids를 로그에 추가할 수 있다.  
+이를 통해 로그로 부터 Trace와 Span 정보들을 로그 수집기에서 추출할 수 있다.
   - 스프링 어플리케이션의 공통 진출입점에 적용 가능하다.
 (servlet filter, rest template, scheduled actions, message channels, zuul filters, feign client)
-  - Sleuth는 분산 추적 데이터 모델(Trace, Spans, Annotations, k-v Annotation)을 제공한다.
-  Zipkin에 최적화 되어 있으며, HTrace에 적용 가능하다.
   - 로그 예제
     ```text
     2018-05-11 15:21:46.466  INFO [sleuth-example,8f8964f0eebf01a8,8f8964f0eebf01a8,false     ] 2647 --- [nio-8080-exec-1] com.example.slueth.SleuthApplication     : This is your home!
