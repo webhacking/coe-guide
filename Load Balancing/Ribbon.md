@@ -20,7 +20,7 @@ Donw상태 서비스 instance는 호출 대상에서 제외되게 됩니다.
 - Multiple protocol support  
 HTTP, TCP, UDP 를 모두 지원합니다.
 
-ribbon은 주로 zuul, feign 서비스를 사용할때 내부에서 같이 작동하게 됩니다.
+ribbon은 주로 zuul, feign, eureka 서비스를 사용할때 내부에서 같이 작동하게 됩니다.
 
 
 # 2. 구성방법
