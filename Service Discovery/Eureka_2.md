@@ -15,17 +15,17 @@ Eureka를 사용하면 등록된 모든 서비스의 정보를 registry로 관�
 
 #### Renew
 - Client는 eureka에 등록 이후 설정된 주기마다 heatbeat를 전송하여 자신의 존재를 알림
-> eureka.instance.lease-renewal-interval-in-seconds (default: 30)  
+  > eureka.instance.lease-renewal-interval-in-seconds (default: 30)  
 
 - 설정된 시간동안 heartbeat를 받지 못하면 해당 Eureka Instance를 Registry에서 제거
-> eureka.instance.lease-expiration-duration-in-seconds  (default: 90)
+  > eureka.instance.lease-expiration-duration-in-seconds  (default: 90)
 
 - renew 관련 interval은 변경하지 않는것을 권장 함(서버 내부적으로 client를 관리하는 로직 때문)
 
 #### Fetch Registry
 - Client는 Server로부터 Registry(서버에 등록된 인스턴스 목록) 정보를 가져와서 로컬에 캐시
 - 캐시 된 정보는 설정된 주기마다 업데이트 됨
-> eureka.client.registryFetchIntervalSeconds (default: 30)  
+  > eureka.client.registryFetchIntervalSeconds (default: 30)  
 
 #### Cancel
 - Client가 shutdown될 때 cancel 요청을 eureka 서버로 보내서 registry에서 제거 하게 됨
@@ -34,22 +34,25 @@ Eureka를 사용하면 등록된 모든 서비스의 정보를 registry로 관�
 - Eureka server와 client의 registry 관련 캐시 사용으로 인해 client가 호출 하려는 다른 instance 정보가 최신으로 갱신되는데 약간의 시간 차가 있음
 
 ## Peering
-여러대의 eureka server를 사용하여 서로 peering 구성이 가능하다.
-Eureka server는 설정에 정의된 peer nodes를 찾아서 Registry 정보 등 Sync 맞추는 작업을 한다
+여러대의 eureka server를 사용하여 서로 peering 구성이 가능하다.  
+Eureka server는 설정에 정의된 peer nodes를 찾아서 Registry 정보 등 Sync 맞추는 작업을 한다 . 
 - 관련 설정
-  - Standalone으로 구성하는 경우 Peer nodes가 없기 때문에 eureka.client.register-with-eureka: false 설정을 통해 등록 과정을 생략할 수 있음
+  - Standalone으로 구성하려면 아래 처럼 설정  
+    > eureka.client.register-with-eureka: false  
+    
   - Peer nodes 로부터 registry를 갱신할 수 없을 때 재시도 횟수 //TODO: 상세 의미 파악 필요
-  > eureka.server.registry-sync-retrires (default: 5)  
+    > eureka.server.registry-sync-retrires (default: 5)  
 
   - Peer nodes 로부터 registry를 갱신할 수 없을때 재시도를 기다리는 시간   //TODO: 상세 의미 파악 필요
-  > eureka.server.wait-time-in-ms-when-sync-empty (default: 3000) milliseconds
+    > eureka.server.wait-time-in-ms-when-sync-empty (default: 3000) milliseconds
 
 
 ## Self-Preservation Mode(자가보존모드)
-Eureka 서버는 등록된 instance로부터 heartbeat를 주기적으로 받는다.
-하지만 네트워크 단절 등의 상황으로 hearbeat를 받을 수 없는 경우 보통 registry에서 해당 instance를 제거 한다.
+Eureka 서버는 등록된 instance로부터 heartbeat를 주기적으로 받는다.  
+하지만 네트워크 단절 등의 상황으로 hearbeat를 받을 수 없는 경우 보통 registry에서 해당 instance를 제거 한다.  
 
-Eureka로의 네트워크는 단절되었지만, 해당 서비스 API를 호출하는데 문제가 없는 경우가 있을수 있어서, self-preservation 을 사용하여 registry에서 문제된 instance를 정해진 기간 동안 제거하지 않을 수 있다.
+Eureka로의 네트워크는 단절되었지만, 해당 서비스 API를 호출하는데 문제가 없는 경우가 있을수 있어서,   
+self-preservation 을 사용하여 registry에서 문제된 instance를 정해진 기간 동안 제거하지 않을 수 있다.  
 
 EvictionTask가 매분 마다 Expected heartbeats 수와 Actual heartbeats 수를 비교하여 Self-Preservation 모드 여부를 결정한다.   
 > eureka.server.eviction-interval-timer-in-ms (default: 60 * 1000)
@@ -58,11 +61,11 @@ EvictionTask가 매분 마다 Expected heartbeats 수와 Actual heartbeats 수�
 기본 매 15분(renewal-threshold-update-interval-ms) 마다 수행되며 preservation mode로 가기 위한 임계값을 계산한다.    
 예를 들어 인스턴스 개수가 N개이고, renewal-percent-threshold값이 0.85이면 계산식은 아래와 같다.      
 - 최소 1분이내 받아야 할 heartbeat 총 수 = 2 * N * 0.85  
-> 위 값은 아래 설정으로 변경 가능
-> eureka.instance.lease-renewal-interval-in-seconds (default: 30)  
-> eureka.server.renewal-percent-threshold (default: 0.85)  
-> scheduler 수행 주기 설정
-> eureka.server.renewal-threshold-update-interval-ms (default: 15 * 60 * 1000)
+  > 위 값은 아래 설정으로 변경 가능
+  > eureka.instance.lease-renewal-interval-in-seconds (default: 30)  
+  > eureka.server.renewal-percent-threshold (default: 0.85)  
+  > scheduler 수행 주기 설정
+  > eureka.server.renewal-threshold-update-interval-ms (default: 15 * 60 * 1000)
 
 #### Actual heartbeats calculation scheduler
 기본 매 1분 마다 수행되며 실제 받은 heartbeats 횟수를 계산하다.
