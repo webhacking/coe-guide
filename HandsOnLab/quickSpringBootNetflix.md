@@ -1,39 +1,68 @@
-# Intellij Community 설치
+# 사용가능한 IDE
+## Intellij Community
 [JetBrains](https://www.jetbrains.com/idea/download/#section=windows) 홈페이지에서 Intellij Community 버젼을 다운 받아 설치 합니다.  
 SDK 설정이 되어 있지않다면, Project Settings > Project 메뉴에서 SDK에서 Java8을 추가합니다.
 
-# 1. Eureka
+## Spring Tools Suite
+Spring application 개발하기 위한 Eclipse 기반의 IDE   
+[STS](https://spring.io/tools/sts/all) 홈페이지에서 STS를 다운 받아 설치 합니다.  
+
+# 실습개요
+<img height="450" src="images/handson-overview.png">  
+
+총 네 개의 프로젝트를 생성하는 실습을 진행합니다. 각 서비스별 간략 정보는 아래와 같습니다.  
+
+|  서비스  | 포트 |              역할              |
+|:--------:|:----:|:------------------------------:|
+|  Eureka  | 8761 | Service Discvoery              |
+|   Zuul   | 8781 | Gateway                        |
+| Customer | 8771 |                                |
+|   Order  | 8772 | Feign을 통한 Customer API 호출 |
+
+# 1. Eureka Server
 Service discovery 역할을 수행하는 eureka 서비스를 설정하도록 하겠습니다.  
 
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 1.5.15
+- Generate...Maven Project, Java, 2.0.3
 - Artifact: eureka
 - Dependencies: eureka server 입력 후 엔터
 
-![](images/springIniEureka.png)
+<img height="500" src="images/springIniEureka.png">
 
 GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
 다운받은 파일을 원하는 경로에 압축 해제 합니다.  
-IDE를 이용하여 해당 프로젝트를 엽니다.
+IDE를 이용하여 해당 프로젝트를 엽니다.  
+프로젝트 구조는 아래와 같습니다.
+```
+eureka
+└── src
+│   └── main
+│        └── java
+│        │     └── com.msa.eureka
+│        │            └── EurekaApplication.java
+│        └── resources
+│              └── application.properties
+└── pom.xml
+```
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-#Spring Boot 1.5.15를 사용함
+<!--Spring Boot 2.0.3를 사용함-->
 <parent>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-parent</artifactId>
-  <version>1.5.15.BUILD-SNAPSHOT</version>  #
+  <version>2.0.3.RELEASE</version>
   <relativePath/> <!-- lookup parent from repository -->
 </parent>
-#Spring Cloud Edgware 사용함
+<!--Spring Cloud Finchley 사용함-->
 <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   <java.version>1.8</java.version>
-  <spring-cloud.version>Edgware.BUILD-SNAPSHOT</spring-cloud.version>
+  <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
 </properties>
 ... ...
-#eureka dependency 추가
+<!--eureka dependency -->
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
@@ -41,7 +70,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 
 ```
 
-src > resources > application.properties 파일명을 application.yml로 변경 합니다.
+src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.
 (가독성 및 작성 편의를 위함)  
 해당 파일에 아래 내용을 작성합니다.
 
@@ -53,14 +82,14 @@ spring:
     name: discovery-service # 서비스명
 eureka:
   client: # Eureka Server는 기본적으로 Client로서도 작동을 해서 아래 설정 필요 함
-    registerWithEureka: false # Eureka서버를 peer 구성시 true 되어야 함
-    fetchRegistry: false  #?? local에 registry cache를 사용 함
+    registerWithEureka: false
+    fetchRegistry: false  
     serviceUrl:
-      defaultZone: http://localhost:${server.port}/eureka/ # peer구성 시 상대서버 ip:port 작성
+      defaultZone: http://localhost:${server.port}/eureka/
   server:
     enable-self-preservation: false
 ```
-Application Main 클래스에 @EnableEurekaServer 어노테이션을 추가합니다.
+eureka-service 프로젝트의 EurekaApplication.java 파일에 @EnableEurekaServer 어노테이션을 추가합니다.
 ```Java
 @EnableEurekaServer
 @SpringBootApplication
@@ -72,15 +101,86 @@ public class EurekaApplication {
 ```
 
 EurekaApplication을 실행 하고 localhost:8761로 접속하여 Eureka Dashboard 화면이 열리면 정상 작동 하는것입니다.  
-현재는 Instances 항목이 No instances available로 표시 됩니
-다.
+현재는 등록된 서비스가 없어 Instances 항목이 No instances available로 표시 됩니다.  
+ <img height="500" src="images/eurekaui.png">
 
-# 2. Customer service
-string을 return 하는 API를 갖는 단순한 application을 만들어 보겠습니다.  
-이 서비스는 eureka에 자동 등록되게 되고, 사용자가 zuul을 통한 라우팅으로 접근하게 구성될 겁니다.
+# 2. Zuul
+Gateway 역할을 수행하는 zuul 서비스를 설정하도록 하겠습니다.  
 
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 1.5.15
+- Generate...Maven Project, Java, 2.0.3
+- Artifact: zuul
+- Dependencies: zuul, eureka discovery 입력 후 엔터
+
+GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
+다운받은 파일을 원하는 workspace경로에서 압축 해제 합니다.  
+IDE를 이용하여 해당 프로젝트를 엽니다.
+
+pom.xml파일을 열어보면 아래와 같이 dependency가 추가된 것을 확인할 수 있습니다.
+```xml
+<!--zuul dependency 추가-->
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+</dependency>
+```
+
+src > resources > application.properties 파일명을 application.yml로 변경 합니다.  
+해당 파일에 아래 내용을 작성합니다. 앞으로 만들 서비스(CUSTOMER, ORDER)에 대한 라우팅 정보를 추가합니다.
+```yml
+spring:
+  application:
+    name: zuul-service
+
+server:
+  port: 8781
+
+zuul:
+  ignoredServices: '*'  # routes에 정의되지 않은 모든 요청은 무시 함
+  sensitive-headers:    # header의 모든 정보를 bypass 함
+  routes:
+    customer:
+      path: /api/v1/customer/**   # 사용자가 입력할 url
+      serviceId: CUSTOMER-SERVICE # routing을 처리할 endpoint service
+      strip-prefix: true          # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함
+    order:
+      path: /api/v1/order/**      # 사용자가 입력할 url
+      serviceId: ORDER-SERVICE    # routing을 처리할 endpoint service
+      strip-prefix: true          # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함      
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+ribbon:
+  ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
+  ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time
+```
+
+zuul-service 프로젝트의 ZuulApplication.java 파일에 @EnableZuulProxy 어노테이션을 추가합니다.
+
+```Java
+@EnableDiscoveryClient
+@EnableZuulProxy  //Zuul Proxy 사용.
+@SpringBootApplication
+public class ZuulApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ZuulApplication.class, args);
+	}
+}
+```
+application을 실행 합니다.    
+localhost:8761 로 접속하여 zuul-service가 instance로 등록된 것을 확인 합니다.    
+ <img height="500" src="images/eureka-client-zuul.png">
+
+# 3. Customer service (Eureka Client)
+string을 return 하는 API를 갖는 단순한 application을 만들어 보겠습니다.  
+이 서비스는 eureka에 자동 등록되고, 사용자가 zuul을 통한 라우팅으로 접근하게 구성될 것입니다.  
+
+Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
+- Generate...Maven Project, Java, 2.0.3
 - Artifact: customer
 - Dependencies: web, eureka discovery 입력 후 엔터
 
@@ -90,12 +190,12 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-#web dependency 추가
+<!--web dependency 추가-->
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
-#eureka client dependency 추가
+<!--eureka client dependency -->
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -103,7 +203,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 
 ```
 
-src > resources > application.properties 파일명을 application.yml로 변경 합니다.
+src > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다.
 
 ```yml
@@ -119,11 +219,11 @@ eureka:
   instance:
     preferIpAddress: true # 서비스간 통신 시 hostname 보다 ip 를 우선 사용 함    
 ```
-Application Main 클래스에 아래 어노테이션을 추가합니다.  
+customer-service 프로젝트의 CustomerApplication.java 파일에 아래 어노테이션을 추가합니다.  
 그리고 /customer 로 호출 시 임의 고객명을 return 하는 API를 생성합니다.
 ```Java
-@EnableDiscoveryClient //해당 application을 eureka serverㅇ에 등록. eureka, consul, zookeeper의 implements를 모두 포함. @EnableEurekaClient는 only works for eureka.
-@RestController // Rest API를 사용할 class임을 명시.
+@EnableDiscoveryClient
+@RestController // Rest API를 사용할 class임을 명시
 @SpringBootApplication
 public class CustomerApplication {
 	@RequestMapping(method = RequestMethod.GET, value = "/customer")
@@ -136,84 +236,29 @@ public class CustomerApplication {
 }
 ```
 application을 실행 합니다.  
-localhost:8761 로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다. 이때 instance명은 모두 대문자로 표시됩니다.  
-localhost:8771/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
 
-# 3. Zuul
-Gateway 역할을 수행하는 zuul 서비스를 설정하도록 하겠습니다.  
+localhost:8761(Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
+localhost:8771/customer로 접속하여 John이 표시되는것을 확인 합니다.   
 
-Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 1.5.15
-- Artifact: zuul
-- Dependencies: zuul, eureka discovery 입력 후 엔터
-
-GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
-다운받은 파일을 원하는 workspace경로에서 압축 해제 합니다.  
-IDE를 이용하여 해당 프로젝트를 엽니다.
-
-pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
-```xml
-#zuul dependency 추가
-<dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-</dependency>
-```
-
-src > resources > application.properties 파일명을 application.yml로 변경 합니다.  
-해당 파일에 아래 내용을 작성합니다.
+그리고 Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
+localhost:8781/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
+> Zuul을 생성하며 추가했던 아래 라우팅 정보를 이용하게 됩니다.
 ```yml
-spring:
-  application:
-    name: zuul-service
-
-server:
-  port: 8781
-
-zuul:
-  ignoredServices: '*'  # routes에 정의되지 않은 모든 요청은 무시 함
-  sensitive-headers:    # header의 모든 정보를 bypass 함
-  routes:
-    customer:
-      path: /api/v1/customer/** # 사용자가 입력할 url
-      serviceId: CUSTOMER-SERVICE # routing을 처리할 endpoint service
-      strip-prefix: true  # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
-ribbon:
-  ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
-  ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time
+routes:
+  customer:
+    path: /api/v1/customer/**   # 사용자가 입력할 url
+    serviceId: CUSTOMER-SERVICE # routing을 처리할 endpoint service
+    strip-prefix: true          # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함
 ```
-> Ribbon  
-> Load Balancing(eureka에 등록된 여러 instance들을 대상) 기능을 하며, routing 정보에 정의된 endpoint로 요청을 전달 한다.  
-
-Application Main 클래스에 아래 어노테이션을 추가합니다.
-
-```Java
-@EnableDiscoveryClient
-@EnableZuulProxy  //Zuul Proxy 사용.
-@SpringBootApplication
-public class ZuulApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(ZuulApplication.class, args);
-	}
-}
-```
-application을 실행 합니다.    
-localhost:8761 로 이동하여 zuul-service가 instance로 등록된 것을 확인 합니다.    
-localhost:8781/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.    
 
 # 4. Order service
-Order-service의 API를 호출하면 Customer-serivce로 부터 데이터를 가져다가 처리 후 return 하는 API를 갖는 application을 만들어 보겠습니다.
+
+
+Order-service는 특정 API를 호출하면 customer-serivce로 부터 데이터를 가져와 가공 후 return 하도록 application을 만들어 보겠습니다.
 
 
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 1.5.15
+- Generate...Maven Project, Java, 2.0.3
 - Artifact: order
 - Dependencies: web, eureka discovery, feign 입력 후 엔터
 
@@ -223,7 +268,7 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-#feign dependency 추가
+<!-- feign dependency 추가 -->
 <dependency>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -249,26 +294,25 @@ ribbon:
   ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
   ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time    
 ```
-아래 화면과 같이 package를 생성하고 feign을 사용하기 위한 CustomerClient interface, CustomerService 를 생성합니다.  
-![](images/feignpackages.png)
+Customer-service의 API를 호출할때 feign을 사용해 보도록 하겠습니다.   
+아래 화면과 같이 package를 생성하고 CustomerClient interface, CustomerService 를 생성합니다.  
+<img height="300" src="images/feignpackages.png">
 
-- CustomerClient 파일 내용
+- CustomerClient.java 파일 내용
 ```Java
 @FeignClient(
         name ="CUSTOMER-SERVICE",   // eureka에 등록된 instance명으로 서비스 조회
-        //url = "http://testhost:portnumber",   //eureka 사용하지 않아도 url로 서비스 지정 가능.
         decode404 = true    // 404 에러 발생시 feign 자체 에러 발생 안함
 )
+@Component
 public interface CustomerClient {
 
     @RequestMapping(method = RequestMethod.GET, value = "/customer")    // customer-service의 customer api 호출
     String getCustomer();
 }
 ```
-> Feign  
-> REST 기반 client 서비스의 API 호출을 지원
 
-- CustomerService 파일 내용
+- CustomerService.java 파일 내용
 ```Java
 @Service
 public class CustomerService {
@@ -282,7 +326,7 @@ public class CustomerService {
 }
 ```
 
-Application Main 클래스에 아래 어노테이션을 추가하고, customer service를 호출하여 값을 return 하는 orders API를 추가 합니다.
+Order-service 프로젝트의 OrderApplication.java 파일에 @EnableFeignClients 어노테이션을 추가하고, customer-service를 호출하여 값을 return 하는 API를 추가 합니다.
 ```Java
 @EnableFeignClients		// Feign을 사용
 @RestController			// Rest API를 사용할 class임을 명시
@@ -305,18 +349,67 @@ public class OrderApplication {
 	}
 }
 ```
-application을 실행 합니다.
-localhost:8761 로 이동하여 order-service가 instance로 등록된 것을 확인 합니다.  
-localhost:8772/orders 를 호출하여 John's order list가 표시되는것을 확인 합니다.  
+application을 실행 합니다.  
+localhost:8761 로 접속하여 order-service가 instance로 등록된 것을 확인 합니다.  
+localhost:8781/api/v1/order/orders 를 호출하여 **John's order list** 가 표시되는것을 확인 합니다.  
 
-### Hystrix
-TBD
+# 5. Hystrix
+지금까지 zuul -> order-service -> customer-service 호출하는 구조를 만들어 보았습니다.  
+만약 위 상황에서 customer-service에 장애가 발생한 경우 Hystrix를 통해 fallback처리를 해보겠습니다.
 
-# 5. Sleuth
+Hystrix 사용을 위한 dependency를 order-service의 pom.xml에 추가합니다.
+```xml
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+</dependency>
+```
+
+Order-service 프로젝트의 OrderApplication.java 파일에 @EnableHystrix 어노테이션을 추가합니다.
+```Java
+@EnableHystrix           
+@EnableFeignClients       
+@RestController           
+@SpringBootApplication
+public class OrderApplication {
+...
+}
+
+```
+
+Order-service 프로젝트의 CustomerService.java 파일에 아래와 같이 @HystrixCommnad 어노테이션을 추가하고,  
+해당 함수 처리 중 에러가 발생 한 경우 호출 될 fallback method를 정의하고 구현합니다.
+```Java
+@HystrixCommand(fallbackMethod = "getDefaultAllCustomer")
+public String getCustomer(){
+    return customerClient.getCustomer();    // CustomerClient를 이용하여 서비스 호출
+}
+
+public String getDefaultAllCustomer() {
+    return "fallback";
+}
+```
+
+CustomerClient.java 파일을 열고, 아래와 같이 fallback 파라미터를 추가 합니다.
+```Java
+@FeignClient(
+        name ="CUSTOMER-SERVICE",   // eureka에 등록된 instance명으로 서비스 조회
+        decode404 = true,    // 404 에러 발생시 feign 자체 에러 발생 안함
+        fallback = CustomerClientFallback.class
+)
+@Component
+public interface CustomerClient {
+
+    @RequestMapping(method = RequestMethod.GET, value = "/customer")    // customer-service의 customer api 호출
+    String getCustomer();
+}
+```
+이제 장애를 발생하여 Hystrix 가 적용되는지 테스트 해보도록 하겠습니다.  
+
+Order-service 를 재실행 합니다.  
+Customer-serivce 를 중지 합니다.
+
+localhost:8781/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
+
+# 6. Sleuth
 TBD
-# 6. Stream(Kafka, RabbitMQ)
-TBD
-# Config
-TBD
-config 파일명도 바꿔야 하고
-초반에 넣으면 혼란스러울수 있다고 생각되어 마지막에 넣기로 함
