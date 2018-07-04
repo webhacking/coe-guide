@@ -27,19 +27,23 @@
 - Sleuth를 사용하여 분산 환경에서 로그 추적을 쉽게 할 수 있음     
 
 <img width="800" src="images/sleuth.png">
+
 ## 6. Client Load Balancing
 - 여러 instances에 대해 loadbalancing이 가능  
 
 <img width="800" src="images/ribbon.png">
+
 ## 7. Circuit Breaker
 - 하위 서비스 장애 상황시 장애가 상위로 전파되는것을 방지 함  
 - Fallback을 통해 장애시 미리 정의된 값으로 처리 할 수 있음  
 
 <img width="800" src="images/hystrix.png">
+
 ## 8. Ribbon and Hystrix on Zuul
 - Ribbon, Hystrix는 zuul에도 적용 가능    
 
 <img width="800" src="images/ribbon-zuul.png">
+
 ## 9. Config Server
 - 서비스들의 config를 통합 관리할 수 있음
 - Config 변경 내용 무중단 반영 가능  
