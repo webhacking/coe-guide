@@ -69,23 +69,24 @@ Hystrix를 적용하는 세 가지 샘플 코드를 제공한다.
 2. configuration - application.yml 에 추가  
 ```yml
 hystrix:
-    threadpool:
+  threadpool:
     default:
-        coreSize: 100  # Hystrix Thread Pool default size
-        maximumSize: 500  # Hystrix Thread Pool default size
-        keepAliveTimeMinutes: 1
-        allowMaximumSizeToDivergeFromCoreSize: true
-    command:
+      coreSize: 100  # Hystrix Thread Pool default size
+      maximumSize: 500  # Hystrix Thread Pool default size
+      keepAliveTimeMinutes: 1
+      allowMaximumSizeToDivergeFromCoreSize: true
+  command:
     default:
-        execution:
+      execution:
         isolation:
-            thread:
-            timeoutInMilliseconds: 1800000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
-        circuitBreaker:
+          thread:
+            timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
+      circuitBreaker:
         requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
         errorThresholdPercentage: 50
         enabled: true
 ```
+
 3. HystrixCommand 정의
 ```java
 @Service
@@ -140,8 +141,8 @@ feign:
 hystrix:
   threadpool:
     default:
-      coreSize: 100  # Hystrix Thread Pool default size
-      maximumSize: 500  # Hystrix Thread Pool default size
+      coreSize: 100  				# Hystrix Thread Pool default size
+      maximumSize: 500  			# Hystrix Thread Pool default size
       keepAliveTimeMinutes: 1
       allowMaximumSizeToDivergeFromCoreSize: true
   command:
@@ -149,9 +150,9 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
+            timeoutInMilliseconds: 180000     	#설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
+        requestVolumeThreshold: 2            	#설정수 만큼 처리가 지연될시 circuit open
         errorThresholdPercentage: 50
         enabled: true    
 ```
