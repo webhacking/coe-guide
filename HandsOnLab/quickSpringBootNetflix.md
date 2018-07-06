@@ -411,5 +411,44 @@ Customer-serivce 를 중지 합니다.
 
 localhost:8781/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
 
-# 6. Sleuth
-TBD
+# 6. Sleuth and Zipkin
+분산환경 트랜젝션의 흐름을 모니터링 하기 위한 Sleuth, Zipkin을 사용해 보겠습니다.  
+
+모니터링을 위한 Zipkin UI 서버를 실행시켜 보겠습니다.
+실행창에서 공유된 zipkin.jar 가 있는 폴더로 이동하여 아래 명령어를 실행 합니다.
+```cmd
+java -jar zipkin.jar
+```
+
+http://localhost:9411/zipkin 으로 이동하여 zipkin ui 가 실행되는지 확인 합니다.
+<img height="300" src="images/zipkin-ui.png">
+
+그리고 아래 dependency를 모든 서비스 (Zuul, Order-service, Customer-service)에 추가합니다.
+
+- Sleuth: TraceID, SpanID 를 남기기 위함
+- Zipkin: Zipkin 서버로 로그 이력을 전송 함  
+
+```xml
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-zipkin</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-sleuth</artifactId>
+</dependency>
+```
+
+각 서비스의 application.yml 파일의 spring 항목에 아래 내용을 추가합니다.
+```yml
+spring:
+  zipkin:
+    baseUrl: http://localhost:9411/   # Zipkin 서버 정보
+  sleuth:
+    sampler:
+      probability: 1.0                # Sleuth에서 로그를 남기는 비율
+```
+
+설정을 추가한 서비스들을 모두 재시작 합니다.  
+API를 호출해 가며 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.  
+<img height="300" src="images/zipkin-tracing.png">
