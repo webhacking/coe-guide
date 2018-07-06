@@ -141,8 +141,8 @@ feign:
 hystrix:
   threadpool:
     default:
-      coreSize: 100  # Hystrix Thread Pool default size
-      maximumSize: 500  # Hystrix Thread Pool default size
+      coreSize: 100  				# Hystrix Thread Pool default size
+      maximumSize: 500  			# Hystrix Thread Pool default size
       keepAliveTimeMinutes: 1
       allowMaximumSizeToDivergeFromCoreSize: true
   command:
@@ -150,9 +150,9 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
+            timeoutInMilliseconds: 180000     	#설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
+        requestVolumeThreshold: 2            	#설정수 만큼 처리가 지연될시 circuit open
         errorThresholdPercentage: 50
         enabled: true    
 ```
