@@ -30,8 +30,28 @@ zuul:
 ```
 
 ## Filters
-- 클라이언트가 보낸 요청을 라우팅 하기 전, 라우팅할 때, 라우팅한 후 응답을 돌려 받았을 때 필요한 작업을 수행
-- 인증처리, 로깅 등을 적용 할 수 있음
+클라이언트가 보낸 요청을 라우팅 하기 전, 라우팅할 때, 라우팅한 후 응답을 돌려 받았을 때 필요한 작업을 수행한다.  
+다음 분야에 filter를 적용할수 있다.
+- Authentication and Security  
+  API 서비스들에 대한 인증을 적용하여 접근을 제한 할 수 있음   
+
+- Insights and Monitoring   
+  접점에서의 의미있는 데이터를 취합하여 분석에 활용할 수 있음   
+
+- Dynamic Routing  
+  비즈니스 로직에 따른 동적인 라우팅 적용이 가능
+
+- Stress Testing   
+  트래픽 양을 조절하며 성능 테스트 가능
+
+- Load Shedding   
+  요청 별 처리량을 제한하여 제한을 넘는 요청들은 drop 함
+
+- Static Response handling   
+  특정 요청에 대하여 미리 정의된 값을 바로 return 할 수 있음
+
+- Multiregion Resiliency   
+  서로 다른 AWS regions 으로도 요청을 라우팅 할 수 있음
 
 ## Service Discovery
 - 라우팅을 연결할 서비스 찾음
@@ -71,7 +91,7 @@ zuul:
 - Ribbon을 이용해 여러 instance에 대하여 정의된 알고리즘으로 매핑이 가능  
 - round-robin, weighted response time, availability이 있음
 
-## Other 2.0 features
+## Other features
 - Connection Pooling
 - Status Categories
 - Retries
