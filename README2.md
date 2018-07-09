@@ -155,7 +155,7 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 ### 4.2 Battle Tested Features
 * Ribbon의 주요 이점은 Amazon Cloud에서 운영하면서 얻은 경험을 기반으로 구축된 상호 작용 통신 메커니즘을 제공합니다.
 
-* Ribbon의 Zone Aware Round Robin 로드 밸런서는 회로 트릭 로직과 함께 구축되어 구역 선호도에 따라 특정한 대상 서비스 인스턴스를 선호하도록 구성 될 수 있습니다.
+* Ribbon의 **Zone Aware Round Robin 로드 밸런서**는 회로 트릭 로직과 함께 구축되어 지역 선호도(**Zone Affinity**)에 따라 특정한 대상 서비스 인스턴스를 선호하도록 구성 될 수 있습니다.
 
 * 이러한 방식은 특정한 Zone이 갑작스럽게 운영 중단 되어도 탄력적으로 대응이 가능합니다.
 
