@@ -10,7 +10,7 @@
 ## 2. Service Discovery
 - Service를 eureka에 등록 하여 id 기반으로 endpoint 탐색이 가능하게 함  
 - Auto scaling에 유연하게 대처할 수 있음  
-- [Eureka](https://github.com/SDSACT/coe-guide/blob/master/README2.md#2-eureka)
+- [Eureka](https://github.com/SDSACT/coe-guide/blob/master/Service%20Discovery/Eureka_2.md#eureka%EB%9E%80)
 
 <img width="800" src="images/eureka.png">
 
