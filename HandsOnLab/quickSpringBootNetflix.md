@@ -159,7 +159,7 @@ ribbon:
   ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time
 ```
 
-zuul-service 프로젝트의 ZuulApplication.java 파일에 @EnableZuulProxy 어노테이션을 추가합니다.
+zuul-service 프로젝트의 ZuulApplication.java 파일에 @EnableZuulProxy, @EnableDiscoveryClient 어노테이션을 추가합니다.
 
 ```Java
 @EnableDiscoveryClient
