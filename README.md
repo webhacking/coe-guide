@@ -7,19 +7,19 @@
 
 <img width="800" src="images/monolith2msa.png">
 
-## 2. Gateway
-- Zuul을 gateway로 사용하여 하나의 인입점을 만듦
-- Zuul이 모든 요청을 관련 서비스에게 routing 함    
-- [Zuul](https://github.com/SDSACT/coe-guide/blob/master/README2.md#3-zuul)
-
-<img width="800" src="images/zuul.png">
-
-## 3. Service Discovery
+## 2. Service Discovery
 - Service를 eureka에 등록 하여 id 기반으로 endpoint 탐색이 가능하게 함  
 - Auto scaling에 유연하게 대처할 수 있음  
 - [Eureka](https://github.com/SDSACT/coe-guide/blob/master/README2.md#2-eureka)
 
 <img width="800" src="images/eureka.png">
+
+## 3. Gateway
+- Zuul을 gateway로 사용하여 하나의 인입점을 만듦
+- Zuul이 모든 요청을 관련 서비스에게 routing 함    
+- [Zuul](https://github.com/SDSACT/coe-guide/blob/master/README2.md#3-zuul)
+
+<img width="800" src="images/zuul.png">
 
 ## 4. Inner Service Call
 - Feign을 사용하여 다른 서비스 호출을 쉽게 할 수 있음  
