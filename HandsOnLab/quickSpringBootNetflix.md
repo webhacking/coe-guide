@@ -407,7 +407,7 @@ http://localhost:8500/api/v1/order/orders 를 호출하여 **fallback's order li
 java -jar zipkin.jar
 ```
 
-http://localhost:9411/zipkin 으로 이동하여 zipkin ui 가 실행되는지 확인 합니다.
+http://localhost:9411/zipkin/ 으로 이동하여 zipkin ui 가 실행되는지 확인 합니다.
 <img height="300" src="images/zipkin-ui.png">
 
 그리고 아래 dependency를 모든 서비스 (Zuul, Order-service, Customer-service)에 추가합니다.
