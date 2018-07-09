@@ -217,9 +217,11 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 
 
 ## 6. Spring Cloud Netflix
+* Spring은 Netflix OSS를 Spring Boot 프로젝트와 쉽게 통합 할 수 있도록 Spring Cloud Netflix를 만들게 됨
+
 * Spring Cloud Netflix는 Spring Boot어플리케이션을 위한 Netflix OSS통합을 제공
 
-* 간단한 주석을 사용하여 애플리케이션 내부의 공통 패턴을 신속하게 활성화 및 구성하여 전투 테스트를 거친 Netflix 구성 요소로 대규모 분산 시스템 구축이 가능 함
+* 간단한 어노테이션을 사용하면 Netflix OSS에서 사용되는 모든 패턴을 신속하게 활성화 및 구성하여 확장 가능한 성능 분산 시스템을 구축 할 수 있게 됨
 
 * 제공 되는 서비스로는 Eureka, Hystrix, Zuul, Ribbon, Archaius, Sidecar 등이 포함 됨
 
