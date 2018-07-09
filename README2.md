@@ -91,7 +91,7 @@
 
 ![Zuul](https://cdn-images-1.medium.com/max/1600/1*9IeEGHSRMGfAnhqM49TLpQ.png)
 
-* Pre 필터는 라우팅 직전에 인증, Origin Server 선택 디버그 정보 로깅등을 담당
+* Pre 필터는 라우팅 직전에 인증, Origin Server 선택, 디버그, 정보 로깅등을 담당
 
 * Routing 필터는 요청은 Origin Server로 라우팅하는 것을 처리하고 이 단계에서 리본을 사용
 
