@@ -40,7 +40,7 @@
 ## 7. Circuit Breaker
 - 하위 서비스 장애 상황시 장애가 상위로 전파되는것을 방지 함  
 - Fallback을 통해 장애시 미리 정의된 값으로 처리 할 수 있음  
-- [Hystrix](https://github.com/SDSACT/coe-guide/blob/master/README2.md#5-hystrix)
+- [Hystrix](https://github.com/SDSACT/coe-guide/blob/master/README2.md#53-%ED%9A%8C%EB%A1%9C-%EC%B0%A8%EB%8B%A8%EA%B8%B0-circuit-breaker)
 
 <img width="800" src="images/hystrix.png">
 
