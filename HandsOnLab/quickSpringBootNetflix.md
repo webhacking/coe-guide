@@ -126,7 +126,7 @@ pom.xml파일을 열어보면 아래와 같이 dependency가 추가된 것을 �
 </dependency>
 ```
 
-src > resources > application.properties 파일명을 application.yml로 변경 합니다.  
+src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다. 앞으로 만들 서비스(CUSTOMER, ORDER)에 대한 라우팅 정보를 추가합니다.
 ```yml
 spring:
@@ -204,7 +204,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 
 ```
 
-src > resources > application.properties 파일명을 application.yml로 변경 합니다.  
+src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다.
 
 ```yml
@@ -276,7 +276,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 </dependency>
 ```
 
-src > resources > application.properties 파일명을 application.yml로 변경 합니다.  
+src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다.
 
 ```yml
@@ -437,5 +437,8 @@ spring:
 ```
 
 설정을 추가한 서비스들을 모두 재시작 합니다.  
-API를 호출해 가며 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.  
+Customer 또는 Order 서비스 API를 호출하여 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.
+http://localhost:8500/api/v1/customer/customer
+http://localhost:8500/api/v1/order/orders
+
 <img height="300" src="images/zipkin-tracing.png">
