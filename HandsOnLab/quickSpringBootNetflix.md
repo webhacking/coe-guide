@@ -361,8 +361,8 @@ http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list**
 Hystrix 사용을 위한 dependency를 order-service의 pom.xml에 추가합니다.
 ```xml
 <dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 </dependency>
 ```
 
@@ -417,12 +417,12 @@ http://localhost:9411/zipkin/ 으로 이동하여 zipkin ui 가 실행되는지 
 
 ```xml
 <dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-zipkin</artifactId>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-zipkin</artifactId>
 </dependency>
 <dependency>
-  <groupId>org.springframework.cloud</groupId>
-  <artifactId>spring-cloud-starter-sleuth</artifactId>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-sleuth</artifactId>
 </dependency>
 ```
 
@@ -438,7 +438,7 @@ spring:
 
 설정을 추가한 서비스들을 모두 재시작 합니다.  
 Customer 또는 Order 서비스 API를 호출하여 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.
-http://localhost:8500/api/v1/customer/customer
+http://localhost:8500/api/v1/customer/customer  
 http://localhost:8500/api/v1/order/orders
 
 <img height="300" src="images/zipkin-tracing.png">
