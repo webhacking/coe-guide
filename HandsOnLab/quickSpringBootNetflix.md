@@ -444,4 +444,5 @@ http://localhost:8500/api/v1/customer/customer
 http://localhost:8500/api/v1/order/orders
 
 <img height="300" src="images/zipkin-tracing.png">
+
 > Zipkin UI가 IE에서 정상적으로 동작하지 않으므로 Chrome에서 접속합니다. 
