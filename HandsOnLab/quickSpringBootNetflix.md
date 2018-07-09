@@ -241,16 +241,18 @@ application을 실행 합니다.
 http://localhost:8000(Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
 http://localhost:8701/customer로 접속하여 John이 표시되는것을 확인 합니다.   
 
-그리고 Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
-http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
-> Zuul을 생성하며 추가했던 아래 라우팅 정보를 이용하게 됩니다.
+앞에서 Zuul Gateway 서버를 만들면서 라우팅 정보에 대한 설정을 했었습니다.
 ```yml
+# zuul application.yml
 routes:
   customer:
     path: /api/v1/customer/**   # 사용자가 입력할 url
     serviceId: CUSTOMER-SERVICE # routing을 처리할 endpoint service
     strip-prefix: true          # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함
 ```
+따라서 Zuul Gateway를 통해서 Customer Service를 호출 할 수 있습니다.  
+http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
+
 
 # 4. Order service
 
