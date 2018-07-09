@@ -200,7 +200,7 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 
 * 이러한 문제는 thrid party 라이브러리를 사용 할 경우(특히 내부를 알 수 없고 언제든지 변경 할 수 있는 black box로 제공된 경우) 더욱더 악화가 될 수 있습니다.
 
-* 따라서 아래 그림과 같이 실패가 일어날만한 지점(종속성이 있는 부분)에 회로 차단기를 설치합니다.
+* 따라서 아래 그림과 같이 **실패가 일어날만한 지점(종속성이 있는 부분)에 회로 차단기를 설치**합니다.
 
 ![circuitbreaker1](https://cdn-images-1.medium.com/max/2000/1*YyU4z_oOw3clyhYfwLdraQ.png)
 
