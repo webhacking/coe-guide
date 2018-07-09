@@ -141,9 +141,9 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 
 * **Ribbon 프레임워크는 middle-tier간 요청**을 로드 밸런싱 처리하고 반면 **Amazon ELB는 고객과 장치 요청에 대한 로드 밸런싱을 수행**합니다.
 
-* Ribbon 클라이언트는 대상 서비스 각각에 대해 생성 되고 구성이 됩니다. Ribbon 클라이언트 구성 요소는 연결 시간 제한, 재시도, 재시도 알고리즘 등을 제공합니다.
+* Ribbon 클라이언트는 대상 서비스 각각에 대해 생성 되고 구성이 됩니다. Ribbon 클라이언트 구성 요소는 **연결 시간 제한, 재시도, 재시도 알고리즘 등을 제공**합니다.
 
-* Ribbon 내부에는 사용자가 정의 가능한 로드 밸런싱 구성 요소가 내장 되어 있습니다. 제공되는 로드밸런싱 전략 중 일부는 다음과 같습니다.
+* Ribbon 내부에는 사용자가 정의 가능한 로드 밸런싱 구성 요소가 내장 되어 있습니다. 제공되는 **로드밸런싱 전략** 중 일부는 다음과 같습니다.
   * Simple Round Robin LB
 
   * Weighted Response Time LB
@@ -164,12 +164,12 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 ![](https://cdn-images-1.medium.com/max/1600/0*SkYmTGU2e15XElZA.gif)
 * 로드 밸런서는 사용 가능한 모든 구역의 통계를 계산하고 검사합니다.
 
-* 서버 별 활성 요청이 구성된 임계 값에 도달하면 Zone은 활성 서버 목록에서 삭제 됩니다.
-(outbinding request / (instance수 - tripping instance))
+* 서버 별 활성 요청이 설정한 임계 값에 도달하면 Zone은 활성 서버 목록에서 삭제 됩니다.
+(Average Active Requests = outstanding request / (instance수 - tripping instance))
 
 * 최악의 Zone이 삭제 되면 나머지 Zone 중에서 인스턴스의 수에 비례해서 Zone이 선택 됩니다.
 
-* 마지막으로 서버는 지정된 규칙(단순한 라운드 로빈 규칙)을 사용하여 선택한 Zone에서 반환 됩니다.
+* 선택된 Zone에서 요청을 받을 서버는 Ribbon에 설정한 로드밸런싱 전략에 따라 반환 됩니다.
 
 ## 5. Hystrix
 
