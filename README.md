@@ -1,4 +1,4 @@
-# Netflix stacks overview
+# Netflix OSS Overview
 
 ## 1. Monolithic to Microservice
 - Monolithic 구조에서 Microservice 구조로 바뀜    
