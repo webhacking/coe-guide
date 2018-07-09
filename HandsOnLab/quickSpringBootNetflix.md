@@ -18,6 +18,7 @@ Spring application 개발하기 위한 Eclipse 기반의 IDE
 |   Zuul   | 8781 | Gateway                        |
 | Customer | 8771 |                                |
 |   Order  | 8772 | Feign을 통한 Customer API 호출 |
+|   Zipkin  | 9411 | Zipkin UI 서버 |
 
 # 1. Eureka Server
 Service discovery 역할을 수행하는 eureka 서비스를 설정하도록 하겠습니다.  
