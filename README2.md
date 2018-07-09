@@ -58,7 +58,7 @@
 
 * AWS는 middle-tier 로드 밸런서를 제공하지 않았음
 
-### 1.3.3 AWS ELB와의 차이
+### 2.3 AWS ELB와의 차이
 * AWS ELB는 최종 사용자 웹 트래픽에 노출되는 Edge서비스를 위한 로드 밸런싱, Eureka는 중간 계층 로드 밸런싱의 필요성을 충족 시켜줌
 
 * 중간 계층 서비스를 AWS ELB 뒤에 둘 수 있지만, 이것을 외부에 노출 시키면 AWS Security Group의 기능이 손실 됨
@@ -68,10 +68,14 @@
 
 * Eureka 로드밸런싱과 프록시 기반의 로드 밸런싱의 큰 차이점 중 하나는 서버에 관한 정보가 클라이언트에 캐시되므로 응용 프로그램이 로드 밸런스의 장애에 대해 복원력을 가질 수 있음 (메모리를 차지하지만 탄력성이 좋음)
 
-### 2.3 Eureka서버와 Eureka 클라이언트의 통신
+### 2.4 Eureka서버와 Eureka 클라이언트의 통신
 * 통신할 서비스의 정보를 찾도록 도와주지만 프로토콜이나 통신 방법에 제한을 두지 않음
 
-* http, https 또는 기타 RPC메커니즘과 같은 프로토콜을 사용
+* 아래 그림과 같이 Eureka client를 내장한 Application Service와 Client가 Eureka Server에 등록을 요청하고 30초마다 갱신을 위한 하트 비트를 보냄
+
+* 이러한 등록 정보와 갱신 정보는 클러스터의 모든 유레카 노드에 복제가 되고 클라이언트들은 레지스트리 정보를 찾아 해당 서비스를 찾고 원격 호출이 가능하게 됨
+
+![Eureka](https://github.com/Netflix/eureka/raw/master/images/eureka_architecture.png)
 
 ## 3. Zuul
 
@@ -83,7 +87,19 @@
 
 * 2013년 기준 Netflix API는 1000개가 넘는 디바이스 유형을 지원하고 피크 시간에 초당 50000개 이상의 요청을 넘기는 Zuul(Edge Service)을 구축하고 있음
 
-### 3.2 Zuul의 기능
+### 3.2 Zuul Filter 동작 방식
+
+![Zuul](https://cdn-images-1.medium.com/max/1600/1*9IeEGHSRMGfAnhqM49TLpQ.png)
+
+* Pre 필터는 라우팅 직전에 인증, Origin Server 선택 디버그 정보 로깅등을 담당
+
+* Routing 필터는 요청은 Origin Server로 라우팅하는 것을 처리하고 이 단계에서 리본을 사용
+
+* Post 필터는 요청이 라우팅 된 이후에 실행
+
+* Error 필터는 다른 단계 중 하나에서 오류가 발생하면 실행
+
+### 3.3 Zuul의 기능
 API 트래픽의 양과 다양성으로 인해 경고 없이 문제가 발생할 수 가 있습니다.
 
 Zuul은 다양한 유형의 필터를 사용하여 신속하게 edge service에 기능을 적용 할 수 있습니다.
@@ -198,7 +214,12 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 * 별도의 스레드 오버헤드가 크기 때문에 메모리 내 캐시 검색만 수행과 같은 네트워크 호출을 수행하지 않을 경우 세마포어가 사용 됩니다. 또한 대체기능(fallback)에도 세마포어가 사용 됩니다.
 
 
+## 6. Spring Cloud Netflix
+* Spring Cloud Netflix는 Spring Boot어플리케이션을 위한 Netflix OSS통합을 제공
 
+* 간단한 주석을 사용하여 애플리케이션 내부의 공통 패턴을 신속하게 활성화 및 구성하여 전투 테스트를 거친 Netflix 구성 요소로 대규모 분산 시스템 구축이 가능 함
+
+* 제공 되는 서비스로는 Eureka, Hystrix, Zuul, Ribbon, Archaius, Sidecar 등이 포함 됨
 
 
 
