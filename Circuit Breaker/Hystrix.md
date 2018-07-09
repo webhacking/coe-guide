@@ -37,7 +37,9 @@ Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재한다.
 - 초기 Service3 호출 정상 동작 상태시에는 Closed
 - Service3 호출 시 이상 발생 한 경우 Open 상태로 변경되고 접속 차단(fail fast)
   - Service3 호출 결과는 fallback으로 정의된 내용이 return 됨
-- 주기적으로 서비스 상태 확인하여 정상 확인될 경우 Close 상태로 변경
+- 주기적으로 서비스 상태 확인하여 정상 확인될 경우 Close 상태로 변경  
+
+> [circuit 관련 설정 참고](https://github.com/Netflix/Hystrix/wiki/Configuration#circuit-breaker)
 
 ### Hystrix 모니터링
 #### Hystrix Dashboard
@@ -82,8 +84,8 @@ hystrix:
           thread:
             timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
-        errorThresholdPercentage: 50
+        requestVolumeThreshold: 2            	# 설정수 값만큼 요청이 들어온 경우만 circut open 여부 결정 함
+        errorThresholdPercentage: 50		# requestVolumn값을 넘는 요청 중 설정 값이상 비율이 에러인 경우 circuit open
         enabled: true
 ```
 
@@ -152,8 +154,8 @@ hystrix:
           thread:
             timeoutInMilliseconds: 180000     	#설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            	#설정수 만큼 처리가 지연될시 circuit open
-        errorThresholdPercentage: 50
+        requestVolumeThreshold: 2            	# 설정수 값만큼 요청이 들어온 경우만 circut open 여부 결정 함
+        errorThresholdPercentage: 50		# requestVolumn값을 넘는 요청 중 설정 값이상 비율이 에러인 경우 circuit open
         enabled: true    
 ```
 2. Feign Hystrix 정의
@@ -200,8 +202,8 @@ hystrix:
           thread:
             timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
-        errorThresholdPercentage: 50
+        requestVolumeThreshold: 2            	# 설정수 값만큼 요청이 들어온 경우만 circut open 여부 결정 함
+        errorThresholdPercentage: 50		# requestVolumn값을 넘는 요청 중 설정 값이상 비율이 에러인 경우 circuit open
         enabled: true    
 ```
 2. routeFallbackProvider 예시  
