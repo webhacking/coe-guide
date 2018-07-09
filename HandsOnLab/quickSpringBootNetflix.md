@@ -14,17 +14,10 @@ Spring application 개발하기 위한 Eclipse 기반의 IDE
 
 |  서비스  | 포트 |              역할              |
 |:--------:|:----:|:------------------------------:|
-<<<<<<< HEAD
-|  Eureka  | 8761 | Service Discvoery              |
-|   Zuul   | 8781 | Gateway                        |
-| Customer | 8771 |                                |
-|   Order  | 8772 | Feign을 통한 Customer API 호출 |
-=======
 |  Eureka  | 8000 | Service Discvoery              |
 |   Zuul   | 8500 | Gateway                        |
 | Customer | 8701 |                                |
 |   Order  | 8702 | Feign을 통한 Customer API 호출 |
->>>>>>> dab4ee0d1644bcc3db34fb0a0c818be399e3ef83
 |   Zipkin  | 9411 | Zipkin UI 서버 |
 
 # 1. Eureka Server
