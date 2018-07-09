@@ -3,6 +3,7 @@
 ## 1. Monolithic to Microservice
 - Monolithic 구조에서 Microservice 구조로 바뀜    
 - 사용자가 모든 서비스로 개별 접속 할수는 없음  
+- [Netflix 사례](https://github.com/SDSACT/coe-guide/blob/master/README2.md#1-netflix-oss)
 
 <img width="800" src="images/monolith2msa.png">
 
