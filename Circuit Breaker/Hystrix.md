@@ -84,8 +84,8 @@ hystrix:
           thread:
             timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
-        errorThresholdPercentage: 50
+        requestVolumeThreshold: 2            	# 설정수 값만큼 요청이 들어온 경우만 circut open 여부 결정 함
+        errorThresholdPercentage: 50		# requestVolumn값을 넘는 요청 중 설정 값이상 비율이 에러인 경우 circuit open
         enabled: true
 ```
 
@@ -202,8 +202,8 @@ hystrix:
           thread:
             timeoutInMilliseconds: 3000     #설정 시간동안 처리 지연발생시 timeout and 설정한 fallback 로직 수행
       circuitBreaker:
-        requestVolumeThreshold: 2            #설정수 만큼 처리가 지연될시 circuit open
-        errorThresholdPercentage: 50
+        requestVolumeThreshold: 2            	# 설정수 값만큼 요청이 들어온 경우만 circut open 여부 결정 함
+        errorThresholdPercentage: 50		# requestVolumn값을 넘는 요청 중 설정 값이상 비율이 에러인 경우 circuit open
         enabled: true    
 ```
 2. routeFallbackProvider 예시  
