@@ -224,8 +224,18 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 
 
 
-
-
+## 7. 출처
+* eureka
+ * https://medium.com/netflix-techblog/netflix-shares-cloud-load-balancing-and-failover-tool-eureka-c10647ef95e5
+* zuul 
+ * https://medium.com/netflix-techblog/announcing-zuul-edge-service-in-the-cloud-ab3af5be08ee
+* ribbon
+ * https://medium.com/netflix-techblog/announcing-ribbon-tying-the-netflix-mid-tier-services-together-a89346910a62
+* hystrix
+ * https://medium.com/netflix-techblog/fault-tolerance-in-a-high-volume-distributed-system-91ab4faae74a
+ * https://medium.com/netflix-techblog/introducing-hystrix-for-resilience-engineering-13531c1ab362
+* 기타
+ * https://medium.com/netflix-techblog/a-closer-look-at-the-christmas-eve-outage-d7b409a529ee
 
 # 수정할 내용
 spring cloud와의 연관성 조사 및 그림 추가 및 내용 정리
