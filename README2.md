@@ -195,6 +195,7 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 * 99.99%의 가동성을 가진 30개의 서비스가 있을 경우 각각에 대해 0.01%의 중단 시간이 미치는 전체적인 영향은 전체 시스템에서 한달에 한시간 이상의 중단 시간을 초래 할 수 있습니다.
 
 * 아래의 그림처럼 대용량 트래픽이 발생하면 백엔으 종속성이 잠재 되어 있는 모든 서버에서 모든 리소스가 몇 초내에 포화 상태가 될 수 있습니다. 실패보다 더 심각 한 것은 이러한 응용 프로그램이 대기열, 스레드 및 서비스 간의 대기 시간을 증가 시켜 계단식 오류를 발생 시킬 수 있습니다.
+
 ![fail](https://github.com/Netflix/Hystrix/wiki/images/soa-3-640.png)
 
 * 이러한 문제는 thrid party 라이브러리를 사용 할 경우(특히 내부를 알 수 없고 언제든지 변경 할 수 있는 black box로 제공된 경우) 더욱더 악화가 될 수 있습니다.
@@ -241,6 +242,7 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
   
 * 기타
   * https://medium.com/netflix-techblog/a-closer-look-at-the-christmas-eve-outage-d7b409a529ee
+  * https://media.netflix.com/ko/company-blog/completing-the-netflix-cloud-migration
 
 # 수정할 내용
 spring cloud와의 연관성 조사 및 그림 추가 및 내용 정리
