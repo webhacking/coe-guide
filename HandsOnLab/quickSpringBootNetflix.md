@@ -14,10 +14,10 @@ Spring application 개발하기 위한 Eclipse 기반의 IDE
 
 |  서비스  | 포트 |              역할              |
 |:--------:|:----:|:------------------------------:|
-|  Eureka  | 8761 | Service Discvoery              |
-|   Zuul   | 8781 | Gateway                        |
-| Customer | 8771 |                                |
-|   Order  | 8772 | Feign을 통한 Customer API 호출 |
+|  Eureka  | 8000 | Service Discvoery              |
+|   Zuul   | 8500 | Gateway                        |
+| Customer | 8701 |                                |
+|   Order  | 8702 | Feign을 통한 Customer API 호출 |
 |   Zipkin  | 9411 | Zipkin UI 서버 |
 
 # 1. Eureka Server
@@ -77,7 +77,7 @@ src > main > resources > application.properties 파일명을 application.yml로 
 
 ```yml
 server:
-  port: 8761  # 서비스 port
+  port: 8000  # 서비스 port
 spring:
   application:
     name: discovery-service # 서비스명
@@ -101,7 +101,7 @@ public class EurekaApplication {
 }
 ```
 
-EurekaApplication을 실행 하고 localhost:8761로 접속하여 Eureka Dashboard 화면이 열리면 정상 작동 하는것입니다.  
+EurekaApplication을 실행 하고 http://localhost:8000로 접속하여 Eureka Dashboard 화면이 열리면 정상 작동 하는것입니다.  
 현재는 등록된 서비스가 없어 Instances 항목이 No instances available로 표시 됩니다.  
  <img height="500" src="images/eurekaui.png">
 
@@ -134,7 +134,7 @@ spring:
     name: zuul-service
 
 server:
-  port: 8781
+  port: 8500
 
 zuul:
   ignoredServices: '*'  # routes에 정의되지 않은 모든 요청은 무시 함
@@ -152,7 +152,7 @@ zuul:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8000/eureka/
 
 ribbon:
   ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
@@ -173,7 +173,7 @@ public class ZuulApplication {
 }
 ```
 application을 실행 합니다.    
-localhost:8761 로 접속하여 zuul-service가 instance로 등록된 것을 확인 합니다.    
+http://localhost:8000 로 접속하여 zuul-service가 instance로 등록된 것을 확인 합니다.    
  <img height="500" src="images/eureka-client-zuul.png">
 
 # 3. Customer service (Eureka Client)
@@ -209,14 +209,14 @@ src > resources > application.properties 파일명을 application.yml로 변경 
 
 ```yml
 server:
-  port: 8771  # 서비스 port
+  port: 8701  # 서비스 port
 spring:
   application:
     name: customer-service # 서비스명
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8000/eureka/
   instance:
     preferIpAddress: true # 서비스간 통신 시 hostname 보다 ip 를 우선 사용 함    
 ```
@@ -238,11 +238,11 @@ public class CustomerApplication {
 ```
 application을 실행 합니다.  
 
-localhost:8761(Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
-localhost:8771/customer로 접속하여 John이 표시되는것을 확인 합니다.   
+http://localhost:8000(Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
+http://localhost:8701/customer로 접속하여 John이 표시되는것을 확인 합니다.   
 
 그리고 Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
-localhost:8781/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
+http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
 > Zuul을 생성하며 추가했던 아래 라우팅 정보를 이용하게 됩니다.
 ```yml
 routes:
@@ -281,14 +281,14 @@ src > resources > application.properties 파일명을 application.yml로 변경 
 
 ```yml
 server:
-  port: 8772  # 서비스 port
+  port: 8702  # 서비스 port
 spring:
   application:
     name: order-service # 서비스명
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://localhost:8000/eureka/
   instance:
     preferIpAddress: true # 서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
 ribbon:
@@ -351,8 +351,8 @@ public class OrderApplication {
 }
 ```
 application을 실행 합니다.  
-localhost:8761 로 접속하여 order-service가 instance로 등록된 것을 확인 합니다.  
-localhost:8781/api/v1/order/orders 를 호출하여 **John's order list** 가 표시되는것을 확인 합니다.  
+http://localhost:8000 로 접속하여 order-service가 instance로 등록된 것을 확인 합니다.  
+http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list** 가 표시되는것을 확인 합니다.  
 
 # 5. Hystrix
 지금까지 zuul -> order-service -> customer-service 호출하는 구조를 만들어 보았습니다.  
@@ -391,26 +391,12 @@ public String getDefaultAllCustomer() {
 }
 ```
 
-CustomerClient.java 파일을 열고, 아래와 같이 fallback 파라미터를 추가 합니다.
-```Java
-@FeignClient(
-        name ="CUSTOMER-SERVICE",   // eureka에 등록된 instance명으로 서비스 조회
-        decode404 = true,    // 404 에러 발생시 feign 자체 에러 발생 안함
-        fallback = CustomerClientFallback.class
-)
-@Component
-public interface CustomerClient {
-
-    @RequestMapping(method = RequestMethod.GET, value = "/customer")    // customer-service의 customer api 호출
-    String getCustomer();
-}
-```
 이제 장애를 발생하여 Hystrix 가 적용되는지 테스트 해보도록 하겠습니다.  
 
 Order-service 를 재실행 합니다.  
 Customer-serivce 를 중지 합니다.
 
-localhost:8781/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
+http://localhost:8500/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
 
 # 6. Sleuth and Zipkin
 분산환경 트랜젝션의 흐름을 모니터링 하기 위한 Sleuth, Zipkin을 사용해 보겠습니다.  
