@@ -19,6 +19,8 @@ Frontend로 부터 모든 요청을 받아 내부 마이크로서비스들에게
 또한 클라이언트 요청을 적절한 서비스로 라우팅하거나 필터를 적용하여 헤더에 특정 정보를 추가할 수 있다.  
 
 ## Zuul 기능
+<img height="500" src="../images/zuul-how-it-works.png">
+
 ## Routing Rules
 - front-end로부터 들어온 request를 path에 따라 특정 service로 라우팅하기 위한 규칙을 정의
 ```yml
