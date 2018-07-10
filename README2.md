@@ -122,9 +122,10 @@ Zuul은 다양한 유형의 필터를 사용하여 신속하게 edge service에 
 * Stress Test - 필터 내에서 동적 Archaius 구성을 사용하여 소규모 서버로 라우팅 되는 트래픽을 지속적으로 증가시키는 자동화 된 프로세스를 보유하고 있습니다. 인스턴스가 더 많은 트래픽을 받게 되면 성능과 용량을 측정합니다. 이렇게 하면 피크 타이밍에 자동 스케일링 정책이 수정이 필요한지 아닌지와 우리가 필요한 EC2의 인스턴스의 갯수를 알려줍니다.
 
 * Multi-Region 복원 - Zuul은 Isthmus(지협)이라 불리는 Multi-Region ELB 복원 프로젝트의 핵심입니다.
-  * 과거 AWS ELB 서비스의 백엔드 데이터가 삭제되어 Netflix의 기능들이 해결 되는데 몇 시간이 걸리게 되었습니다.(미국, 캐나다, 라틴 아메리카에 영향을 미쳤고 북유럽은 영향이 없었음)
-
-  * East 지역의 ELB만 죽었을 경우 West 지역의 ELB > West 지역의 Zuul > East 지역의 서비스를 제공하는 식으로 개선하였습니다.
+  * Isthmus - ELB 가동 중단과 같은 문제를 견딜 수 있도록 아키텍처를 강화하였고 이러한 중단을 극복하기 위해 다른 지역에 호스팅 된 ELB 세트를 사용하도록 하는 방법 (ELB 문제에 대한 탄력성)
+  ![](https://cdn-images-1.medium.com/max/1600/0*-NotvSIpVgdrweCP.)
+  
+  ![](https://cdn-images-1.medium.com/max/1600/0*q0BO8z2eG9JLPRdf.)
 
 
 ## 4. Ribbon
