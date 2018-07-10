@@ -29,6 +29,7 @@
 
 ## 5. Inner Service Call
 - Feign을 사용하여 다른 서비스 호출을 쉽게 할 수 있음  
+- [Feign](https://github.com/SDSACT/coe-guide/blob/master/Etc/Feign.md#client-api-call)
 
 <img width="800" src="images/inner-service-call.png">
 
