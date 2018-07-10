@@ -23,7 +23,7 @@
 ## 4. Gateway
 - Zuul을 gateway로 사용하여 하나의 인입점을 만듦
 - Zuul이 모든 요청을 관련 서비스에게 routing 함    
-- [Zuul](https://github.com/SDSACT/coe-guide/blob/master/README2.md#3-zuul)
+- [Zuul](https://github.com/SDSACT/coe-guide/blob/master/Gateway/Zuul_2.md)
 
 <img width="800" src="images/zuul.png">
 
