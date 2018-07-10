@@ -11,7 +11,7 @@
 
 이런 문제를 해결하기 위해 Circuit Breaker 패턴으로 개발된 Hystrix는 장애 상황에 아래와 같이 대처 한다.
 - 장애전파 방지: 서비스간 의존성이 발생하는 접근 포인트를 분리하여 장애 서비스 호출 안함
-- fallback: 미리 정의된 값을 return 함  
+- **fallback: 미리 정의된 값을 return 함**  
 
 > 특정 서비스 혹은 서비스의 REST API 호출 결과가 비정상인 경우, 전체 서비스로의 전이를 방지하기 위해 API Gateway 혹은 각 서비스의 Hystrix에서 해당 호출을 자동으로 차단합니다.
 
@@ -22,7 +22,7 @@
 - 실시간 모니터링, 알람 및 설정 변경(Operational Control) 지원
 
 ### 장애전파 방지 및 빠른 실패/복구(Circuit Breaker 패턴)
-서비스 간 수많은 의존관계가 있는 MSA환경에서 특정 서비스 하나가 갑자기 응답하지 않게 되면 해당 서비스와 의존관계에 있는 모든 서비스들이 연쇄적으로 문제를 일으키게 되고 원인이 되는 서비스를 찾아 내기까지 시간도 오래 걸린다.   
+서비스 간 수많은 의존관계가 있는 MSA환경에서 특정 서비스 하나가 갑자기 응답하지 않게 되면 해당 서비스와 의존관계에 있는 모든 서비스들이 연쇄적으로 문제를 일으키게 되고 **원인이 되는 서비스를 찾아 내기까지 시간도 오래 걸린다**.   
 ![](../images/circuitbreaker-hystrix-fail-propagation.png)
 
 이러한 연쇄적인 장애 발생을 막기 위해선 장애가 전파되지 않도록 문제가 발생한 서비스에 대한 접속 차단이 필요하고 Circuit Breaker 패턴을 적용하여 해결할 수 있다.   
@@ -32,6 +32,7 @@ Circuit Breaker 패턴에는 아래와 같이 세 가지 상태가 존재한다.
 - Closed : 초기 상태로 모든 접속은 평소와 같이 실행된다.
 - Open(Failure state) : 에러율이 임계치를 넘어서면 OPEN 상태가 되고, 모든 접속은 차단(fail fast)된다.
 - Half-open : OPEN 후 일정 시간이 지나면 HALF_OPEN 상태가 되고, 접속을 시도하여 성공하면 CLOSED, 실패하면 OPEN으로 되돌아간다.
+
 #### Circuit open 상태 설명
 ![](../images/circuitbreaker-hystrix-circuitbreaker.png)
 - 초기 Service3 호출 정상 동작 상태시에는 Closed
