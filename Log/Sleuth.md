@@ -35,7 +35,7 @@ Global Transaction ID를 이용한 분산 트랜잭션 로그 모니터링 예�
 - cr(Client Received) : Span의 종료 시점 [cr - cs = 클라이언트가 서버로부터 응답받는데 걸리는 전체 시간]
 
 ![](../images/log-sleuth-annotation.png)
-
+![](../images/log-sleuth-span-relationship.png)
 
 ## Spring Cloud Sleuth의 기능
 
