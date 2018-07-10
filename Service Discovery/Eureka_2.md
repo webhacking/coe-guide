@@ -222,6 +222,7 @@ eureka.client.registryFetchIntervalSeconds: 3 # 기본 30초
   eureka:
     instance:
       hostname: eureka1
+    client:
       serviceUrl:
         defaultZone: http://eureka2:8761/eureka/
 
