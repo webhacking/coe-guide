@@ -131,7 +131,7 @@ Zuul은 다양한 유형의 필터를 사용하여 신속하게 edge service에 
 
 Netflix는 클라우드 기반에서 정교한 서비스를 지향하는 아키텍처를 지향합니다. 현재 Netflix API 서비스와 같은 수백개의 정교한 서비스를 Edge 서비스를 통해서 지원하고 있습니다. 경량급 REST 기반 프로토콜은 이러한 서비스 프로세스 간 통신을 위한 선택입니다.
 
-Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Internal Web Service Framework (NIWS) 를 구성하는 몇가지 요소를 제공합니다. 유레카와 함께 사용되는 내부 클라이언트 로드 밸러서로서 주로 middle-tier 서비스에 대한 로드 밸런신 요청에 사용되고 있습니다.
+Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Internal Web Service Framework (NIWS) 를 구성하는 몇가지 요소를 제공합니다. **유레카와 함께 사용되는 내부 클라이언트 로드 밸러서**로서 주로 **middle-tier 서비스에 대한 로드 밸런싱** 요청에 사용되고 있습니다.
 
 ### 4.1 Ribbon의 역할
 * Netflix의 대표적인 배포 아키텍쳐
