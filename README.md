@@ -43,6 +43,7 @@
 
 ## 7. Distributed Log Tracking
 - Sleuth를 사용하여 분산 환경에서 로그 추적을 쉽게 할 수 있음     
+- [Sleuth](https://github.com/SDSACT/coe-guide/blob/master/Log/Sleuth.md#sleuth-%EB%9E%80)
 
 <img width="800" src="images/sleuth.png">
 
