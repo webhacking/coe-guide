@@ -165,7 +165,8 @@ Ribbon은 소프트웨어 로드 밸런싱 알고리즘과 함께 Netflix Intern
 * 로드 밸런서는 사용 가능한 모든 구역의 통계를 계산하고 검사합니다.
 
 * 서버 별 활성 요청이 설정한 임계 값에 도달하면 Zone은 활성 서버 목록에서 삭제 됩니다.
-(Average Active Requests = outstanding request / (instance수 - tripping instance))
+
+**(Average Active Requests = outstanding request / (instance수 - tripping instance))**
 
 * 최악의 Zone이 삭제 되면 나머지 Zone 중에서 인스턴스의 수에 비례해서 Zone이 선택 됩니다.
 
