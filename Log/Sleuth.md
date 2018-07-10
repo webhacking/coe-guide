@@ -3,7 +3,7 @@
 
 MSA 구조에서 클라이언트의 호출이 내부적으로 여러개의 서비스를 거쳐서 일어나서 전체 트랜잭션에 대한 로그 트레이싱이 어렵다.  
 이를 쉽게 하기 위해 트랜잭션의 전 구간을 추적하기 위한 하나의 연관 ID가 필요하다.  
-Sleuth를 사용하면 이 연관 ID(traceID, spanID)를 자동으로 생성해 준다.  
+**Sleuth를 사용하면 이 연관 ID(traceID, spanID)를 자동으로 생성**해 준다.  
 
 ![](../images/log-overview-tracing2.png)
 
