@@ -329,6 +329,7 @@ public class CustomerService {
 
 Order-service 프로젝트의 OrderApplication.java 파일에 @EnableFeignClients 어노테이션을 추가하고, customer-service를 호출하여 값을 return 하는 API를 추가 합니다.
 ```Java
+@EnableDiscoveryClient
 @EnableFeignClients		// Feign을 사용
 @RestController			// Rest API를 사용할 class임을 명시
 @SpringBootApplication
@@ -354,35 +355,7 @@ application을 실행 합니다.
 http://localhost:8000 로 접속하여 order-service가 instance로 등록된 것을 확인 합니다.  
 http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list** 가 표시되는것을 확인 합니다.  
 
-# 5. Load Balancing
-Eureka, Zuul, Feign 등에서는 load balancing을 위한 Ribbon이 포함되어 있습니다.  
-Customer 서비스를 이용하여 여러개의 instance를 생성하고, 이에 대한 load balancing이 자동으로 되는것을 확인해 보겠습니다.  
-
-기존 application의 instance를 여러개 실행하려면 간단하게는 port만 바꿔 주면 됩니다.   
-이번 실습에서는 customer project 폴더를 복사하여 customer2를 만들도록 하겠습니다.
-그리고 customer2를 IDE로 열어서 아래와 같이 설정과 소스코드를 수정해 줍니다.  
-
- application.yml에서 port를 변경 합니다.    
- application.name은 동일하게 해야 eureka에 동일 app으로 등록 됩니다.  
-```yml
-server:
-  port: 8711  # 서비스 port
-```
-
-다른 instance가 호출되는것을 구별하기 위해 CustomerApplication.java의 getCustomer 메서드 return 값을 아래와 같이 변경 합니다.  
-```Java
-public String getCustomer() {
-  return "Hubert";
-}
-```
-application을 실행 합니다.  
-http://localhost:8000 로 접속하여 customer-service의 instance가 두개 등록된 것을 확인 합니다.  
-http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list**, **Hubert's order list** 가 번갈아 표시되는 것을 확인 합니다.  
-
-> Ribbon이 가지고 있는 cache가 refresh 되기 까지 30초에서 2분 정도가 걸릴 수 있습니다.  
-> 이로 인해 처음 호출 시 Jons's order list만 계속 표시 될 수 있습니다.  
-
-# 6. Hystrix
+# 5. Hystrix
 지금까지 zuul -> order-service -> customer-service 호출하는 구조를 만들어 보았습니다.  
 만약 위 상황에서 customer-service에 장애가 발생한 경우 Hystrix를 통해 fallback처리를 해보겠습니다.
 
@@ -397,7 +370,8 @@ Hystrix 사용을 위한 dependency를 order-service의 pom.xml에 추가합니�
 Order-service 프로젝트의 OrderApplication.java 파일에 @EnableHystrix 어노테이션을 추가합니다.
 ```Java
 @EnableHystrix           
-@EnableFeignClients       
+@EnableFeignClients    
+@EnableDiscoveryClient
 @RestController           
 @SpringBootApplication
 public class OrderApplication {
@@ -510,3 +484,32 @@ spring:
 설정을 추가한 서비스들을 모두 재시작 합니다.  
 API를 호출해 가며 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.  
 <img height="300" src="images/zipkin-tracing.png">
+
+
+# 7. Load Balancing
+Eureka, Zuul, Feign 등에서는 load balancing을 위한 Ribbon이 포함되어 있습니다.  
+Customer 서비스를 이용하여 여러개의 instance를 생성하고, 이에 대한 load balancing이 자동으로 되는것을 확인해 보겠습니다.  
+
+기존 application의 instance를 여러개 실행하려면 간단하게는 port만 바꿔 주면 됩니다.   
+이번 실습에서는 customer project 폴더를 복사하여 customer2를 만들도록 하겠습니다.
+그리고 customer2를 IDE로 열어서 아래와 같이 설정과 소스코드를 수정해 줍니다.  
+
+ application.yml에서 port를 변경 합니다.    
+ application.name은 동일하게 해야 eureka에 동일 app으로 등록 됩니다.  
+```yml
+server:
+  port: 8711  # 서비스 port
+```
+
+다른 instance가 호출되는것을 구별하기 위해 CustomerApplication.java의 getCustomer 메서드 return 값을 아래와 같이 변경 합니다.  
+```Java
+public String getCustomer() {
+  return "Hubert";
+}
+```
+application을 실행 합니다.  
+http://localhost:8000 로 접속하여 customer-service의 instance가 두개 등록된 것을 확인 합니다.  
+http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list**, **Hubert's order list** 가 번갈아 표시되는 것을 확인 합니다.  
+
+> Ribbon이 가지고 있는 cache가 refresh 되기 까지 30초에서 2분 정도가 걸릴 수 있습니다.  
+> 이로 인해 처음 호출 시 Jons's order list만 계속 표시 될 수 있습니다.  
