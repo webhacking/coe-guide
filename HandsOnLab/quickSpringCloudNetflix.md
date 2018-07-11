@@ -37,13 +37,13 @@ IDE를 이용하여 해당 프로젝트를 엽니다.
 
 ##### 참고) Eclipse STS를 사용하여 프로젝트 생성
 Spring Starter Project 생성  
-<img height="300" src="images/handson-eclipse-sts-1.png">  
+<img height="300" src="images/handson-eclipse-sts-1.PNG">  
 
 Project 정보 설정 (https 접속이 불가한 경우 Service URL을 http://start.spring.io 로 변경)
-<img height="500" src="images/handson-eclipse-sts-2.png">  
+<img height="500" src="images/handson-eclipse-sts-2.PNG">  
 
 Project Dependency(Eureka Server) 추가  
-<img height="500" src="images/handson-eclipse-sts-3.png">
+<img height="500" src="images/handson-eclipse-sts-3.PNG">
 
 프로젝트 구조는 아래와 같습니다.
 ```
