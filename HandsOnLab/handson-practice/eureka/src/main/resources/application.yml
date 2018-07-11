@@ -1,0 +1,13 @@
+server:
+  port: 8000  # 서비스 port
+spring:
+  application:
+    name: discovery-service # 서비스명
+eureka:
+  client: # Eureka Server는 기본적으로 Client로서도 작동을 해서 아래 설정 필요 함
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}/eureka/
+  server:
+    enable-self-preservation: false
