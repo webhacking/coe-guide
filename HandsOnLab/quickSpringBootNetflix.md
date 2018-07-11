@@ -17,6 +17,7 @@ Spring application 개발하기 위한 Eclipse 기반의 IDE
 |  Eureka  | 8000 | Service Discvoery              |
 |   Zuul   | 8500 | Gateway                        |
 | Customer | 8701 |                                |
+| Customer | 8711 | Customer의 다른 instance        |
 |   Order  | 8702 | Feign을 통한 Customer API 호출 |
 |   Zipkin  | 9411 | Zipkin UI 서버 |
 
@@ -426,6 +427,7 @@ Customer-serivce 를 중지 합니다.
 
 http://localhost:8500/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
 
+#### Hystrix Dashboard
 Hystrix 상황을 모니터링 하기 위해 Hystrix Dashboard를 사용할 수 있습니다.  
 order-service의 pom.xml에 아래 내용을 추가합니다.
 ```xml
