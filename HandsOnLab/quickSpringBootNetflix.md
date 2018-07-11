@@ -6,6 +6,7 @@ SDK 설정이 되어 있지않다면, Project Settings > Project 메뉴에서 SD
 ## Spring Tools Suite
 Spring application 개발하기 위한 Eclipse 기반의 IDE   
 [STS](https://spring.io/tools/sts/all) 홈페이지에서 STS를 다운 받아 설치 합니다.  
+(또는 기존에 사용하는 Eclipse에서 STS Plugin을 설치해서 사용합니다.)
 
 # 실습개요
 <img height="450" src="images/handson-overview.png">  
@@ -32,7 +33,18 @@ Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이
 
 GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
 다운받은 파일을 원하는 경로에 압축 해제 합니다.  
-IDE를 이용하여 해당 프로젝트를 엽니다.  
+IDE를 이용하여 해당 프로젝트를 엽니다.    
+
+##### 참고) Eclipse STS를 사용하여 프로젝트 생성
+Spring Starter Project 생성  
+<img height="300" src="images/handson-eclipse-sts-1.png">  
+
+Project 정보 설정 (https 접속이 불가한 경우 Service URL을 http://start.spring.io 로 변경)
+<img height="500" src="images/handson-eclipse-sts-2.png">  
+
+Project Dependency(Eureka Server) 추가  
+<img height="500" src="images/handson-eclipse-sts-3.png">
+
 프로젝트 구조는 아래와 같습니다.
 ```
 eureka
@@ -101,7 +113,7 @@ public class EurekaApplication {
 }
 ```
 
-EurekaApplication을 실행 하고 http://localhost:8000로 접속하여 Eureka Dashboard 화면이 열리면 정상 작동 하는것입니다.  
+EurekaApplication을 실행 하고 http://localhost:8000 로 접속하여 Eureka Dashboard 화면이 열리면 정상 작동 하는것입니다.  
 현재는 등록된 서비스가 없어 Instances 항목이 No instances available로 표시 됩니다.  
  <img height="500" src="images/eurekaui.png">
 
@@ -238,8 +250,8 @@ public class CustomerApplication {
 ```
 application을 실행 합니다.  
 
-http://localhost:8000(Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
-http://localhost:8701/customer로 접속하여 John이 표시되는것을 확인 합니다.   
+http://localhost:8000 (Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
+http://localhost:8701/customer 로 접속하여 John이 표시되는것을 확인 합니다.   
 
 그리고 Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
 http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
