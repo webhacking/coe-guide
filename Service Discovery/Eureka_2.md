@@ -40,10 +40,10 @@ Eureka server는 설정에 정의된 peer nodes를 찾아서 Registry 정보 등
   - Standalone으로 구성하려면 아래 처럼 설정  
     > eureka.client.register-with-eureka: false  
     
-  - Peer nodes 로부터 registry를 갱신할 수 없을 때 재시도 횟수 //TODO: 상세 의미 파악 필요
+  - Peer nodes 로부터 registry를 갱신할 수 없을 때 재시도 횟수
     > eureka.server.registry-sync-retrires (default: 5)  
 
-  - Peer nodes 로부터 registry를 갱신할 수 없을때 재시도를 기다리는 시간   //TODO: 상세 의미 파악 필요
+  - Peer nodes 로부터 registry를 갱신할 수 없을때 재시도를 기다리는 시간
     > eureka.server.wait-time-in-ms-when-sync-empty (default: 3000) milliseconds
 
 
@@ -70,8 +70,6 @@ EvictionTask가 매분 마다 Expected heartbeats 수와 Actual heartbeats 수�
 #### Actual heartbeats calculation scheduler
 기본 매 1분 마다 수행되며 실제 받은 heartbeats 횟수를 계산하다.
 
-
-// TODO: 클로이와 내용 확인 필요
 #### Eureka Client 동작과 Server간 Communication
 - Self-Identification & Registration
   - Instance Startup 이후 Instance 정보 Replication
