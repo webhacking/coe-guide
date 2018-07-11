@@ -241,18 +241,16 @@ application을 실행 합니다.
 http://localhost:8000(Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
 http://localhost:8701/customer로 접속하여 John이 표시되는것을 확인 합니다.   
 
-앞에서 Zuul Gateway 서버를 만들면서 라우팅 정보에 대한 설정을 했었습니다.
+그리고 Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
+http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
+> Zuul을 생성하며 추가했던 아래 라우팅 정보를 이용하게 됩니다.
 ```yml
-# zuul application.yml
 routes:
   customer:
     path: /api/v1/customer/**   # 사용자가 입력할 url
     serviceId: CUSTOMER-SERVICE # routing을 처리할 endpoint service
     strip-prefix: true          # path에서 /** 앞의 경로는 제거 후 뒷단 서비스로 요청 함
 ```
-따라서 Zuul Gateway를 통해서 Customer Service를 호출 할 수 있습니다.  
-http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
-
 
 # 4. Order service
 
@@ -356,15 +354,43 @@ application을 실행 합니다.
 http://localhost:8000 로 접속하여 order-service가 instance로 등록된 것을 확인 합니다.  
 http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list** 가 표시되는것을 확인 합니다.  
 
-# 5. Hystrix
+# 5. Load Balancing
+Eureka, Zuul, Feign 등에서는 load balancing을 위한 Ribbon이 포함되어 있습니다.  
+Customer 서비스를 이용하여 여러개의 instance를 생성하고, 이에 대한 load balancing이 자동으로 되는것을 확인해 보겠습니다.  
+
+기존 application의 instance를 여러개 실행하려면 간단하게는 port만 바꿔 주면 됩니다.   
+이번 실습에서는 customer project 폴더를 복사하여 customer2를 만들도록 하겠습니다.
+그리고 customer2를 IDE로 열어서 아래와 같이 설정과 소스코드를 수정해 줍니다.  
+
+ application.yml에서 port를 변경 합니다.    
+ application.name은 동일하게 해야 eureka에 동일 app으로 등록 됩니다.  
+```yml
+server:
+  port: 8711  # 서비스 port
+```
+
+다른 instance가 호출되는것을 구별하기 위해 CustomerApplication.java의 getCustomer 메서드 return 값을 아래와 같이 변경 합니다.  
+```Java
+public String getCustomer() {
+  return "Hubert";
+}
+```
+application을 실행 합니다.  
+http://localhost:8000 로 접속하여 customer-service의 instance가 두개 등록된 것을 확인 합니다.  
+http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list**, **Hubert's order list** 가 번갈아 표시되는 것을 확인 합니다.  
+
+> Ribbon이 가지고 있는 cache가 refresh 되기 까지 30초에서 2분 정도가 걸릴 수 있습니다.  
+> 이로 인해 처음 호출 시 Jons's order list만 계속 표시 될 수 있습니다.  
+
+# 6. Hystrix
 지금까지 zuul -> order-service -> customer-service 호출하는 구조를 만들어 보았습니다.  
 만약 위 상황에서 customer-service에 장애가 발생한 경우 Hystrix를 통해 fallback처리를 해보겠습니다.
 
 Hystrix 사용을 위한 dependency를 order-service의 pom.xml에 추가합니다.
 ```xml
 <dependency>
-	<groupId>org.springframework.cloud</groupId>
-	<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
 </dependency>
 ```
 
@@ -400,6 +426,49 @@ Customer-serivce 를 중지 합니다.
 
 http://localhost:8500/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
 
+Hystrix 상황을 모니터링 하기 위해 Hystrix Dashboard를 사용할 수 있습니다.  
+order-service의 pom.xml에 아래 내용을 추가합니다.
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+    <version>1.4.4.RELEASE</version>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+OrderApplication.java 파일에 @EnableHystrixDashboard 어노테이션을 추가합니다.
+```Java
+@EnableHystrixDashboard
+@EnableHystrix           
+@EnableFeignClients       
+@RestController           
+@SpringBootApplication
+public class OrderApplication {
+...
+}
+```
+
+application.yml에 아래 내용을 추가합니다.
+
+```yml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'hystrix.stream'
+```
+
+Order-service 를 재실행 합니다.   
+http://localhost:8702/hystrix 로 이동하여
+http://localhost:8702/actuator/hystrix.stream 을 url창에 입력 후 Monitor Stream을 클릭 합니다.  
+<img height="300" src="images/hystrix-dashboard-main.png">
+
+http://localhost:8500/api/v1/order/orders 를 호출해서 count 변화를 확인 할수 있습니다.  
+
 # 6. Sleuth and Zipkin
 분산환경 트랜젝션의 흐름을 모니터링 하기 위한 Sleuth, Zipkin을 사용해 보겠습니다.  
 
@@ -419,12 +488,12 @@ http://localhost:9411/zipkin/ 으로 이동하여 zipkin ui 가 실행되는지 
 
 ```xml
 <dependency>
-	<groupId>org.springframework.cloud</groupId>
-	<artifactId>spring-cloud-starter-zipkin</artifactId>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-zipkin</artifactId>
 </dependency>
 <dependency>
-	<groupId>org.springframework.cloud</groupId>
-	<artifactId>spring-cloud-starter-sleuth</artifactId>
+  <groupId>org.springframework.cloud</groupId>
+  <artifactId>spring-cloud-starter-sleuth</artifactId>
 </dependency>
 ```
 
@@ -439,10 +508,5 @@ spring:
 ```
 
 설정을 추가한 서비스들을 모두 재시작 합니다.  
-Customer 또는 Order 서비스 API를 호출하여 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.
-http://localhost:8500/api/v1/customer/customer  
-http://localhost:8500/api/v1/order/orders
-
+API를 호출해 가며 Zipkin UI에서 해당 이력이 남는것을 확인 합니다.  
 <img height="300" src="images/zipkin-tracing.png">
-
-> Zipkin UI가 IE에서 정상적으로 동작하지 않으므로 Chrome에서 접속합니다. 
