@@ -414,6 +414,8 @@ Customer-serivce 를 중지 합니다.
 
 http://localhost:8500/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
 
+#### Hystrix Dashboard
+
 Hystrix 상황을 모니터링 하기 위해 Hystrix Dashboard를 사용할 수 있습니다.  
 order-service의 pom.xml에 아래 내용을 추가합니다.
 ```xml
