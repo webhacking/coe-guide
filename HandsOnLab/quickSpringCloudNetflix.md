@@ -232,7 +232,7 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8000/eureka/
   instance:
-    preferIpAddress: true # 서비스간 통신 시 hostname 보다 ip 를 우선 사용 함    
+    preferIpAddress: true # hostname을 ip로 셋팅하여 인스턴스 정보를 서버에 등록함
 ```
 customer-service 프로젝트의 CustomerApplication.java 파일에 아래 어노테이션을 추가합니다.  
 그리고 /customer 로 호출 시 임의 고객명을 return 하는 API를 생성합니다.
