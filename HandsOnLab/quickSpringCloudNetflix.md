@@ -418,9 +418,8 @@ Hystrix 상황을 모니터링 하기 위해 Hystrix Dashboard를 사용할 수 
 order-service의 pom.xml에 아래 내용을 추가합니다.
 ```xml
 <dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-    <version>1.4.4.RELEASE</version>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
 </dependency>
 <dependency>
     <groupId>org.springframework.boot</groupId>
