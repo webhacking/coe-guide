@@ -300,9 +300,8 @@ Hystrix stream을 시각화하는 서비스
 1. Hystrix Dashboard dependency 추가
 ```xml
 <dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
-    <version>1.4.4.RELEASE</version>
+	<groupId>org.springframework.cloud</groupId>
+	<artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
 </dependency>
 ```
 2. Application annotation 추가
