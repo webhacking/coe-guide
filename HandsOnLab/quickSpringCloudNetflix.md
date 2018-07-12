@@ -506,8 +506,9 @@ Customer 서비스를 이용하여 여러개의 instance를 생성하고, 이에
 
 기존 application의 instance를 여러개 실행하려면 간단하게는 port만 바꿔 주면 됩니다.   
 이번 실습에서는 customer project 폴더를 복사하여 customer2를 만들도록 하겠습니다.
-그리고 customer2를 IDE로 열어서 아래와 같이 설정과 소스코드를 수정해 줍니다.  
-
+그리고 customer2를 IDE로 열어서 아래와 같이 설정과 소스코드를 수정해 줍니다.    
+> application을 container화 하면 instance 관리를 효율적으로 할 수 있습니다.   
+ 
  application.yml에서 port를 변경 합니다.    
  application.name은 동일하게 해야 eureka에 동일 app으로 등록 됩니다.  
 ```yml
