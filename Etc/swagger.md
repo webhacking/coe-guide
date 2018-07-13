@@ -116,14 +116,14 @@ public class SwaggerConfig {
 이제 서버를 기동 시킨 이후
 브라우저에 http://localhost:8080/v2/api-docs 를 입력하면 아래와 같이 해당 어플리케이션에서 제공하는 REST API에 대한 정보를 볼 수 있습니다.
 
-![api-docs](/..images/apidocs.png)
+![api-docs](..images/apidocs.png)
 
 하지만 이러한 방식으로는 사용자가 보기 힘들기 때문에 swagger-ui를 이용하여 보도록 합니다.
 
 http://localhost:8080/swagger-ui.html 로 접속하면 아래와 같이 해당 어플리케이션이 제공하는 REST API를 볼 뿐 아니라 model 정보도 볼 수 있습니다.
 그리고 해당 REST API를 테스트 해 볼 수 있습니다.
 
-![api-docs](/..images/swaggerui.png)
+![api-docs](..images/swaggerui.png)
 
 
 만약 .../v2/api-docs의 경로를 변경하고 싶다면
@@ -278,13 +278,13 @@ zuul:
 
 위와 같이 설정 이후 http://[gateway-ip]:[gateway-port]/swagger-ui.html 로 접속하면 아래와 같은 화면을 볼 수 있습니다.
 
-![customer-service](/..images/customer-service.png)
+![customer-service](..images/customer-service.png)
 
 오른 쪽 상단의 select box를 클릭하면 아래와 같은 리스트가 보이고 원하는 어플리케이션을 선택 하면 해당 swagger정보로 이동하게 됩니다.
 
-![select-box](/..images/selectbox.png)
+![select-box](..images/selectbox.png)
 
-![order-service](/..images/order-service.png)
+![order-service](..images/order-service.png)
 
 zuul로 swagger-ui가 이동하였기 때문에 필요에 따라 각 어플리케이션에서 swagger-ui dependency를 제거하면 됩니다.
 
