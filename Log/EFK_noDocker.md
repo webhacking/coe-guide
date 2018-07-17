@@ -132,3 +132,4 @@ yum localinstall /data/td-agent-3.1.1-0.el7.x86_64.rpm
 /etc/td-agent
 
 https://www.centos.org/forums/viewtopic.php?t=62995
+yes | yum install -y td-agent --downloaddir=/data/rpms/ --downloadonly
