@@ -146,6 +146,6 @@ https://www.centos.org/forums/viewtopic.php?t=62995
 * config 경로
 /etc/td-agent  
 /etc/init.d/td-agent status
-* plugin 
+* plugin   
 /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
 
