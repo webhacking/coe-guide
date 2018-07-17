@@ -115,3 +115,10 @@ cd kibana-6.3.1-linux-x86_64/
 ./bin/kibana
 ```
 [출처](https://www.elastic.co/guide/en/kibana/current/install.html)
+
+
+
+yum localinstall td-agent-3.1.1-0.el7.x86_64.rpm
+
+(/opt/td-agent/embeded) 
+./fluent-gem install --force --local /data/fluent-plugin-elasticsearch-2.11.1.gem
