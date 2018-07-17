@@ -125,7 +125,7 @@ docker run -v /Users/boston/Developer/data:/data -it centos /bin/bash
 * td-agent rpm 설치  
 yum localinstall /data/td-agent-3.1.1-0.el7.x86_64.rpm
 
-#### network이 안되는 상황에서는   
+#### 네트워크 안되는 상황 
 1. rpm 설치파일을 로컬에 받음  
 yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm --downloaddir=/data/rpms/ --downloadonly
 2. 해당 파일 모두 설치  
