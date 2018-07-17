@@ -130,3 +130,5 @@ yum localinstall /data/td-agent-3.1.1-0.el7.x86_64.rpm
 /var/log/td-agent
 * config 경로
 /etc/td-agent
+
+https://www.centos.org/forums/viewtopic.php?t=62995
