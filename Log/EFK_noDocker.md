@@ -117,19 +117,33 @@ cd kibana-6.3.1-linux-x86_64/
 [출처](https://www.elastic.co/guide/en/kibana/current/install.html)
 
 
-docker run -v /Users/boston/Developer/data:/data -p 9880:9880 -it centos_fluentd /bin/bash
 
-* td-agent rpm 설치
+## CentOS fluentd 설치 
+
+docker run -v /Users/boston/Developer/data:/data -it centos /bin/bash
+
+* td-agent rpm 설치  
 yum localinstall /data/td-agent-3.1.1-0.el7.x86_64.rpm
-* plugin 설치
-/opt/td-agent/embeded/fluent-gem install --force --local /data/fluent-plugin-elasticsearch-2.11.1.gem
 
+#### network이 안되는 상황에서는   
+1. rpm 설치파일을 로컬에 받음  
+yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm --downloaddir=/data/rpms/ --downloadonly
+2. 해당 파일 모두 설치  
+yum install ./rpms/*.rpm
+3. td-agent rpm 설치  
+yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm
+
+https://www.centos.org/forums/viewtopic.php?t=62995  
+
+* plugin 설치  
+/opt/td-agent/embeded/bin/fluent-gem install --force --local /data/fluent-plugin-elasticsearch-2.11.1.gem
+
+#### 설치경로 참고
 * 설치 경로 
 /opt/td-agent
 * 로그 경로
 /var/log/td-agent
 * config 경로
-/etc/td-agent
+/etc/td-agent  
+/etc/init.d/td-agent status
 
-https://www.centos.org/forums/viewtopic.php?t=62995
-yes | yum install -y td-agent --downloaddir=/data/rpms/ --downloadonly
