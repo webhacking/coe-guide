@@ -173,7 +173,12 @@ gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
 # /etc/init.d/td-agent restart
 ```
 
+### 환경설정 
+```bash
+# vi /etc/td-agent/td-agent.conf
 
+
+### elasticsearch 설치
 
 
 
