@@ -109,6 +109,7 @@ $ curl -X POST -d 'json={"json":"message"}' http://localhost:8888/debug.test
 ```
 
 ## Elastricsearch
+8G 이하의 서버에서는 정상작동 안할 수 있음 [출처](https://github.com/SDSACT/coe-guide/blob/master/Log/EFK_noDocker.md)
 
 #### yum package
 ```
