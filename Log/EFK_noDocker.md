@@ -265,8 +265,8 @@ gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
 scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11.1.gem ec2-user@ec2-52-79-117-82.ap-northeast-2.compute.amazonaws.com:~/.
 
 ```bash
-# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch -v 2.7.0
-# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser -v 2.1.6
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch-2.11.1.gem
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser-2.1.6.gem
 # /etc/init.d/td-agent restart
 ```
 
