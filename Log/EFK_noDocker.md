@@ -58,7 +58,7 @@ sudo -k
 sudo sh <<SCRIPT
 
   # add GPG key
-  sudo rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+  rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
 
   # add treasure data repository to yum
   cat >/etc/yum.repos.d/td.repo <<'EOF';
@@ -114,7 +114,7 @@ $ curl -X POST -d 'json={"json":"message"}' http://localhost:8888/debug.test
 ```
 $ sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 ```
-repository정보 추가 /etc/yum/repos.d/elasticsearch.repo  
+repository정보 추가 /etc/yum.repos.d/elasticsearch.repo  
 ```
 [elasticsearch-6.x]
 name=Elasticsearch repository for 6.x packages
@@ -162,7 +162,7 @@ cd elasticsearch-6.3.1/bin
 ```
 $ sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 ```
-repository정보 추가 /etc/yum/repos.d/elasticsearch.repo  
+repository정보 추가 /etc/yum.repos.d/elasticsearch.repo  
 ```
 [kibana-6.x]
 name=Kibana repository for 6.x packages
