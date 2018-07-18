@@ -126,6 +126,7 @@ autorefresh=1
 type=rpm-md
 ```
 ```
+$ sudo yum update
 $ sudo yum install elasticsearch
 ```
 [출처](https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html)
@@ -174,6 +175,7 @@ autorefresh=1
 type=rpm-md
 ```
 ```
+$ sudo yum update
 $ sudo yum install kibana
 ```
 [출처](https://www.elastic.co/guide/en/kibana/current/rpm.html)
