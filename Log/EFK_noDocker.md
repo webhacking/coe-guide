@@ -130,7 +130,7 @@ $ sudo yum update
 $ sudo yum install elasticsearch
 ```
 [출처](https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html)
-#### Configuring kibana
+#### Configuring elasticsearch
 설정파일 경로
 /etc/elasticsearch/elasticsearch.yml
 /etc/sysconfig/elasticsearch
@@ -163,7 +163,7 @@ cd elasticsearch-6.3.1/bin
 ```
 $ sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 ```
-repository정보 추가 /etc/yum.repos.d/elasticsearch.repo  
+repository정보 추가 /etc/yum.repos.d/kibana.repo  
 ```
 [kibana-6.x]
 name=Kibana repository for 6.x packages
