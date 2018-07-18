@@ -1,12 +1,12 @@
 # Docker 없이 EFK 설치하기
 
-## Port 정보
-elasticsearch 9200
-fluentd-aggregator 24224 
+### Port 정보
+elasticsearch 9200  
+fluentd-aggregator 24224  
 kibana 5601
 
-## Fluentd
-#### Before Installing
+## 1. Fluentd 설치
+### Before Installing
 - Setup NTP
 logging 시간 동기화를 위함
 - Increase Max # of File Desc
@@ -36,12 +36,23 @@ net.ipv4.ip_local_port_range = 10240 65535
 ```
 [출처](https://docs.fluentd.org/v1.0/articles/before-install)
 
-#### 사내망이라 yum 설치가 안되는 경우
-해당 패키지의 repository 정보를 사내 Nexus에 추가할 수 있음  
-Jira의 DevOps_Support 프로젝트에서 issue로 등록 함  
+### td-agent 설치
+
+#### RPM 파일로 직접 설치하는 경우(인터넷 안됨)
+1. 인터넷이 가능한 PC에서 RPM 파일을 다운로드 받음(Dependency가 걸린 RPM까지 모두 다 다운로드 됨)
+yum install td-agent --downloaddir=/data/rpms/ --downloadonly
+2. 인터넷이 불가능한 PC에 해당 파일 이동 후 모두 설치  
+```sh
+yum install /data/rpms/*.rpm
+```
+
+#### yum으로 설치하기
+> 사내망이라 yum 설치가 안되는 경우
+> 해당 패키지의 repository 정보를 사내 Nexus에 추가할 수 있음  
+> Jira의 DevOps_Support 프로젝트에서 issue로 등록 함  
 > 추가 방법 상세 안내는 사내 Confluence DevOps Support 공간에 Guide > Library Repo. Guide 참고  
 
-#### Installing Fluentd
+
 curl로 설치 스크립트를 다운받아 실행 함.  
 > GPG key는 txt복사 후 파일로 생성해도 됨  
 > 이 경우 repo에는 file:///filepath 로 변경 해야 함  
@@ -50,6 +61,7 @@ curl로 설치 스크립트를 다운받아 실행 함.
 $ curl -L https://toolbelt.treasuredata.com/sh/install-redhat-td-agent3.sh | sh
 ```
 ```sh
+# install-redhat-td-agent3.sh
 echo "=============================="
 echo " td-agent Installation Script "
 echo "=============================="
@@ -87,7 +99,125 @@ echo ""
 echo "Installation completed. Happy Logging!"
 echo ""
 ```
-Launch Daemon  
+설치경로 참고
+- 설치 경로 : /opt/td-agent
+- 로그 경로 : /var/log/td-agent
+- config 경로 : /etc/td-agent  
+- plugin : /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
+
+#### fluentd plugin 설치
+##### gem 파일로 직접 설치하는 경우 (인터넷 안됨)
+1. https://rubygems.org/ 에서 gem 파일 다운로드
+   - fluent-plugin-elasticsearch-2.11.1.gem (elasticsearch와 연계하기 위함)
+   - fluent-plugin-grok-parser-2.1.6.gem    (log내용 parsing)
+
+2. scp로 설치할 서버에 파일 전송   
+```sh
+# ec2로 scp 전송예제
+scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11.1.gem ec2-user@ec2-52-79-117-82.ap-northeast-2.compute.amazonaws.com:~/.
+```  
+3. fluentd가 설치된 환경에서 plugin 설치
+```sh
+# /opt/td-agent/embedded/bin/fluent-gem install ~/fluent-plugin-elasticsearch-2.11.1.gem
+# /opt/td-agent/embedded/bin/fluent-gem install ~/fluent-plugin-grok-parser-2.1.6.gem
+# /etc/init.d/td-agent restart
+```  
+##### gem으로 설치 (인터넷 됨)
+```sh
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch -v 2.11.1
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser -v 2.1.6
+# /etc/init.d/td-agent restart
+```  
+
+#### config 설정
+fluentd-client 정보  
+/etc/td-agent/td-agent.conf 파일
+```
+<source>
+        @type tail
+        format none
+        path /var/log/*.log
+        pos_file /var/log/demo-service.pos
+        tag app
+        <parse>
+                @type multiline_grok
+                grok_pattern %{TIMESTAMP_ISO8601:timestamp}\s+%{LOGLEVEL:severity}\s+\[%{DATA:service},%{DATA:trace},%{DATA:span},%{DATA:exportable}\]\s+%{DATA:pid}\s+---\s+\[\s*%{DATA:thread}\]\s+%{DATA:class}\s+\[\s*%{NUMBER:line}\]\s:\s+%{GREEDYDATA:rest}
+    multiline_start_regexp /^[\d]/
+        </parse>
+</source>
+<match app>
+        @type copy
+        <store>
+                @type stdout
+        </store>
+        <store>
+                @type forward
+                @log_level debug
+                <server>
+                        host 13.125.225.179
+                        port 24224
+                </server>
+                buffer_type memory
+                buffer_chunk_limit 16m
+                buffer_queue_limit 128
+                flush_interval 30s
+                flush_at_shutdown false
+                retry_limit 17
+                retry_wait 1s
+                max_retry_wait 1m
+                disable_retry_limit true
+                num_threads 4
+        </store>
+</match>
+```
+
+fluentd-aggregator 정보  
+/etc/td-agent/td-agent.conf 파일
+```text
+<system>
+    @log_level info
+</system>
+
+<source>
+    @type forward
+    bind 0.0.0.0
+    port 24224
+    @log_level debug
+</source>
+
+<match app.**>
+    @type copy
+    <store>
+        @type elasticsearch
+        host 52.79.248.125
+        port 9200
+        logstash_format true
+        logstash_prefix dep_api
+        logstash_dateformat %Y%m%d
+        time_key timestamp
+        include_tag_key true
+        type_name app_log
+        tag_key @log_name
+        buffer_type memory
+        buffer_chunk_limit 16m
+        buffer_queue_limit 128
+        flush_interval 30s
+        flush_at_shutdown false
+        retry_limit 17
+        retry_wait 1s
+        max_retry_wait 1m
+        disable_retry_limit true
+        num_threads 4
+    </store>
+    <store>
+        @type stdout
+    </store>
+</match>
+```
+
+참고 https://docs.fluentd.org/v1.0/articles/quickstart
+
+#### 실행하기  
 
 - systemd  
 If you want to customize systemd behaviour, put your td-agent.service into /etc/systemd/system
@@ -113,7 +243,7 @@ By default, /etc/td-agent/td-agent.conf is configured to take logs from HTTP and
 $ curl -X POST -d 'json={"json":"message"}' http://localhost:8888/debug.test
 ```
 
-## Elastricsearch
+## 2. Elastricsearch
 8G 이하의 서버에서는 정상작동 안할 수 있음 [출처](https://github.com/SDSACT/coe-guide/blob/master/Log/EFK_noDocker.md)
 
 #### yum package
@@ -164,7 +294,7 @@ cd elasticsearch-6.3.1/bin
 ```
 [출처](https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)
 
-## Kibana
+## 3. Kibana
 #### yum package
 ```
 $ sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
@@ -201,7 +331,7 @@ sudo systemctl start kibana.service
 sudo systemctl stop kibana.service
 ```
 
-#### tar 실행
+#### tar로 설치하는 경우
 ```sh
 wget  https://artifacts.elastic.co/downloads/kibana/kibana-6.3.1-linux-x86_64.tar.gz
 shasum -a 512 kibana-6.3.1-linux-x86_64.tar.gz
@@ -210,123 +340,3 @@ cd kibana-6.3.1-linux-x86_64/
 ./bin/kibana
 ```
 [출처](https://www.elastic.co/guide/en/kibana/current/install.html)
-
-
-
-## CentOS fluentd 설치 
-
-docker run -v /Users/boston/Developer/data:/data -it centos /bin/bash
-
-* td-agent rpm 설치  
-yum localinstall /data/td-agent-3.1.1-0.el7.x86_64.rpm
-
-#### 네트워크 안되는 상황 
-1. rpm 설치파일을 로컬에 받음  
-yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm --downloaddir=/data/rpms/ --downloadonly
-2. 해당 파일 모두 설치  
-yum install ./rpms/*.rpm
-3. td-agent rpm 설치  
-yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm
-
-https://www.centos.org/forums/viewtopic.php?t=62995  
-
-* plugin 설치  
-/opt/td-agent/embeded/bin/fluent-gem install --force --local /data/fluent-plugin-elasticsearch-2.11.1.gem
-
-#### 설치경로 참고
-* 설치 경로 
-/opt/td-agent
-* 로그 경로
-/var/log/td-agent
-* config 경로
-/etc/td-agent  
-/etc/init.d/td-agent status
-* plugin   
-/opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
-
-### td-agent/plugin 설치
-```bash
-# rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
-# vi /etc/yum.repos.d/td.repo
-
-[treasuredata]
-name=TreasureData
-baseurl=http://packages.treasuredata.com/3/redhat/\$releasever/\$basearch
-gpgcheck=1
-gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
-
-# yum check-update
-# yum install td-agent
-
-# /etc/init.d/td-agent start
-```
-
-
-scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11.1.gem ec2-user@ec2-52-79-117-82.ap-northeast-2.compute.amazonaws.com:~/.
-
-```bash
-# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch-2.11.1.gem
-# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser-2.1.6.gem
-# /etc/init.d/td-agent restart
-```
-
-### 환경설정 
-```bash
-# vi /etc/td-agent/td-agent.conf
-
-### fluentd aggregator ###
-<system>
-    @log_level info
-</system>
-
-<source>
-    @type forward
-    bind 0.0.0.0
-    port 24224
-    @log_level debug
-</source>
-
-<match app.**>
-    @type copy
-    <store>
-        @type elasticsearch
-        host 52.79.248.125
-        port 9200
-        logstash_format true
-        logstash_prefix dep_api
-        logstash_dateformat %Y%m%d
-        time_key timestamp
-        include_tag_key true
-        type_name app_log
-        tag_key @log_name
-        buffer_type memory
-        buffer_chunk_limit 16m
-        buffer_queue_limit 128
-        flush_interval 30s
-        flush_at_shutdown false
-        retry_limit 17
-        retry_wait 1s
-        max_retry_wait 1m
-        disable_retry_limit true
-        num_threads 4
-    </store>
-    <store>
-        @type stdout
-    </store>
-</match>
-```
-
-#### service 등록
-```bash
-# /bin/systemctl daemon-reload
-# /bin/systemctl enable td-agent.service
-
-# service td-agent.service start
-```
-log, pid path 필요 시 수정 (/usr/lib/systemd/system/td-agent.service)
-
-
-
-
-
-
