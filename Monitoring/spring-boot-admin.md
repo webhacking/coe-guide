@@ -25,6 +25,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
   ```xml
     <dependencyManagement>
       <dependencies>
+
         <dependency>
           <groupId>org.springframework.cloud</groupId>
           <artifactId>spring-cloud-dependencies</artifactId>
@@ -32,6 +33,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
           <type>pom</type>
           <scope>import</scope>
         </dependency>
+
         <dependency>
           <groupId>de.codecentric</groupId>
           <artifactId>spring-boot-admin-dependencies</artifactId>
@@ -39,13 +41,16 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
           <type>pom</type>
           <scope>import</scope>
         </dependency>
+
       </dependencies>
     </dependencyManagement>
+
     <properties>
       <spring-boot-admin.version>1.5.7</spring-boot-admin.version>
       <spring-cloud.version>Edgware.RC1</spring-cloud.version>
       ...
     </properties>
+
     <dependencies>
       <dependency>
         <groupId>de.codecentric</groupId>
@@ -223,7 +228,7 @@ Spring Boot Admin 은 Spring Boot 어플리케이션의 admin interface를 제�
 		  defaultZone: ${EUREKA_SERVER_URL:http://localhost}:${EUREKA_SERVER_PORT:8761}/eureka/
      ```
     - Spring boot 2.x 버전의 경우 default actuator endpoint는 health, info뿐이므로 명시적으로 열어줘야 함("*")
-    
+
   4. Eureka Discovery Annotation 추가, actuator access security 설정 추가
   ```java
   @SpringBootApplication

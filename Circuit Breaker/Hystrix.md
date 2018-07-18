@@ -66,7 +66,7 @@ Hystrix를 적용하는 세 가지 샘플 코드를 제공한다.
 <dependency>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-starter-hystrix</artifactId>
-    <version>1.4.4.RELEASE</version>
+    <version>1.4.5.RELEASE</version>
 </dependency>
 ```        
 2. configuration - application.yml 에 추가  
@@ -136,7 +136,7 @@ Feign dependency 에 hystrix가 기본 포함 되어 별도 dependency추가 불
 > **단, client 서비스가 eureka에 등록되지 않은경우, Ribbon이 해당 서비스를 찾을 수 없어 Ribbon에러가 먼저 발생하여, Hystrix 적용 안됨.**  
 
 1. configuration - application.yml 에 추가   
-feign에서 hystrix 사용 여부를 선택 할 수 있음(hystrix 관련 config 는 모두 동일) 
+feign에서 hystrix 사용 여부를 선택 할 수 있음(hystrix 관련 config 는 모두 동일)
 ```yml
 feign:
   hystrix:
