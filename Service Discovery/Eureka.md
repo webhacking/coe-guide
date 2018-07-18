@@ -7,18 +7,18 @@
      - Netflix Eureka 등장 용어 정리
      - Eureka Client 동작과 Server간 Communication
      - Eureka Server 동작과 Peer Server간 Communication
-  
+
 - **2. Netflix Eureka Features**
   - Self-Identification & Registration
   - Service Discovery
   - Service Registry
-  
+
 - **3. Getting Started**
   - Eureka Server 설치방법
   - Eureka Client 설치방법
   - Eureka Clustering
   - Eureka registry caching
-  
+
 # 1. Netflix Eureka 개요
 ## 마이크로서비스 아키텍처에서 의미
 - 정의
@@ -35,7 +35,7 @@
   - 로드밸런싱과 장애복구(failover)가 가능한 Middle-tier 서비스 환경을 구성 했을 때 클라이언트(API Gateway 또는 다른 서비스)에게 가용한 서비스 인스턴스들의 위치 정보를 동적으로 제공할 수 있어야 한다.
   - 그러나 전통적인 로드 밸런서는 서버의 고정적인 IP 주소와 Host name을 기준으로 동작하는 반면, AWS와 같은 클라우드 환경에서는 서버 위치가 동적으로 변할 수 있기 때문에 로드 밸런서에 그 위치를 등록하고 변경하는 과정이 훨씬 더 까다롭다.
   - 또한 AWS는 middle-tier load balancer를 제공하지 않는다.
- 
+
 ## Netflix Eureka Architecture (설명 보기 쉽게 정리 TBD)
 ### Eureka High level Architecture
 <p align="center"><img height="500" src="../images/eureka-high-level-architecture.png"></p>
@@ -64,7 +64,7 @@
     - eureka.instance.instance-enabled-onit 설정값을 통해 Startup 후 Traffic 받을 준비가 되었을 때 status:UP이 되도록 할 수 있다 (default: false)
   - Instance Startup 이후  heartbeat 전송
     - 등록 이후 heartbeat은 eureka.instance.lease-renewal-interval-in-seconds에 설정된 주기마다 스케쥴러가 실행된다 (default: 30)
-    - Eureka Server는 interval에 따라 Eureka Service의 status(UP/DOWN/..)를 판단하고 가장 최근 heartbeat 시점 + interval 이후에 heartbeat을 받지 못하면 eureka.instance.lease-expiration-duration-in-seconds에 설정된 시간만큼 기다렸다가 해당 Eureka Instance를 Registry에서 제거한다 (default: 90, 단, Eureka Instance가 정상적으로 종료된 경우 Registry에서 바로 제거된다) 
+    - Eureka Server는 interval에 따라 Eureka Service의 status(UP/DOWN/..)를 판단하고 가장 최근 heartbeat 시점 + interval 이후에 heartbeat을 받지 못하면 eureka.instance.lease-expiration-duration-in-seconds에 설정된 시간만큼 기다렸다가 해당 Eureka Instance를 Registry에서 제거한다 (default: 90, 단, Eureka Instance가 정상적으로 종료된 경우 Registry에서 바로 제거된다)
   - Instance Startup 이후 Instance 정보 Replication
     - 등록 이후 Instance 정보가 변경 되었을 때 Registry 정보를 갱신하기 위한 REST를 eureka.client.instance-info-replication-interval-seconds에 설정된 주기마다 호출한다 (default: 30)
     - eureka.client.initial-instance-info-replication-interval-seconds (default: 40)
@@ -165,7 +165,7 @@ eureka:
     ```
 
 5. Eureka server 구동 후 Eureka Dashboard 확인
-  ![](../images/eureka-dashboard.png) 
+  ![](../images/eureka-dashboard.png)
     - 웹브라우저에서 Eureka Server로 설정한 URL에 접속시 Eureka 콘솔 화면을 볼 수 있음  
 
 ## Eureka Client 설치방법
@@ -176,7 +176,6 @@ eureka:
     <dependency>
         <groupId>org.springframework.cloud</groupId>
         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        <version>1.4.4.RELEASE</version>
     </dependency>
     ```
 3. property 추가

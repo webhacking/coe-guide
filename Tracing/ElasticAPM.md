@@ -19,13 +19,13 @@ APM Server는 Go로 개발되었고, APM Agent는 Node.js, Python를 제공한�
 
 
 # 참고
-### Elastic APM vs Pinpoint 
+### Elastic APM vs Pinpoint
 
-|          | Elastic APM                                                                                                      | Pinpoint                                                                                                                                                                                   |                                                                                            |
-|----------|----------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| Visualization       |  Kibana Dashboard 또는 전용 UI 사용 <br/>- Application (Response/Request Info) <br/>- Error Tracking <br/>- Transaction |  별도 UI Server 구성 <br/>- ServerMap <br/>- Realtime Active Thread Chart <br/>- Request/Response Scatter Chart <br/>- Transaction Callstack <br/>- Inspector (CPU usage, Memory/Garbage Collection, TPS, JVM args) | pinpoint)<br/>더 다양한 동적 UI 제공 <br/> APM)<br/>ELK Stack 사용할 경우 별도 UI 구성 필요없음(Kibana) |
-| Store    | Elasticsearch                                                                                            | HBase                                                                                                                                                                                      | APM)<br/>ELK Stack 사용할 경우 별도 DB 구성 필요없음                                          |
-| Language | Server - GO <br/>Agent - Python, Nodejs                                                                       | Agent/Collector/Web - JAVA                                                                                                                                                                 |                                                                                            |
+|| Elastic APM | Pinpoint | 비교 |
+|----------|----------|----------|----------|
+| Visualization | Kibana Dashboard 또는 전용 UI 사용 <br/>- Application (Response/Request Info) <br/>- Error Tracking <br/>- Transaction |  별도 UI Server 구성 <br/>- ServerMap <br/>- Realtime Active Thread Chart <br/>- Request/Response Scatter Chart <br/>- Transaction Callstack <br/>- Inspector (CPU usage, Memory/Garbage Collection, TPS, JVM args) | pinpoint)<br/>더 다양한 동적 UI 제공 <br/> APM)<br/>ELK Stack 사용할 경우 별도 UI 구성 필요없음(Kibana) |
+| Store | Elasticsearch | HBase | APM)<br/>ELK Stack 사용할 경우 별도 DB 구성 필요없음 |
+| Language | Server - GO <br/>Agent - Python, Nodejs | Agent/Collector/Web - JAVA | . |
 
 
 https://www.elastic.co/guide/en/apm/get-started/current/install-and-run.html#agents

@@ -202,3 +202,73 @@ cd kibana-6.3.1-linux-x86_64/
 ./bin/kibana
 ```
 [출처](https://www.elastic.co/guide/en/kibana/current/install.html)
+
+
+
+## CentOS fluentd 설치 
+
+docker run -v /Users/boston/Developer/data:/data -it centos /bin/bash
+
+* td-agent rpm 설치  
+yum localinstall /data/td-agent-3.1.1-0.el7.x86_64.rpm
+
+#### 네트워크 안되는 상황 
+1. rpm 설치파일을 로컬에 받음  
+yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm --downloaddir=/data/rpms/ --downloadonly
+2. 해당 파일 모두 설치  
+yum install ./rpms/*.rpm
+3. td-agent rpm 설치  
+yum install /data/td-agent-3.1.1-0.el7.x86_64.rpm
+
+https://www.centos.org/forums/viewtopic.php?t=62995  
+
+* plugin 설치  
+/opt/td-agent/embeded/bin/fluent-gem install --force --local /data/fluent-plugin-elasticsearch-2.11.1.gem
+
+#### 설치경로 참고
+* 설치 경로 
+/opt/td-agent
+* 로그 경로
+/var/log/td-agent
+* config 경로
+/etc/td-agent  
+/etc/init.d/td-agent status
+* plugin   
+/opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
+
+
+### td-agent/plugin 설치
+```bash
+# rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+# vi /etc/yum.repos.d/td.repo
+
+[treasuredata]
+name=TreasureData
+baseurl=http://packages.treasuredata.com/3/redhat/\$releasever/\$basearch
+gpgcheck=1
+gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
+
+# yum check-update
+# yum install td-agent-3.1.1
+
+# /etc/init.d/td-agent start
+```
+
+```bash
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch -v 2.7.0
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser -v 2.1.6
+# /etc/init.d/td-agent restart
+```
+
+### 환경설정 
+```bash
+# vi /etc/td-agent/td-agent.conf
+
+
+### elasticsearch 설치
+
+
+
+
+
+

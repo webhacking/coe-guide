@@ -52,14 +52,17 @@ Global Transaction ID를 이용한 분산 트랜잭션 로그 모니터링 예�
 # 2. 구성방법  
 
 모니터링을 원하는 모든 서비스에 아래 항목을 추가 한다.  
+
 1. Sleuth dependency 추가
+    
+    maven 
     ```xml
-    <dependencyManagement>
+   <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-sleuth</artifactId>
-                <version>1.3.4.BUILD-SNAPSHOT</version>
+                <version>2.0.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -70,60 +73,75 @@ Global Transaction ID를 이용한 분산 트랜잭션 로그 모니터링 예�
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
-    </dependencies><repositories>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>https://repo.spring.io/libs-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+    </dependencies>
     ```
+
+    gradle
+    ```gradle 
+    buildscript {
+    dependencies {
+            classpath "io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE"
+        }
+    }
+
+    apply plugin: "io.spring.dependency-management"
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-sleuth:2.0.0.RELEASE'
+        }
+    }
+    dependencies {
+        compile 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    }
+    ```
+
 2. log 추가 예제 코드 (sl4j 로깅 시 traceID/spanID가 자동 추가 됨)
+
     ```java
     @SpringBootApplication
     @RestController
     public class Application {
 
-    private static Logger log = LoggerFactory.getLogger(DemoController.class);
+        private static Logger log = LoggerFactory.getLogger(DemoController.class);
+        
+        @RequestMapping("/")
+        public String home() {
+            log.info("Handling home");
+            return "Hello World";
+        }
 
-    @RequestMapping("/")
-    public String home() {
-        log.info("Handling home");
-        return "Hello World";
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
-
+        public static void main(String[] args) {
+            SpringApplication.run(Application.class, args);
+        }
     }
     ```
 
 3. Logback.xml 에서 로깅 포맷 변경 가능
+
     ```xml
-					<pattern>
-						{
-						"severity": "%level",
-						"service": "${springAppName:-}",
-						"trace": "%X{X-B3-TraceId:-}",
-						"span": "%X{X-B3-SpanId:-}",
-						"parent": "%X{X-B3-ParentSpanId:-}",
-						"exportable": "%X{X-Span-Export:-}",
-						"pid": "${PID:-}",
-						"thread": "%thread",
-						"class": "%logger{40}",
-						"rest": "%message"
-						}
-					</pattern>
+    <pattern>
+        {
+            "severity": "%level",
+            "service": "${springAppName:-}",
+            "trace": "%X{X-B3-TraceId:-}",
+            "span": "%X{X-B3-SpanId:-}",
+            "parent": "%X{X-B3-ParentSpanId:-}",
+            "exportable": "%X{X-Span-Export:-}",
+            "pid": "${PID:-}",
+            "thread": "%thread",
+            "class": "%logger{40}",
+            "rest": "%message"
+        }
+    </pattern>
     ```
 
 
 # 참고
-> zipkin vs. jaeger 참고
-<img src='../images/zipkinVsJaeger.png'>
-[출처](https://sematext.com/blog/jaeger-vs-zipkin-opentracing-distributed-tracers/)
+>zipkin vs. jaeger 참고
+
+![](../images/zipkinVsJaeger.png "zipkin vs. jaeger 참고")
+
+출처 : https://sematext.com/blog/jaeger-vs-zipkin-opentracing-distributed-tracers/)
 
 http://bcho.tistory.com/1243?category=502863
