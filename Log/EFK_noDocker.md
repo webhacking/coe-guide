@@ -149,3 +149,34 @@ https://www.centos.org/forums/viewtopic.php?t=62995
 * plugin   
 /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
 
+
+### td-agent/plugin 설치
+```bash
+# rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
+# vi /etc/yum.repos.d/td.repo
+
+[treasuredata]
+name=TreasureData
+baseurl=http://packages.treasuredata.com/3/redhat/\$releasever/\$basearch
+gpgcheck=1
+gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
+
+# yum check-update
+# yum install td-agent-3.1.1
+
+# /etc/init.d/td-agent start
+```
+
+```bash
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch -v 2.7.0
+# /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser -v 2.1.6
+# /etc/init.d/td-agent restart
+```
+
+
+
+
+
+
+
+
