@@ -251,10 +251,13 @@ gpgcheck=1
 gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
 
 # yum check-update
-# yum install td-agent-3.1.1
+# yum install td-agent
 
 # /etc/init.d/td-agent start
 ```
+
+
+scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11.1.gem ec2-user@ec2-52-79-117-82.ap-northeast-2.compute.amazonaws.com:~/.
 
 ```bash
 # /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch -v 2.7.0
@@ -265,6 +268,7 @@ gpgkey=https://packages.treasuredata.com/GPG-KEY-td-agent
 ### 환경설정 
 ```bash
 # vi /etc/td-agent/td-agent.conf
+```
 
 
 ### elasticsearch 설치
