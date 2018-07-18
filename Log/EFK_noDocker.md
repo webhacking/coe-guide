@@ -1,5 +1,10 @@
 # Docker 없이 EFK 설치하기
 
+## Port 정보
+elasticsearch 9200
+fluentd-aggregator 24224 
+kibana 5601
+
 ## Fluentd
 #### Before Installing
 - Setup NTP
@@ -239,7 +244,6 @@ https://www.centos.org/forums/viewtopic.php?t=62995
 * plugin   
 /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
 
-
 ### td-agent/plugin 설치
 ```bash
 # rpm --import https://packages.treasuredata.com/GPG-KEY-td-agent
@@ -269,10 +273,57 @@ scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11
 ### 환경설정 
 ```bash
 # vi /etc/td-agent/td-agent.conf
+
+### fluentd aggregator ###
+<system>
+    @log_level info
+</system>
+
+<source>
+    @type forward
+    bind 0.0.0.0
+    port 24224
+    @log_level debug
+</source>
+
+<match app.**>
+    @type copy
+    <store>
+        @type elasticsearch
+        host 52.79.248.125
+        port 9200
+        logstash_format true
+        logstash_prefix dep_api
+        logstash_dateformat %Y%m%d
+        time_key timestamp
+        include_tag_key true
+        type_name app_log
+        tag_key @log_name
+        buffer_type memory
+        buffer_chunk_limit 16m
+        buffer_queue_limit 128
+        flush_interval 30s
+        flush_at_shutdown false
+        retry_limit 17
+        retry_wait 1s
+        max_retry_wait 1m
+        disable_retry_limit true
+        num_threads 4
+    </store>
+    <store>
+        @type stdout
+    </store>
+</match>
 ```
 
+#### service 등록
+```bash
+# /bin/systemctl daemon-reload
+# /bin/systemctl enable td-agent.service
 
-### elasticsearch 설치
+# service td-agent.service start
+```
+log, pid path 필요 시 수정 (/usr/lib/systemd/system/td-agent.service)
 
 
 
