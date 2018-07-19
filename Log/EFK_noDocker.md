@@ -132,6 +132,10 @@ scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11
 ```  
 
 ### fluentd config 설정
+
+> logback 로그패턴   
+> %d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} ${LOG_LEVEL_PATTERN:-%5p} [${APP_NAME:-},%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-Span-Export}] ${PID:- } --- [%15.15t] %-40.40logger{39} [%4.4L] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}  
+
 fluentd-client 정보 (각 서비스의 log파일을 읽어 fluentd aggregator로 전송한다)  
 /etc/td-agent/td-agent.conf 파일
 ```
@@ -173,7 +177,7 @@ fluentd-client 정보 (각 서비스의 log파일을 읽어 fluentd aggregator�
 </match>
 ```
 
-fluentd-aggregator 정보 (각 서비스의 log정보를 받아 elasticsearch로 전송한다) 
+fluentd-aggregator 정보 (각 서비스의 log정보를 받아 elasticsearch로 전송한다)
 /etc/td-agent/td-agent.conf 파일
 ```text
 <system>
