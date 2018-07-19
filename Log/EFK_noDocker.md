@@ -38,7 +38,8 @@ net.ipv4.ip_local_port_range = 10240 65535
 
 ### td-agent 설치
 
-#### RPM 파일로 직접 설치하는 경우(인터넷 안됨)
+
+##### - RPM 파일로 직접 설치하는 경우(인터넷 안됨)
 1. 인터넷이 가능한 PC에서 RPM 파일을 다운로드 받음(Dependency가 걸린 RPM까지 모두 다 다운로드 됨)
 yum install td-agent --downloaddir=/data/rpms/ --downloadonly
 2. 인터넷이 불가능한 PC에 해당 파일 이동 후 모두 설치  
@@ -46,7 +47,7 @@ yum install td-agent --downloaddir=/data/rpms/ --downloadonly
 yum install /data/rpms/*.rpm
 ```
 
-#### yum으로 설치하기
+##### - yum으로 설치하기(인터넷 됨)
 > 사내망이라 yum 설치가 안되는 경우
 > 해당 패키지의 repository 정보를 사내 Nexus에 추가할 수 있음  
 > Jira의 DevOps_Support 프로젝트에서 issue로 등록 함  
@@ -105,8 +106,8 @@ echo ""
 - config 경로 : /etc/td-agent  
 - plugin : /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
 
-#### fluentd plugin 설치
-##### gem 파일로 직접 설치하는 경우 (인터넷 안됨)
+### fluentd plugin 설치
+##### - gem 파일로 직접 설치하는 경우 (인터넷 안됨)
 1. https://rubygems.org/ 에서 gem 파일 다운로드
    - fluent-plugin-elasticsearch-2.11.1.gem (elasticsearch와 연계하기 위함)
    - fluent-plugin-grok-parser-2.1.6.gem    (log내용 parsing)
@@ -122,15 +123,16 @@ scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11
 # /opt/td-agent/embedded/bin/fluent-gem install ~/fluent-plugin-grok-parser-2.1.6.gem
 # /etc/init.d/td-agent restart
 ```  
-##### gem으로 설치 (인터넷 됨)
+
+##### - gem으로 설치 (인터넷 됨)
 ```sh
 # /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch -v 2.11.1
 # /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser -v 2.1.6
 # /etc/init.d/td-agent restart
 ```  
 
-#### config 설정
-fluentd-client 정보  
+### fluentd config 설정
+fluentd-client 정보 (각 서비스의 log파일을 읽어 fluentd aggregator로 전송한다)  
 /etc/td-agent/td-agent.conf 파일
 ```
 <source>
@@ -171,7 +173,7 @@ fluentd-client 정보
 </match>
 ```
 
-fluentd-aggregator 정보  
+fluentd-aggregator 정보 (각 서비스의 log정보를 받아 elasticsearch로 전송한다) 
 /etc/td-agent/td-agent.conf 파일
 ```text
 <system>
@@ -217,13 +219,12 @@ fluentd-aggregator 정보
 
 참고 https://docs.fluentd.org/v1.0/articles/quickstart
 
-#### 실행하기  
+### 실행하기  
 
 - systemd  
 If you want to customize systemd behaviour, put your td-agent.service into /etc/systemd/system
 
   ```sh
-
   $ sudo systemctl start td-agent.service
   $ sudo systemctl status td-agent.service
   $ sudo systemctl enable td-agent.service  # 서버 시작시 기동 됨
@@ -237,11 +238,26 @@ $ sudo /etc/init.d/td-agent restart
 $ sudo /etc/init.d/td-agent status
 ```
 
-#### Post Sample Logs
-By default, /etc/td-agent/td-agent.conf is configured to take logs from HTTP and route them to stdout (/var/log/td-agent/td-agent.log).
+### 테스트(Post Sample Logs)
+td-agent.conf에 input을 HTTP로 설정하고 output을 stdout으로 설정하여 테스트 해본다.
+
+td-agent.conf
+```sh
+<source>
+  @type http
+  port 9880
+</source>
+<match **>
+  @type stdout
+</match>
+```
+
 ```sh
 $ curl -X POST -d 'json={"json":"message"}' http://localhost:8888/debug.test
 ```
+
+/var/log/td-agent/td-agent.log에서 output을 확인한다.
+
 
 ## 2. Elastricsearch
 8G 이하의 서버에서는 정상작동 안할 수 있음 [출처](https://github.com/SDSACT/coe-guide/blob/master/Log/EFK_noDocker.md)
