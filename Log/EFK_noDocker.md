@@ -130,6 +130,11 @@ scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11
 ```  
 
 #### config 설정
+
+> logback 로그패턴   
+> %d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} ${LOG_LEVEL_PATTERN:-%5p} [${APP_NAME:-},%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-Span-Export}] ${PID:- } --- [%15.15t] %-40.40logger{39} [%4.4L] : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+참고(logback pattern) https://logback.qos.ch/manual/layouts.html
+
 fluentd-client 정보  
 /etc/td-agent/td-agent.conf 파일
 ```
