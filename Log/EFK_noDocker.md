@@ -7,11 +7,11 @@ kibana 5601
 
 ## 1. Fluentd 설치
 ### Before Installing
-- Setup NTP
+- Setup NTP  
 logging 시간 동기화를 위함
-- Increase Max # of File Desc
+- Increase Max # of File Desc  
 ulimit -n 명령어를 값을 확인할수 있고,
-아래 내용을 /etc/security/limits.conf에 추가 후 재시작  
+아래 내용을 /etc/security/limits.conf에 추가 후 세션 재접속 
 
   ```conf
   root soft nofile 65536
@@ -19,9 +19,9 @@ ulimit -n 명령어를 값을 확인할수 있고,
   * soft nofile 65536
   * hard nofile 65536
   ```
-- Optimize Network Kernel Parameters
-여러 Fluentd instan를 사용하는 경우 최적의 성능을 위해,
-아래 내용을 /etc/sysctl.conf에 추가 후 재시작
+- Optimize Network Kernel Parameters  
+여러 Fluentd instan를 사용하는 경우 최적의 성능을 위해,  
+아래 내용을 /etc/sysctl.conf에 추가 후 세션 재접속 or 서버
 ```conf
 net.core.somaxconn = 1024
 net.core.netdev_max_backlog = 5000
@@ -48,12 +48,15 @@ yum install td-agent --downloaddir=/data/rpms/ --downloadonly
 ```sh
 yum install /data/rpms/*.rpm
 ```
+> 일부 패키지의 버젼 문제로 설치 안되는 경우 해당 패키지 삭제해 재설치 시도  
 
 ##### - yum으로 설치하기(인터넷 됨)
 > 사내망이라 yum 설치가 안되는 경우
 > 해당 패키지의 repository 정보를 사내 Nexus에 추가할 수 있음  
 > Jira의 DevOps_Support 프로젝트에서 issue로 등록 함  
 > 추가 방법 상세 안내는 사내 Confluence DevOps Support 공간에 Guide > Library Repo. Guide 참고  
+> 하지만 등록 한 repository가 redirect 되는 경우 모든 경로를 다 등록해 줘야 하고,   
+> dependency가 있는 경우 이들이 잘 다운된다는 보장이 없음..  
 
 
 curl로 설치 스크립트를 다운받아 실행 함.  
@@ -138,7 +141,7 @@ scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11
 
 ### 로그 경로 수정
 /etc/systemd/system/td-agent.service   
-파일에서 --log 경로를 수정합니다. 
+파일에서 td-agent 실행하는 부분에 --log 옵션의 경로를 수정합니다. 
 (로그 파일 관리를 위한 /etc/logrotate.d/td-agent의 log경로도 수정)
 
 ### fluentd config 설정
@@ -254,6 +257,7 @@ $ sudo /etc/init.d/td-agent status
 
 ### 테스트(Post Sample Logs)
 td-agent.conf에 input을 HTTP로 설정하고 output을 stdout으로 설정하여 테스트 해본다.
+> http type으로 지정 시 해당 포트로 http 요청을 받을 수 있게된다.
 
 td-agent.conf
 ```sh
