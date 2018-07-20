@@ -107,6 +107,9 @@ echo ""
 - plugin : /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
 
 ### fluentd plugin 설치
+fluentd-aggregator에 fluent-plugin-elasticsearch gem 설치
+각 서비스의 fluentd-client에 fluent-plugin-grok-parser gem 설치
+
 ##### - gem 파일로 직접 설치하는 경우 (인터넷 안됨)
 1. https://rubygems.org/ 에서 gem 파일 다운로드
    - fluent-plugin-elasticsearch-2.11.1.gem (elasticsearch와 연계하기 위함)
@@ -130,6 +133,11 @@ scp -i ~/Downloads/fluentd.pem ~/Developer/data/fluent-plugin-elasticsearch-2.11
 # /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-grok-parser -v 2.1.6
 # /etc/init.d/td-agent restart
 ```  
+
+### 로그 경로 수정
+/etc/systemd/system/td-agent.service   
+파일에서 --log 경로를 수정합니다. 
+(로그 파일 관리를 위한 /etc/logrotate.d/td-agent의 log경로도 수정)
 
 ### fluentd config 설정
 
@@ -177,7 +185,7 @@ fluentd-client 정보 (각 서비스의 log파일을 읽어 fluentd aggregator�
 </match>
 ```
 
-fluentd-aggregator 정보 (각 서비스의 log정보를 받아 elasticsearch로 전송한다)
+fluentd-aggregator 정보 (각 서비스의 log정보를 받아 elasticsearch로 전송한다)  
 /etc/td-agent/td-agent.conf 파일
 ```text
 <system>
@@ -313,6 +321,10 @@ cd elasticsearch-6.3.1/bin
 ./elasticsearch
 ```
 [출처](https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)
+
+** binary를 통해 직접 설치 할 경우 vm 설정이 자동으로 적용되지 않으므로   
+/etc/sysctl.conf 파일에 vm.max_map_count=262144 설정을 추가해 줍니다.  
+[참고](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
 
 ## 3. Kibana
 #### yum package
