@@ -40,8 +40,10 @@ net.ipv4.ip_local_port_range = 10240 65535
 
 
 ##### - RPM 파일로 직접 설치하는 경우(인터넷 안됨)
-1. 인터넷이 가능한 PC에서 RPM 파일을 다운로드 받음(Dependency가 걸린 RPM까지 모두 다 다운로드 됨)
+1. 인터넷이 가능한 PC에서 RPM 파일을 다운로드 받음(Dependency가 걸린 RPM까지 모두 다 다운로드 됨)  
+```sh
 yum install td-agent --downloaddir=/data/rpms/ --downloadonly
+```  
 2. 인터넷이 불가능한 PC에 해당 파일 이동 후 모두 설치  
 ```sh
 yum install /data/rpms/*.rpm
@@ -107,8 +109,8 @@ echo ""
 - plugin : /opt/td-agent/embedded/lib/ruby/gems/2.4.0/gems
 
 ### fluentd plugin 설치
-fluentd-aggregator에 fluent-plugin-elasticsearch gem 설치
-각 서비스의 fluentd-client에 fluent-plugin-grok-parser gem 설치
+fluentd-aggregator에 fluent-plugin-elasticsearch gem 설치  
+각 서비스의 fluentd-client에 fluent-plugin-grok-parser gem 설치  
 
 ##### - gem 파일로 직접 설치하는 경우 (인터넷 안됨)
 1. https://rubygems.org/ 에서 gem 파일 다운로드
