@@ -5,7 +5,7 @@ elasticsearch 9200
 fluentd-aggregator 24224  
 kibana 5601
 
-## 1. Fluentd 설치
+# 1. Fluentd 설치
 ### Before Installing
 - Setup NTP  
 logging 시간 동기화를 위함
@@ -277,7 +277,7 @@ $ curl -X POST -d 'json={"json":"message"}' http://localhost:8888/debug.test
 /var/log/td-agent/td-agent.log에서 output을 확인한다.
 
 
-## 2. Elastricsearch
+# 2. Elastricsearch
 8G 이하의 서버에서는 정상작동 안할 수 있음 [출처](https://github.com/SDSACT/coe-guide/blob/master/Log/EFK_noDocker.md)
 
 #### yum package
@@ -301,11 +301,12 @@ $ sudo yum install elasticsearch
 ```
 [출처](https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html)
 #### Configuring elasticsearch
-설정파일 경로
-/etc/elasticsearch/elasticsearch.yml
-/etc/sysconfig/elasticsearch
-[confi 항목 상세](https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html#rpm-configuring)
+설정파일 경로[confi 항목 상세](https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html#rpm-configuring)
+/etc/elasticsearch/elasticsearch.yml  
+/etc/sysconfig/elasticsearch    
+host 정보를 0.0.0.0 으로 설정  
 
+  
 #### Running kibana with systemd
 서버 시작시 자동 실행 등록
 ```
@@ -320,6 +321,10 @@ sudo systemctl stop elasticsearch.service
 
 #### tar 실행
 it is recommended that you use **the Oracle JDK version 1.8.0_131**
+> binary를 통해 직접 설치 할 경우 vm 설정이 자동으로 적용되지 않으므로   
+/etc/sysctl.conf 파일에 vm.max_map_count=262144 설정을 추가해 줍니다.  
+[참고](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+
 ```sh
 curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.3.1.tar.gz
 tar -xvf elasticsearch-6.3.1.tar.gz
@@ -328,11 +333,7 @@ cd elasticsearch-6.3.1/bin
 ```
 [출처](https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html)
 
-** binary를 통해 직접 설치 할 경우 vm 설정이 자동으로 적용되지 않으므로   
-/etc/sysctl.conf 파일에 vm.max_map_count=262144 설정을 추가해 줍니다.  
-[참고](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
-
-## 3. Kibana
+# 3. Kibana
 #### yum package
 ```
 $ sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
@@ -354,8 +355,8 @@ $ sudo yum install kibana
 ```
 [출처](https://www.elastic.co/guide/en/kibana/current/rpm.html)
 #### Configuring kibana
-설정파일 경로 /etc/kibana/kibana.yml
-[confi 항목 상세](https://www.elastic.co/guide/en/kibana/6.3/settings.html)
+설정파일 경로 /etc/kibana/kibana.yml[confi 항목 상세](https://www.elastic.co/guide/en/kibana/6.3/settings.html)  
+host 정보를 0.0.0.0 으로 설정
 
 #### Running kibana with systemd
 서버 시작시 자동 실행 등록
