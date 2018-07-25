@@ -304,7 +304,7 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8000/eureka/
   instance:
-    preferIpAddress: true # 서비스간 통신 시 hostname 보다 ip 를 우선 사용 함
+    preferIpAddress: true # hostname보다 ip로 자신의 주소를 구성하여 instance 등록 -> 서비스간 ip로 통신
 ribbon:
   ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
   ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time    
