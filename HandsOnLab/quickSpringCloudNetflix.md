@@ -568,5 +568,5 @@ Maven 선택 후 Next 버튼을 클릭하여 완료
 
 ### 3. IntelliJ Memory 설정
 [Help] - [Edit Custom VM Options...] 클릭  
-idea.vmoptions에서 Xms, Xmx 사이즈 변경  
+idea.vmoptions에서 Xms, Xmx 사이즈 변경 후 IntelliJ 재실행  
 <img height="300" src="images/intellij-vmoption.png">
