@@ -565,3 +565,8 @@ Import Module을 클릭하여 다운받은 Spring Boot Project를 추가
 
 Maven 선택 후 Next 버튼을 클릭하여 완료  
 <img height="500" src="images/intellij-module-setting3.png">  
+
+### 3. IntelliJ Memory 설정
+[Help] - [Edit Custom VM Options...] 클릭  
+idea.vmoptions에서 Xms, Xmx 사이즈 변경  
+<img height="300" src="images/intellij-vmoption.png">
