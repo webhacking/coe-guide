@@ -24,10 +24,11 @@ Spring application 개발하기 위한 Eclipse 기반의 IDE
 # 1. Eureka Server
 Service discovery 역할을 수행하는 eureka 서비스를 설정하도록 하겠습니다.  
 
+### 1-1. Spring Boot Project 생성
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 2.0.3
+- Generate...Maven Project, Java, 2.0.4
 - Artifact: eureka
-- Dependencies: eureka server 입력 후 엔터
+- Dependencies: **eureka server** 입력 후 엔터
 
 <img height="500" src="images/springIniEureka.png">
 
@@ -35,15 +36,6 @@ GenerateProject를 클릭하여 zip파일을 다운 받습니다.
 다운받은 파일을 원하는 경로에 압축 해제 합니다.  
 IDE를 이용하여 해당 프로젝트를 엽니다.    
 
-#### 참고) Eclipse STS를 사용하여 프로젝트 생성
-Spring Starter Project 생성  
-<img height="300" src="images/handson-eclipse-sts-1.PNG">  
-
-Project 정보 설정 (https 접속이 불가한 경우 Service URL을 http://start.spring.io 로 변경)
-<img height="500" src="images/handson-eclipse-sts-2.PNG">  
-
-Project Dependency(Eureka Server) 추가  
-<img height="500" src="images/handson-eclipse-sts-3.PNG">
 
 
 
@@ -62,11 +54,11 @@ eureka
 
 pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인할 수 있습니다.
 ```xml
-<!--Spring Boot 2.0.3를 사용함-->
+<!--Spring Boot 2.0.4를 사용함-->
 <parent>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-parent</artifactId>
-  <version>2.0.3.RELEASE</version>
+  <version>2.0.4.RELEASE</version>
   <relativePath/> <!-- lookup parent from repository -->
 </parent>
 <!--Spring Cloud Finchley 사용함-->
@@ -85,6 +77,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 
 ```
 
+### 1-2. 프러퍼티 yaml 파일로 변경 및 추가  
 src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.
 (가독성 및 작성 편의를 위함)  
 해당 파일에 아래 내용을 작성합니다.
@@ -104,6 +97,8 @@ eureka:
   server:
     enable-self-preservation: false
 ```
+
+### 1-3. EurekaApplication 코드 수정
 eureka-service 프로젝트의 EurekaApplication.java 파일에 @EnableEurekaServer 어노테이션을 추가합니다.
 ```Java
 @EnableEurekaServer
@@ -115,6 +110,7 @@ public class EurekaApplication {
 }
 ```
 
+### 1-4. 실행 확인
 EurekaApplication을 실행 하고 http://localhost:8000 로 접속하여 Eureka Dashboard 화면이 열리면 정상 작동 하는것입니다.  
 현재는 등록된 서비스가 없어 Instances 항목이 No instances available로 표시 됩니다.  
  <img height="500" src="images/eurekaui.png">
@@ -122,10 +118,11 @@ EurekaApplication을 실행 하고 http://localhost:8000 로 접속하여 Eureka
 # 2. Zuul
 Gateway 역할을 수행하는 zuul 서비스를 설정하도록 하겠습니다.  
 
+### 2-1. Spring Boot Project 생성
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 2.0.3
+- Generate...Maven Project, Java, 2.0.4
 - Artifact: zuul
-- Dependencies: zuul, eureka discovery 입력 후 엔터
+- Dependencies: **zuul, eureka discovery** 입력 후 엔터
 
 GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
 다운받은 파일을 원하는 workspace경로에서 압축 해제 합니다.  
@@ -140,6 +137,7 @@ pom.xml파일을 열어보면 아래와 같이 dependency가 추가된 것을 �
 </dependency>
 ```
 
+### 2-2. 프러퍼티 yaml 파일로 변경 및 추가  
 src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다. 앞으로 만들 서비스(CUSTOMER, ORDER)에 대한 라우팅 정보를 추가합니다.
 ```yml
@@ -173,6 +171,7 @@ ribbon:
   ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time
 ```
 
+### 2-3. ZuulApplication 코드 수정   
 zuul-service 프로젝트의 ZuulApplication.java 파일에 @EnableZuulProxy, @EnableDiscoveryClient 어노테이션을 추가합니다.
 
 ```Java
@@ -186,6 +185,8 @@ public class ZuulApplication {
 	}
 }
 ```
+
+### 2-4. 실행 확인  
 application을 실행 합니다.    
 http://localhost:8000 로 접속하여 zuul-service가 instance로 등록된 것을 확인 합니다.    
  <img height="500" src="images/eureka-client-zuul.png">
@@ -194,10 +195,11 @@ http://localhost:8000 로 접속하여 zuul-service가 instance로 등록된 것
 string을 return 하는 API를 갖는 단순한 application을 만들어 보겠습니다.  
 이 서비스는 eureka에 자동 등록되고, 사용자가 zuul을 통한 라우팅으로 접근하게 구성될 것입니다.  
 
+### 3-1. Spring Boot Project 생성
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 2.0.3
+- Generate...Maven Project, Java, 2.0.4
 - Artifact: customer
-- Dependencies: web, eureka discovery 입력 후 엔터
+- Dependencies: **web, eureka discovery** 입력 후 엔터
 
 GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
 다운받은 파일을 원하는 workspace경로에서 압축 해제 합니다.  
@@ -218,6 +220,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 
 ```
 
+### 3-2. 프러퍼티 yaml 파일로 변경 및 추가  
 src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다.
 
@@ -234,6 +237,8 @@ eureka:
   instance:
     preferIpAddress: true # hostname을 ip로 셋팅하여 인스턴스 정보를 서버에 등록함
 ```
+
+### 3-3. CustomerApplication 코드 수정   
 customer-service 프로젝트의 CustomerApplication.java 파일에 아래 어노테이션을 추가합니다.  
 그리고 /customer 로 호출 시 임의 고객명을 return 하는 API를 생성합니다.
 ```Java
@@ -250,14 +255,16 @@ public class CustomerApplication {
 	}
 }
 ```
+
+### 3-4. 실행 확인
 application을 실행 합니다.  
 
 http://localhost:8000 (Eureka Server UI)로 이동하여 customer-service가 instance로 등록된 것을 확인 합니다.   
 http://localhost:8701/customer 로 접속하여 John이 표시되는것을 확인 합니다.   
 
-그리고 Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
+Zuul Gateway에서 설정한 라우팅 정보를 통해 Customer Service를 호출 할 수 있습니다.  
 http://localhost:8500/api/v1/customer/customer 를 호출하여 John이 표시되는것을 확인 합니다.  
-> Zuul을 생성하며 추가했던 아래 라우팅 정보를 이용하게 됩니다.
+> 호출 시 Zuul을 생성하며 추가했던 아래 라우팅 정보를 이용하게 됩니다.
 ```yml
 routes:
   customer:
@@ -268,14 +275,13 @@ routes:
 
 # 4. Order service
 
-
 Order-service는 특정 API를 호출하면 customer-serivce로 부터 데이터를 가져와 가공 후 return 하도록 application을 만들어 보겠습니다.
 
-
+### 4-1. Spring Boot Project 생성
 Spring Initializer 페이지 [(start.spring.io)](http://start.spring.io) 로 이동하여 아래와 같이 개발환경과 dependencies를 선택 합니다.
-- Generate...Maven Project, Java, 2.0.3
+- Generate...Maven Project, Java, 2.0.4
 - Artifact: order
-- Dependencies: web, eureka discovery, feign 입력 후 엔터
+- Dependencies: **web, eureka discovery, feign** 입력 후 엔터
 
 GenerateProject를 클릭하여 zip파일을 다운 받습니다.  
 다운받은 파일을 원하는 workspace경로에서 압축 해제 합니다.  
@@ -290,6 +296,7 @@ pom.xml파일을 열어보면 아래와 같은 내용이 추가된 것을 확인
 </dependency>
 ```
 
+### 4-2. 프러퍼티 yaml 파일로 변경 및 추가   
 src > main > resources > application.properties 파일명을 application.yml로 변경 합니다.  
 해당 파일에 아래 내용을 작성합니다.
 
@@ -309,6 +316,8 @@ ribbon:
   ConnectTimeout: 5000    # Client에서 서버로 요청시 서버와의 Connection 맺기 까지의 delay time
   ReadTimeout: 2000       # Connection 맺은 후 response 받기 까지 delay time    
 ```
+
+### 4-3. OrderApplication 코드 수정 및 feign 적용  
 Customer-service의 API를 호출할때 feign을 사용해 보도록 하겠습니다.   
 아래 화면과 같이 package를 생성하고 CustomerClient interface, CustomerService 를 생성합니다.  
 <img height="300" src="images/feignpackages.png">
@@ -364,7 +373,8 @@ public class OrderApplication {
 		SpringApplication.run(OrderApplication.class, args);
 	}
 }
-```
+```  
+### 4-4. 실행 확인
 application을 실행 합니다.  
 http://localhost:8000 로 접속하여 order-service가 instance로 등록된 것을 확인 합니다.  
 http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list** 가 표시되는것을 확인 합니다.  
@@ -373,6 +383,7 @@ http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list**
 지금까지 zuul -> order-service -> customer-service 호출하는 구조를 만들어 보았습니다.  
 만약 위 상황에서 customer-service에 장애가 발생한 경우 Hystrix를 통해 fallback처리를 해보겠습니다.
 
+### 5-1. Hystrix 적용  
 Hystrix 사용을 위한 dependency를 order-service의 pom.xml에 추가합니다.
 ```xml
 <dependency>
@@ -414,7 +425,7 @@ Customer-serivce 를 중지 합니다.
 
 http://localhost:8500/api/v1/order/orders 를 호출하여 **fallback's order list** 가 표시되는것을 확인합니다.
 
-#### Hystrix Dashboard
+### 5-2. Hystrix Dashboard 적용  
 
 Hystrix 상황을 모니터링 하기 위해 Hystrix Dashboard를 사용할 수 있습니다.  
 order-service의 pom.xml에 아래 내용을 추가합니다.
@@ -458,9 +469,10 @@ http://localhost:8702/actuator/hystrix.stream 을 url창에 입력 후 Monitor S
 
 http://localhost:8500/api/v1/order/orders 를 호출해서 count 변화를 확인 할수 있습니다.  
 
-# 6. Sleuth and Zipkin
+# 6. Sleuth and Zipkin  
 분산환경 트랜젝션의 흐름을 모니터링 하기 위한 Sleuth, Zipkin을 사용해 보겠습니다.  
 
+### 6-1. Zipkin 서버 실행
 모니터링을 위한 Zipkin UI 서버를 실행시켜 보겠습니다.
 실행창에서 공유된 zipkin.jar 가 있는 폴더로 이동하여 아래 명령어를 실행 합니다.
 ```cmd
@@ -470,6 +482,7 @@ java -jar zipkin.jar
 http://localhost:9411/zipkin/ 으로 이동하여 zipkin ui 가 실행되는지 확인 합니다.
 <img height="300" src="images/zipkin-ui.png">
 
+### 6-2. 서비스 적용
 그리고 아래 dependency를 모든 서비스 (Zuul, Order-service, Customer-service)에 추가합니다.
 
 - Sleuth: TraceID, SpanID 를 남기기 위함
@@ -509,7 +522,7 @@ Customer 서비스를 이용하여 여러개의 instance를 생성하고, 이에
 이번 실습에서는 customer project 폴더를 복사하여 customer2를 만들도록 하겠습니다.
 그리고 customer2를 IDE로 열어서 아래와 같이 설정과 소스코드를 수정해 줍니다.    
 > application을 container화 하면 instance 관리를 효율적으로 할 수 있습니다.   
- 
+
  application.yml에서 port를 변경 합니다.    
  application.name은 동일하게 해야 eureka에 동일 app으로 등록 됩니다.  
 ```yml
@@ -529,3 +542,26 @@ http://localhost:8500/api/v1/order/orders 를 호출하여 **John's order list**
 
 > Ribbon이 가지고 있는 cache가 refresh 되기 까지 30초에서 2분 정도가 걸릴 수 있습니다.  
 > 이로 인해 처음 호출 시 Jons's order list만 계속 표시 될 수 있습니다.  
+
+
+## 참고
+
+### 1. Eclipse STS를 사용하여 프로젝트 생성
+Spring Starter Project 생성  
+<img height="300" src="images/handson-eclipse-sts-1.PNG">  
+
+Project 정보 설정 (https 접속이 불가한 경우 Service URL을 http://start.spring.io 로 변경)  
+<img height="500" src="images/handson-eclipse-sts-2.PNG">  
+
+Project Dependency 추가  
+<img height="500" src="images/handson-eclipse-sts-3.PNG">
+
+### 2. IntelliJ Module 추가
+프로젝트에 마우스 우클릭하여 Open Module Settings  
+<img height="700" src="images/intellij-module-setting1.png">  
+
+Import Module을 클릭하여 다운받은 Spring Boot Project를 추가
+<img height="500" src="images/intellij-module-setting2.png">   
+
+Maven 선택 후 Next 버튼을 클릭하여 완료  
+<img height="500" src="images/intellij-module-setting3.png">  
