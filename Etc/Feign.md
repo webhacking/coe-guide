@@ -33,7 +33,7 @@ public class OrderApplication { ... }
 
 // Customer interface
 @FeignClient(
-        name = "order-service"  //feign 서비스 명
+        name = "customer-service"  //feign 서비스 명
         url = "http://customer-service-host:portnumber",
         decode404 = true //TODO: 404 에러를 feign에서 처리하지 않음
 )
