@@ -75,3 +75,17 @@
         serviceUrl:
           defaultZone: http://eureka:8761/eureka/
     ```
+
+# 3. 동작
+
+1. discovery sidecar application
+    - Eureka에 등록된 serviceId(NODE-SERVICE)로 사용 가능
+![discovery-node-server](../images/discovery-node-server.png)
+    - 내부 서비스에서 node sever를 접근하는 예제 코드
+![discovery-sample-code](../images/discovery-sample-code.png)
+
+2. discovery another application
+    - **sidecarHostName** : **sidecarPort** / **servceId**
+    - serviceId를 이용하여 Node Server에서 다른 micro service 사용 가능
+    - Node server에서 http://localhost:8009/Service1/someEndPoint 를 접근하는 경우 sidecar application이 Eureka서버에서 서버 정보를 가져와 Service1으로 라우팅 해준다.
+![discovery-another-service](../images/discovery-another-service.png) 
